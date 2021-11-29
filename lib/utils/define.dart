@@ -1,0 +1,3 @@
+class ColorsStronger {
+  ColorsStronger._();
+}
