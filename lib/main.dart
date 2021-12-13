@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            // fontFamily: 'adqd',
-            ),
+          fontFamily: 'Do_Hyeon',
+        ),
         initialRoute: SplashScreen.routeName,
         routes: {
           SplashScreen.routeName: (context) {
