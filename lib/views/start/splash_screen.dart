@@ -2,60 +2,17 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/views/workouts_calendar/workouts_calendar.dart';
 
-typedef void PreprocessCompleter(bool needAuth);
-
-class Processes {
-  static bool _needAuth = false;
-  static const int _jobCount = 2;
-  static int _compeleteCount = 0;
-
-  static void process(PreprocessCompleter completer) {
-    _startTime(() {
-      _compeleteCount++;
-      if (_compeleteCount >= _jobCount) {
-        completer(_needAuth);
-        print("스타트타임");
-      }
-    });
-
-    _checkAuth().then((value) {
-      _needAuth = value;
-      _compeleteCount++;
-      if (_compeleteCount >= _jobCount) {
-        completer(_needAuth);
-      }
-      print("체크어스");
-    });
-  }
-
-  static Future<bool> _checkAuth() async {
-    //TODO: Secure Storage 연동 로그인 정보 가져오기
-    return false;
-  }
-
-  static _startTime(void completer()) async {
-    var _duration = const Duration(milliseconds: 1500);
-    return Timer(_duration, completer);
-  }
-}
-
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  SplashScreen({Key? key}) : super(key: key);
+  late AuthProvider _authProvider;
 
   @override
   Widget build(BuildContext context) {
-    Processes.process((needAuth) {
-      if (needAuth == false) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const WorkoutsCalendar(),
-          ),
-        );
-      }
-    });
+    _authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -71,9 +28,10 @@ class SplashScreen extends StatelessWidget {
                 const Text(
                   'Stronger',
                   style: TextStyle(
-                      fontSize: 42,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700),
+                    fontSize: 42,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ],
             ),
