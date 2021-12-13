@@ -1,43 +1,55 @@
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:stronger/provider/auth_provider.dart';
-import 'package:stronger/views/workouts_calendar/workouts_calendar.dart';
 
-class SplashScreen extends StatelessWidget {
-  SplashScreen({Key? key}) : super(key: key);
-  late AuthProvider _authProvider;
+import '../home.dart';
+
+class SplashScreen extends StatefulWidget {
+  static const routeName = '/splash';
+  const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    _pushToMain(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    _authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          decoration: const BoxDecoration(color: Colors.black),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/splash/weightlifting.png',
+      body: Container(
+        decoration: const BoxDecoration(color: Colors.black),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/splash/weightlifting.png',
+                color: Colors.white,
+              ),
+              const Text(
+                'Stronger',
+                style: TextStyle(
+                  fontSize: 42,
                   color: Colors.white,
+                  fontWeight: FontWeight.w700,
                 ),
-                const Text(
-                  'Stronger',
-                  style: TextStyle(
-                    fontSize: 42,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _pushToMain(BuildContext context) async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    Navigator.pushNamedAndRemoveUntil(
+        context, Home.routeName, (route) => false);
   }
 }

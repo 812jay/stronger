@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class WorkoutsCalendar extends StatelessWidget {
+  static const routeName = 'calendar';
   const WorkoutsCalendar({Key? key}) : super(key: key);
 
   @override

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
+import 'package:stronger/views/home.dart';
 import 'package:stronger/views/start/splash_screen.dart';
 
 void main() {
@@ -26,12 +27,19 @@ class MyApp extends StatelessWidget {
             create: (BuildContext context) => AuthProvider()),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: SplashScreen(),
+            // fontFamily: 'adqd',
+            ),
+        initialRoute: SplashScreen.routeName,
+        routes: {
+          SplashScreen.routeName: (context) {
+            return const SplashScreen();
+          },
+          Home.routeName: (context) {
+            return const Home();
+          }
+        },
       ),
     );
   }
