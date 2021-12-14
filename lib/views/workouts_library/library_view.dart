@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:stronger/provider/library_provider.dart';
+import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/utils/define.dart';
 import 'package:stronger/widgets/common/common_card.dart';
 import 'package:stronger/widgets/common/workout_text.dart';
@@ -64,9 +65,9 @@ class LibraryView extends StatelessWidget {
               ),
 
               /// categories
-              Consumer<LibraryProvider>(
-                builder: (_, provider, __) {
-                  final categories = provider.categories;
+              Consumer2<UserProvider, LibraryProvider>(
+                builder: (_, up, lp, __) {
+                  final categories = up.categories;
                   return Container(
                     margin: const EdgeInsets.only(top: 15),
                     height: 35,
@@ -82,10 +83,10 @@ class LibraryView extends StatelessWidget {
                                     : EdgeInsets.zero,
                                 child: _CategoryChip(
                                   text: categories[index],
-                                  isSelected: provider
-                                      .isSelectedCategory(categories[index]),
-                                  onSelect: () => provider
-                                      .onCategorySelect(categories[index]),
+                                  isSelected:
+                                      lp.isSelectedCategory(categories[index]),
+                                  onSelect: () =>
+                                      lp.onCategorySelect(categories[index]),
                                 ),
                               );
                             },
@@ -153,7 +154,7 @@ class _CategoryChip extends StatelessWidget {
           border: isSelected
               ? null
               : Border.all(
-                  color: ColorsStronger.lightGrey,
+                  color: ColorsStronger.lightGrey.withOpacity(0.5),
                   width: 1,
                 ),
         ),

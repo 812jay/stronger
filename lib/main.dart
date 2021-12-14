@@ -4,7 +4,10 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/provider/library_provider.dart';
+import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/views/home.dart';
+import 'package:stronger/views/setting/category_edit_view.dart';
+import 'package:stronger/views/setting/tool_edit_view.dart';
 import 'package:stronger/views/start/splash_screen.dart';
 
 void main() {
@@ -25,17 +28,16 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (BuildContext context) => AuthProvider(),
-        ),
+            create: (BuildContext context) => AuthProvider()),
         ChangeNotifierProvider(
-          lazy: true,
-          create: (BuildContext context) => LibraryProvider(),
-        ),
+            lazy: true, create: (BuildContext context) => LibraryProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Do_Hyeon',
+          scaffoldBackgroundColor: Colors.white,
         ),
         initialRoute: SplashScreen.routeName,
         routes: {
@@ -44,6 +46,12 @@ class MyApp extends StatelessWidget {
           },
           Home.routeName: (context) {
             return const Home();
+          },
+          ToolEditView.routeName: (context) {
+            return const ToolEditView();
+          },
+          CategoryEditView.routeName: (context) {
+            return const CategoryEditView();
           }
         },
       ),
