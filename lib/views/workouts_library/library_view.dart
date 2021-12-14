@@ -1,10 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/src/provider.dart';
 import 'package:stronger/provider/library_provider.dart';
+import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/utils/define.dart';
-import 'package:stronger/widgets/common/common_card.dart';
-import 'package:stronger/widgets/common/workout_text.dart';
 import 'package:stronger/widgets/library/workout_card.dart';
 
 class LibraryView extends StatelessWidget {
@@ -13,7 +12,6 @@ class LibraryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final libraryProvider = context.read<LibraryProvider>();
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -64,9 +62,9 @@ class LibraryView extends StatelessWidget {
               ),
 
               /// categories
-              Consumer<LibraryProvider>(
-                builder: (_, provider, __) {
-                  final categories = provider.categories;
+              Consumer2<UserProvider, LibraryProvider>(
+                builder: (_, up, lp, __) {
+                  final categories = up.categories;
                   return Container(
                     margin: const EdgeInsets.only(top: 15),
                     height: 35,
@@ -82,10 +80,10 @@ class LibraryView extends StatelessWidget {
                                     : EdgeInsets.zero,
                                 child: _CategoryChip(
                                   text: categories[index],
-                                  isSelected: provider
-                                      .isSelectedCategory(categories[index]),
-                                  onSelect: () => provider
-                                      .onCategorySelect(categories[index]),
+                                  isSelected:
+                                      lp.isSelectedCategory(categories[index]),
+                                  onSelect: () =>
+                                      lp.onCategorySelect(categories[index]),
                                 ),
                               );
                             },
@@ -102,7 +100,9 @@ class LibraryView extends StatelessWidget {
                 workoutName: '벤치프레스',
                 bodyPart: '가슴',
                 isBookmarked: false,
-                onTap: () => print('1'),
+                onTap: () {
+                  print('1');
+                },
               ),
               WorkoutCard(
                 workoutName: '프랭크',
@@ -153,7 +153,7 @@ class _CategoryChip extends StatelessWidget {
           border: isSelected
               ? null
               : Border.all(
-                  color: ColorsStronger.lightGrey,
+                  color: ColorsStronger.lightGrey.withOpacity(0.5),
                   width: 1,
                 ),
         ),
