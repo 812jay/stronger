@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/utils/define.dart';
-
-const shadowColor = Color(0xFFD9D9D9);
+import 'package:stronger/widgets/common/common_card.dart';
+import 'package:stronger/widgets/common/workout_text.dart';
+import 'package:stronger/widgets/library/workout_card.dart';
 
 class LibraryView extends StatelessWidget {
   static const routeName = 'library';
@@ -36,7 +37,7 @@ class LibraryView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: const [
                       BoxShadow(
-                        color: shadowColor,
+                        color: ColorsStronger.shadowColor,
                         blurRadius: 5,
                       )
                     ],
@@ -61,11 +62,13 @@ class LibraryView extends StatelessWidget {
                   ),
                 ),
               ),
+
+              /// categories
               Consumer<LibraryProvider>(
                 builder: (_, provider, __) {
                   final categories = provider.categories;
                   return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 15),
+                    margin: const EdgeInsets.only(top: 15),
                     height: 35,
                     child: CustomScrollView(
                       scrollDirection: Axis.horizontal,
@@ -93,6 +96,19 @@ class LibraryView extends StatelessWidget {
                     ),
                   );
                 },
+              ),
+              const SizedBox(height: 10),
+              WorkoutCard(
+                workoutName: '벤치프레스',
+                bodyPart: '가슴',
+                isBookmarked: false,
+                onTap: () => print('1'),
+              ),
+              WorkoutCard(
+                workoutName: '프랭크',
+                bodyPart: '전신',
+                isBookmarked: true,
+                onTap: () => print('2'),
               ),
             ],
           ),
