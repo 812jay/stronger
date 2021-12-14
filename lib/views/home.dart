@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/views/setting/setting_view.dart';
 import 'package:stronger/views/workouts_calendar/workouts_calendar.dart';
 import 'package:stronger/views/workouts_library/library_view.dart';

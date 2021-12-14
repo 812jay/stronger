@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
+import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/views/home.dart';
 import 'package:stronger/views/start/splash_screen.dart';
 
@@ -24,7 +25,12 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (BuildContext context) => AuthProvider()),
+          create: (BuildContext context) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          lazy: true,
+          create: (BuildContext context) => LibraryProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
