@@ -9,17 +9,17 @@ import 'package:stronger/views/workouts_library/library_view.dart';
 const List<Map<String, dynamic>> itemList = [
   {
     'text': '캘린더',
-    'icon': CupertinoIcons.calendar,
+    'icon': 'assets/icons/calendar.png',
     'currentIndex': 0,
   },
   {
     'text': '운동 목록',
-    'icon': CupertinoIcons.airplane,
+    'icon': 'assets/icons/dumbbell.png',
     'currentIndex': 1,
   },
   {
     'text': '프로필',
-    'icon': CupertinoIcons.airplane,
+    'icon': 'assets/icons/account.png',
     'currentIndex': 2,
   },
 ];
@@ -80,10 +80,20 @@ class _HomeState extends State<Home> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 5),
+                    //   child: Icon(
+                    //     item['icon'],
+                    //     color: _selectedIndex == item['currentIndex']
+                    //         ? Colors.black
+                    //         : Colors.grey,
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5),
-                      child: Icon(
+                      child: Image.asset(
                         item['icon'],
+                        height: 25,
                         color: _selectedIndex == item['currentIndex']
                             ? Colors.black
                             : Colors.grey,
