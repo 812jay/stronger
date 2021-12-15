@@ -45,6 +45,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-#firebase 설정파일
+#firebase ios 설정파일
 /ios/Runner.xcodeproj/project.pbxproj
 /ios/Runner/GoogleService-Info.plist
