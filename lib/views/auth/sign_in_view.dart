@@ -55,7 +55,10 @@ class SignInView extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     _authProvider.signUp(
-                        _emailController.text, _passwordController.text);
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                      name: '이름',
+                    );
                   },
                   child: Text('sign up'),
                 ),

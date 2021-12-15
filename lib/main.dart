@@ -9,7 +9,7 @@ import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/views/home.dart';
 import 'package:stronger/views/setting/category_edit_view.dart';
 import 'package:stronger/views/setting/tool_edit_view.dart';
-import 'package:stronger/views/sign_in/sign_in_view.dart';
+import 'package:stronger/views/auth/sign_in_view.dart';
 import 'package:stronger/views/start/splash_screen.dart';
 
 void main() async {

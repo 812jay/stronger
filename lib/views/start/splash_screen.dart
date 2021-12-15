@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:stronger/views/sign_in/sign_in_view.dart';
+import 'package:stronger/views/auth/sign_in_view.dart';
 
 import '../home.dart';
 
