@@ -9,8 +9,9 @@ import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/views/home.dart';
 import 'package:stronger/views/setting/category_edit_view.dart';
 import 'package:stronger/views/setting/tool_edit_view.dart';
-import 'package:stronger/views/auth/sign_in_view.dart';
+import 'package:stronger/views/auth/auth_view.dart';
 import 'package:stronger/views/start/splash_screen.dart';
+import 'package:stronger/views/stronger.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,16 +43,10 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Do_Hyeon',
           scaffoldBackgroundColor: Colors.white,
         ),
-        initialRoute: SplashScreen.routeName,
+        initialRoute: Stronger.routeName,
         routes: {
-          SplashScreen.routeName: (context) {
-            return const SplashScreen();
-          },
-          SignInView.routeName: (context) {
-            return SignInView();
-          },
-          Home.routeName: (context) {
-            return const Home();
+          Stronger.routeName: (context) {
+            return const Stronger();
           },
           ToolEditView.routeName: (context) {
             return const ToolEditView();

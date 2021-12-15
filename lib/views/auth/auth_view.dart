@@ -2,12 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
 
-class SignInView extends StatelessWidget {
+class AuthView extends StatefulWidget {
   static const routeName = '/signin';
-  SignInView({Key? key}) : super(key: key);
+  const AuthView({Key? key}) : super(key: key);
+
+  @override
+  State<AuthView> createState() => _AuthViewState();
+}
+
+class _AuthViewState extends State<AuthView> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
   late AuthProvider _authProvider;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

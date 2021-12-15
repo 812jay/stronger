@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger/views/setting/category_edit_view.dart';
 import 'package:stronger/views/setting/tool_edit_view.dart';
@@ -32,6 +33,17 @@ class SettingView extends StatelessWidget {
               },
               child: const Text(
                 'category setting',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+              },
+              child: const Text(
+                'logout',
                 style: TextStyle(
                   color: Colors.black,
                 ),
