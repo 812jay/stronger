@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -8,10 +9,12 @@ import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/views/home.dart';
 import 'package:stronger/views/setting/category_edit_view.dart';
 import 'package:stronger/views/setting/tool_edit_view.dart';
+import 'package:stronger/views/sign_in/sign_in_view.dart';
 import 'package:stronger/views/start/splash_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   // initializeDateFormatting().then((_) => runApp(const MyApp()));
 
@@ -43,6 +46,9 @@ class MyApp extends StatelessWidget {
         routes: {
           SplashScreen.routeName: (context) {
             return const SplashScreen();
+          },
+          SignInView.routeName: (context) {
+            return SignInView();
           },
           Home.routeName: (context) {
             return const Home();

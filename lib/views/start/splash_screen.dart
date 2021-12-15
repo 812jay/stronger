@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:stronger/views/sign_in/sign_in_view.dart';
 
 import '../home.dart';
 
@@ -49,7 +50,10 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _pushToMain(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 2));
 
+    // Navigator.pushNamedAndRemoveUntil(
+    //     context, Home.routeName, (route) => false);
+
     Navigator.pushNamedAndRemoveUntil(
-        context, Home.routeName, (route) => false);
+        context, SignInView.routeName, (route) => false);
   }
 }
