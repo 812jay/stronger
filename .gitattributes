@@ -1,1 +1,2 @@
 *.pbxproj binary merge=union
+/ios/Runner/GoogleService-Info.plist binary merge=union
