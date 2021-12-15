@@ -43,7 +43,7 @@ class SettingView extends StatelessWidget {
                 FirebaseAuth.instance.signOut();
               },
               child: const Text(
-                'logout',
+                'logouTTT',
                 style: TextStyle(
                   color: Colors.black,
                 ),
