@@ -56,14 +56,14 @@ class WorkoutsCalendar extends StatelessWidget {
                       CommonSmallButton(onTap: () {}, buttonText: '편집하기'),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 10.0,
                           vertical: 2.0,
                         ),
@@ -73,14 +73,14 @@ class WorkoutsCalendar extends StatelessWidget {
                               color: ColorsStronger.lightGrey,
                             ),
                             borderRadius: BorderRadius.circular(13.0)),
-                        child: Text(
+                        child: const Text(
                           'VOL',
                           style: TextStyle(fontSize: 16.0),
                         ),
                       ),
-                      SizedBox(width: 10.0),
+                      const SizedBox(width: 10.0),
                       Container(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 10.0,
                           vertical: 2.0,
                         ),
@@ -90,21 +90,22 @@ class WorkoutsCalendar extends StatelessWidget {
                               color: ColorsStronger.lightGrey,
                             ),
                             borderRadius: BorderRadius.circular(13.0)),
-                        child: Text(
+                        child: const Text(
                           'MAX',
                           style: TextStyle(fontSize: 16.0),
                         ),
                       ),
                     ],
                   ), // Vol, Max
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   CommonCard(
-                    onTap: () {},
+                    // onTap: () {},
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,17 +130,18 @@ class WorkoutsCalendar extends StatelessWidget {
                               Icon(Icons.check_circle_outline),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [Text('50kg x 20회'), Text('총합 1000kg')],
                           ),
                         ],
                       ),
                     ),
-                    height: 62,
+                    height: 80,
                   ),
                 ],
               ),

@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger/models/user_model.dart';
@@ -7,15 +8,13 @@ import 'package:stronger/service/auth_service.dart';
 class AuthProvider extends ChangeNotifier {
   final authService = AuthService();
   final firebaseAuth = FirebaseAuth.instance;
+
+  String? get uid => firebaseAuth.currentUser?.uid;
+
   Future<void> signIn(String email, String password) async {
     print('email: $email, password: $password');
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      print('success');
+      authService.signIn(email, password);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -31,10 +30,8 @@ class AuthProvider extends ChangeNotifier {
     required String password,
     required String name,
   }) async {
-    print('signup email: $email, password: $password');
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential = await authService.signUp(email, password);
 
       if (userCredential.user != null) {
         final user = userCredential.user!;
@@ -54,23 +51,15 @@ class AuthProvider extends ChangeNotifier {
         await authService.registerUser(userModel);
       }
       await FirebaseAuth.instance.signOut();
-      print('success signup');
+      log('success signup');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        log('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        log('The account already exists for that email.');
       }
     } catch (e) {
-      print(e);
+      log('$e');
     }
-  }
-
-  Future<void> getUser() async {
-    // print('getUser : ${FirebaseAuth.instance.currentUser!.uid}');
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    UserModel userData = await authService.getUserInformation(uid);
-    print('userData : $userData');
-    notifyListeners();
   }
 }

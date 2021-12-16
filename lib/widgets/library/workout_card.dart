@@ -24,7 +24,6 @@ class WorkoutCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 15),
         child: CommonCard(
-          onTap: () {},
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

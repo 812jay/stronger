@@ -64,7 +64,7 @@ class LibraryView extends StatelessWidget {
               /// categories
               Consumer2<UserProvider, LibraryProvider>(
                 builder: (_, up, lp, __) {
-                  final categories = up.categories;
+                  final categories = up.userModel.categories;
                   return Container(
                     margin: const EdgeInsets.only(top: 15),
                     height: 35,

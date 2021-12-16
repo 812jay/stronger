@@ -48,6 +48,17 @@ class UserModel extends Equatable {
     );
   }
 
+  factory UserModel.empty() {
+    return const UserModel(
+      emailAddress: '',
+      name: '',
+      uid: '',
+      profileImage: '',
+      categories: [],
+      tools: [],
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'emailAddress': emailAddress,

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/provider/library_provider.dart';
+import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/views/setting/setting_view.dart';
 import 'package:stronger/views/workouts_calendar/workouts_calendar.dart';
 import 'package:stronger/views/workouts_library/library_view.dart';
@@ -34,14 +36,33 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
+  bool isSignedIn = false;
+
+  @override
+  void initState() {
+    _getUserData();
+    super.initState();
+  }
+
+  Future<void> _getUserData() async {
+    final userProvider = context.read<UserProvider>();
+    final String? uid = context.read<AuthProvider>().uid;
+    if (uid is String) {
+      await userProvider.getUserData(uid);
+      await Future.delayed(const Duration(seconds: 3));
+      setState(() => isSignedIn = true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _navigators,
-      ),
+      body: !isSignedIn
+          ? const Center(child: CircularProgressIndicator())
+          : IndexedStack(
+              index: _selectedIndex,
+              children: _navigators,
+            ),
       bottomNavigationBar: Container(
         height: 70,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),

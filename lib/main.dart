@@ -6,11 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/provider/user_provider.dart';
-import 'package:stronger/views/home.dart';
 import 'package:stronger/views/setting/category_edit_view.dart';
 import 'package:stronger/views/setting/tool_edit_view.dart';
-import 'package:stronger/views/auth/auth_view.dart';
-import 'package:stronger/views/start/splash_screen.dart';
 import 'package:stronger/views/stronger.dart';
 
 void main() async {
@@ -34,7 +31,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (BuildContext context) => AuthProvider()),
         ChangeNotifierProvider(
-            lazy: true, create: (BuildContext context) => LibraryProvider()),
+            create: (BuildContext context) => LibraryProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: MaterialApp(

@@ -38,7 +38,7 @@ class CategoryEditView extends StatelessWidget {
             Expanded(
               child: Consumer<UserProvider>(
                 builder: (_, up, __) {
-                  final List<String> categories = up.categories;
+                  final List<String> categories = up.userModel.categories;
                   return CustomScrollView(
                     slivers: [
                       SliverList(

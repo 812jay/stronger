@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stronger/models/user_model.dart';
 
 class AuthService {
+  final firebaseAuth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
 
   Future<void> registerUser(UserModel userModel) async {
@@ -17,19 +19,19 @@ class AuthService {
     }
   }
 
-  Future<UserModel> getUserInformation(uid) async {
-    // try {
-    //   final snapshot = await firestore.collection('users').doc(uid).get();
-    //   // print(snapshot);
-    //   final userModel = UserModel.fromDocument(snapshot);
-    //   print(userModel);
-    // } catch (e) {
-    //   UnimplementedError();
-    // }
-    final snapshot = await firestore.collection('users').doc(uid).get();
-    // print(snapshot);
-    final userModel = UserModel.fromDocument(snapshot);
-    // print(userModel);
-    return userModel;
+  Future<void> signIn(String email, String password) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } catch (e) {
+      log('$e');
+    }
+  }
+
+  Future<UserCredential> signUp(String email, String password) async {
+    return await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
   }
 }

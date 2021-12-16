@@ -38,7 +38,7 @@ class ToolEditView extends StatelessWidget {
             Expanded(
               child: Consumer<UserProvider>(
                 builder: (_, up, __) {
-                  final List<String> tools = up.tools;
+                  final List<String> tools = up.userModel.tools;
                   return CustomScrollView(
                     slivers: [
                       SliverList(
