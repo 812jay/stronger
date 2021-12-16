@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.stronger">
+    package="com.jay.stronger">
    <application
         android:label="stronger"
         android:icon="@mipmap/ic_launcher">
