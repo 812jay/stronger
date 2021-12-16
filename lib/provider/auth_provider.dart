@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:stronger/models/user_model.dart';
 import 'package:stronger/service/auth_service.dart';
 
 class AuthProvider extends ChangeNotifier {
   final authService = AuthService();
+  final firebaseAuth = FirebaseAuth.instance;
   Future<void> signIn(String email, String password) async {
     print('email: $email, password: $password');
     try {
@@ -33,7 +36,23 @@ class AuthProvider extends ChangeNotifier {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
 
-      // }
+      if (userCredential.user != null) {
+        final user = userCredential.user!;
+
+        final String uid = user.uid;
+        final String email = user.email!;
+
+        final userModel = UserModel(
+          emailAddress: email,
+          name: name,
+          uid: uid,
+          profileImage: '',
+          categories: const ['가슴', '코어', '등', '어깨', '팔', '하체'],
+          tools: const ['바벨', '덤벨', '케틀벨', '맨몸', '기타'],
+        );
+
+        await authService.registerUser(userModel);
+      }
       await FirebaseAuth.instance.signOut();
       print('success signup');
     } on FirebaseAuthException catch (e) {
@@ -45,5 +64,13 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<void> getUser() async {
+    // print('getUser : ${FirebaseAuth.instance.currentUser!.uid}');
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    UserModel userData = await authService.getUserInformation(uid);
+    print('userData : $userData');
+    notifyListeners();
   }
 }

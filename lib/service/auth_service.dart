@@ -16,4 +16,20 @@ class AuthService {
       print('$e');
     }
   }
+
+  Future<UserModel> getUserInformation(uid) async {
+    // try {
+    //   final snapshot = await firestore.collection('users').doc(uid).get();
+    //   // print(snapshot);
+    //   final userModel = UserModel.fromDocument(snapshot);
+    //   print(userModel);
+    // } catch (e) {
+    //   UnimplementedError();
+    // }
+    final snapshot = await firestore.collection('users').doc(uid).get();
+    // print(snapshot);
+    final userModel = UserModel.fromDocument(snapshot);
+    // print(userModel);
+    return userModel;
+  }
 }

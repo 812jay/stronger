@@ -26,6 +26,7 @@ class WorkoutCardForAdd extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 15),
         child: CommonCard(
+          onTap: () {},
           cardColor: isSelected
               ? ColorsStronger.primaryBG.withAlpha(50)
               : Colors.white,

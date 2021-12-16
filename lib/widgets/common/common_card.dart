@@ -3,12 +3,14 @@ import 'package:stronger/utils/define.dart';
 
 class CommonCard extends StatelessWidget {
   const CommonCard({
+    required this.onTap,
     required this.child,
     this.cardColor = Colors.white,
     this.height = 50,
     Key? key,
   }) : super(key: key);
 
+  final VoidCallback onTap;
   final Widget child;
   final Color cardColor;
   final double height;
@@ -16,21 +18,24 @@ class CommonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    return Container(
-      width: width * 0.9,
-      height: height,
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: ColorsStronger.shadowColor,
-            blurRadius: 5,
-          )
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width * 0.9,
+        height: height,
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [
+            BoxShadow(
+              color: ColorsStronger.shadowColor,
+              blurRadius: 5,
+            )
+          ],
+        ),
+        child: child,
       ),
-      child: child,
     );
   }
 }

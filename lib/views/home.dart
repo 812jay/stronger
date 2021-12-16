@@ -161,7 +161,7 @@ class _HomeState extends State<Home> {
 
         switch (settings.name) {
           case SettingView.routeName:
-            builder = (_) => const SettingView();
+            builder = (_) => SettingView();
             break;
 
           default:

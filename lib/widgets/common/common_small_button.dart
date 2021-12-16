@@ -25,7 +25,7 @@ class CommonSmallButton extends StatelessWidget {
       height: height,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: ColorsStronger.primaryBG,
+          primary: buttonColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),

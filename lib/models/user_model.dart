@@ -43,8 +43,8 @@ class UserModel extends Equatable {
       name: data['name'],
       uid: data['uid'],
       profileImage: data['profileImage'],
-      categories: data['categories'],
-      tools: data['tools'],
+      categories: List.castFrom<dynamic, String>(data['categories']),
+      tools: List.castFrom<dynamic, String>(data['tools']),
     );
   }
 

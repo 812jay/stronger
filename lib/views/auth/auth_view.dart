@@ -58,8 +58,12 @@ class _AuthViewState extends State<AuthView> {
                 padding: EdgeInsets.symmetric(vertical: 20.0),
                 child: ElevatedButton(
                   onPressed: () {
+                    //userProvider가 먼저 실행되지않도록 설정 걸어두자. async await
+
                     _authProvider.signIn(
-                        _emailController.text, _passwordController.text);
+                      _emailController.text,
+                      _passwordController.text,
+                    );
                   },
                   child: Text('sign in'),
                 ),

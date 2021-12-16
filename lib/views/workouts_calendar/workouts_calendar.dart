@@ -101,6 +101,7 @@ class WorkoutsCalendar extends StatelessWidget {
                     height: 15,
                   ),
                   CommonCard(
+                    onTap: () {},
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
