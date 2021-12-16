@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "507383841989",
+    "project_id": "stronger-4804f",
+    "storage_bucket": "stronger-4804f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507383841989:android:8e6bbd2c40785de7415cac",
+        "android_client_info": {
+          "package_name": "com.jay.stronger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "507383841989-8khp77elkk5u8tp7ah9k9puhgogomjec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiDhNodxKBdGr0FrkbtS38sP2-2lXWBTo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "507383841989-8khp77elkk5u8tp7ah9k9puhgogomjec.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "507383841989-hvpdmv4c38l5ie9ljao8ave2pm7nkimr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jay.stronger"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
