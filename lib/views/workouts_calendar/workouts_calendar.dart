@@ -16,20 +16,50 @@ class WorkoutsCalendar extends StatelessWidget {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
 
-    CalendarFormat format = CalendarFormat.month;
-    DateTime selectedDay = DateTime.now();
-    DateTime focusedDate = DateTime.now();
-
     return Scaffold(
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TableCalendar(
-              locale: 'ko-KR',
-              firstDay: DateTime(1980),
-              lastDay: DateTime(2060),
-              focusedDay: selectedDay,
+            Consumer<CalendarProvider>(
+              builder: (_, cp, __) {
+                return TableCalendar(
+                  locale: 'ko-KR',
+                  firstDay: DateTime(2000),
+                  lastDay: DateTime(2060),
+                  onDaySelected: (selectDay, focusDay) {
+                    cp.onDaySelect(selectDay, focusDay);
+                  },
+                  selectedDayPredicate: (day) {
+                    return cp.onSelectDayPredicate(day);
+                  },
+                  focusedDay: cp.selectedDay,
+                  calendarFormat: cp.format,
+                  startingDayOfWeek: StartingDayOfWeek.sunday,
+                  daysOfWeekVisible: true,
+                  onPageChanged: (focusedDay) {
+                    cp.onPageChange(focusedDay);
+                  },
+                  onFormatChanged: (format) {
+                    cp.onFormatChange(format);
+                  },
+                  calendarStyle: const CalendarStyle(
+                    isTodayHighlighted: true,
+                    selectedDecoration: BoxDecoration(
+                      color: ColorsStronger.primaryBG,
+                      shape: BoxShape.circle,
+                    ),
+                    selectedTextStyle: TextStyle(color: Colors.white),
+                    todayDecoration: BoxDecoration(
+                      color: Colors.transparent,
+                      shape: BoxShape.circle,
+                    ),
+                    todayTextStyle: TextStyle(
+                      color: ColorsStronger.primaryBG,
+                    ),
+                  ),
+                );
+              },
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -52,7 +82,6 @@ class WorkoutsCalendar extends StatelessWidget {
                   Consumer<CalendarProvider>(
                     builder: (_, cp, __) {
                       WorkoutViewTypes viewType = cp.selectedViewType;
-                      print(cp.selectedViewType);
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
