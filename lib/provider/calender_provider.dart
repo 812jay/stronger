@@ -1,19 +1,17 @@
 import 'package:stronger/provider/easy_notifier.dart';
 
-class CalendarProvider extends EasyNotifier {
-  final List<int> _allTypes = [0, 1];
-  List<int> get allTypes => _allTypes;
-  int _selectedType = 0;
-  int get selectedType => _selectedType;
+enum WorkoutViewTypes {
+  vol,
+  max,
+}
 
-  void onTypeSelect(int type) {
-    print(type);
+class CalendarProvider extends EasyNotifier {
+  WorkoutViewTypes _selectedViewType = WorkoutViewTypes.vol;
+  WorkoutViewTypes get selectedViewType => _selectedViewType;
+
+  void onSelectViewType(WorkoutViewTypes type) {
     notify(() {
-      if (type == 0) {
-        _selectedType = 0;
-      } else {
-        _selectedType = 1;
-      }
+      _selectedViewType = type;
     });
   }
 }

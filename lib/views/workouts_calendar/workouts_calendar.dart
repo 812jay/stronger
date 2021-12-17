@@ -51,65 +51,80 @@ class WorkoutsCalendar extends StatelessWidget {
                   ),
                   Consumer<CalendarProvider>(
                     builder: (_, cp, __) {
-                      final types = cp.allTypes;
-                      final selectedType = cp.selectedType;
+                      WorkoutViewTypes viewType = cp.selectedViewType;
+                      print(cp.selectedViewType);
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: types
-                            .map(
-                              (type) => GestureDetector(
-                                onTap: () {
-                                  cp.onTypeSelect(type);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 5.0,
-                                    vertical: 5.0,
-                                  ),
-                                  width: 70,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: type == selectedType
-                                        ? ColorsStronger.primaryBG
-                                        : ColorsStronger.lightGrey,
-                                    borderRadius: type == 0
-                                        ? const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                          )
-                                        : const BorderRadius.only(
-                                            topRight: Radius.circular(10),
-                                            bottomRight: Radius.circular(10),
-                                          ),
-                                  ),
-                                  child: Center(
-                                    child: type == 0
-                                        ? Text(
-                                            'VOL',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: type == selectedType
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                            ),
-                                          )
-                                        : Text(
-                                            'MAX',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: type == selectedType
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                            ),
-                                          ),
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              cp.onSelectViewType(WorkoutViewTypes.vol);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 5.0,
+                                vertical: 5.0,
+                              ),
+                              width: 70,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: viewType == WorkoutViewTypes.vol
+                                    ? ColorsStronger.primaryBG
+                                    : ColorsStronger.lightGrey,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'VOL',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: viewType == WorkoutViewTypes.vol
+                                        ? Colors.white
+                                        : Colors.black,
                                   ),
                                 ),
                               ),
-                            )
-                            .toList(),
+                            ),
+                          ), //vol
+                          GestureDetector(
+                            onTap: () {
+                              cp.onSelectViewType(WorkoutViewTypes.max);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 5.0,
+                                vertical: 5.0,
+                              ),
+                              width: 70,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: viewType == WorkoutViewTypes.max
+                                    ? ColorsStronger.primaryBG
+                                    : ColorsStronger.lightGrey,
+                                borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'MAX',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: viewType == WorkoutViewTypes.max
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       );
                     },
-                    child: Container(),
                   ),
                   const SizedBox(
                     height: 15,
