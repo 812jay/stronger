@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stronger/provider/calender_provider.dart';
 import 'package:stronger/utils/define.dart';
 import 'package:stronger/widgets/common/common_button.dart';
 import 'package:stronger/widgets/common/common_card.dart';
@@ -24,6 +26,7 @@ class WorkoutsCalendar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TableCalendar(
+              locale: 'ko-KR',
               firstDay: DateTime(1980),
               lastDay: DateTime(2060),
               focusedDay: selectedDay,
@@ -40,63 +43,74 @@ class WorkoutsCalendar extends StatelessWidget {
                         '2021.12.14',
                         style: TextStyle(fontSize: 18),
                       ),
-                      // SizedBox(
-                      //   height: 30,
-                      //   child: ElevatedButton(
-                      //     onPressed: () {},
-                      //     style: ElevatedButton.styleFrom(
-                      //       primary: ColorsStronger.primaryBG,
-                      //       shape: RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(20),
-                      //       ),
-                      //     ),
-                      //     child: const Text('편집하기'),
-                      //   ),
-                      // ),//편집하기 버튼
                       CommonSmallButton(onTap: () {}, buttonText: '편집하기'),
                     ],
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0,
-                          vertical: 2.0,
-                        ),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 2.0,
-                              color: ColorsStronger.lightGrey,
-                            ),
-                            borderRadius: BorderRadius.circular(13.0)),
-                        child: const Text(
-                          'VOL',
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                      ),
-                      const SizedBox(width: 10.0),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0,
-                          vertical: 2.0,
-                        ),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 2.0,
-                              color: ColorsStronger.lightGrey,
-                            ),
-                            borderRadius: BorderRadius.circular(13.0)),
-                        child: const Text(
-                          'MAX',
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                      ),
-                    ],
-                  ), // Vol, Max
+                  Consumer<CalendarProvider>(
+                    builder: (_, cp, __) {
+                      final types = cp.allTypes;
+                      final selectedType = cp.selectedType;
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: types
+                            .map(
+                              (type) => GestureDetector(
+                                onTap: () {
+                                  cp.onTypeSelect(type);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 5.0,
+                                    vertical: 5.0,
+                                  ),
+                                  width: 70,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: type == selectedType
+                                        ? ColorsStronger.primaryBG
+                                        : ColorsStronger.lightGrey,
+                                    borderRadius: type == 0
+                                        ? const BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                          )
+                                        : const BorderRadius.only(
+                                            topRight: Radius.circular(10),
+                                            bottomRight: Radius.circular(10),
+                                          ),
+                                  ),
+                                  child: Center(
+                                    child: type == 0
+                                        ? Text(
+                                            'VOL',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: type == selectedType
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
+                                          )
+                                        : Text(
+                                            'MAX',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: type == selectedType
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
+                                          ),
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      );
+                    },
+                    child: Container(),
+                  ),
                   const SizedBox(
                     height: 15,
                   ),
@@ -111,7 +125,7 @@ class WorkoutsCalendar extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
-                                children: [
+                                children: const [
                                   Text(
                                     '스쿼트',
                                     style: TextStyle(fontSize: 18),
@@ -122,12 +136,12 @@ class WorkoutsCalendar extends StatelessWidget {
                                   Text(
                                     '하체',
                                     style: TextStyle(
-                                      color: ColorsStronger.lightGrey,
+                                      color: ColorsStronger.grey,
                                     ),
                                   ),
                                 ],
                               ),
-                              Icon(Icons.check_circle_outline),
+                              const Icon(Icons.check_circle_outline),
                             ],
                           ),
                           const SizedBox(
@@ -136,7 +150,10 @@ class WorkoutsCalendar extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [Text('50kg x 20회'), Text('총합 1000kg')],
+                            children: const [
+                              Text('50kg x 20회'),
+                              Text('총합 1000kg'),
+                            ],
                           ),
                         ],
                       ),

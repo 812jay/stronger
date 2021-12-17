@@ -28,7 +28,7 @@ class WorkoutText extends StatelessWidget {
           bodyPart,
           style: const TextStyle(
             fontSize: 15,
-            color: ColorsStronger.lightGrey,
+            color: ColorsStronger.grey,
           ),
         ),
       ],

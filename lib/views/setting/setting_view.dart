@@ -57,7 +57,7 @@ class SettingView extends StatelessWidget {
                                   Text(
                                     userModel.emailAddress,
                                     style: const TextStyle(
-                                      color: ColorsStronger.lightGrey,
+                                      color: ColorsStronger.grey,
                                     ),
                                   ),
                                 ],

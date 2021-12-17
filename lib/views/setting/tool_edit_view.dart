@@ -29,7 +29,7 @@ class ToolEditView extends StatelessWidget {
                   '등록된 도구',
                   style: TextStyle(
                     fontSize: 20,
-                    color: ColorsStronger.lightGrey,
+                    color: ColorsStronger.grey,
                   ),
                 ),
               ),
@@ -77,14 +77,14 @@ class ToolEditView extends StatelessWidget {
                                     top: index == 0
                                         ? BorderSide(
                                             width: 1,
-                                            color: ColorsStronger.lightGrey
+                                            color: ColorsStronger.grey
                                                 .withOpacity(0.5),
                                           )
                                         : BorderSide.none,
                                     bottom: BorderSide(
                                       width: 1,
-                                      color: ColorsStronger.lightGrey
-                                          .withOpacity(0.5),
+                                      color:
+                                          ColorsStronger.grey.withOpacity(0.5),
                                     ),
                                   ),
                                 ),

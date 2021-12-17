@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
+import 'package:stronger/provider/calender_provider.dart';
 import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/views/setting/category_edit_view.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (BuildContext context) => LibraryProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => CalendarProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -54,7 +54,7 @@ class LibraryView extends StatelessWidget {
                       disabledBorder: InputBorder.none,
                       hintText: '운동 이름',
                       hintStyle: TextStyle(
-                        color: ColorsStronger.lightGrey,
+                        color: ColorsStronger.grey,
                       ),
                     ),
                   ),
@@ -153,7 +153,7 @@ class _CategoryChip extends StatelessWidget {
           border: isSelected
               ? null
               : Border.all(
-                  color: ColorsStronger.lightGrey.withOpacity(0.5),
+                  color: ColorsStronger.grey.withOpacity(0.5),
                   width: 1,
                 ),
         ),
