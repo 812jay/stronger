@@ -41,7 +41,7 @@ class CalendarProvider extends EasyNotifier {
     _format = format;
   }
 
-  bool onSelectDayPredicate(DateTime day) {
-    return isSameDay(_selectedDay, day);
-  }
+  // bool onSelectDayPredicate(DateTime day) {
+  //   return isSameDay(_selectedDay, day);
+  // }
 }

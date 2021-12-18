@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/provider/calender_provider.dart';
 import 'package:stronger/provider/library_provider.dart';
+import 'package:stronger/provider/schedule_provider.dart';
 import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/views/setting/category_edit_view.dart';
 import 'package:stronger/views/setting/tool_edit_view.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
             create: (BuildContext context) => LibraryProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
+        ChangeNotifierProvider(create: (context) => ScheduleProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
