@@ -3,23 +3,23 @@ import 'package:equatable/equatable.dart';
 
 class WorkoutRecordsModel extends Equatable {
   final String description;
-  final Timestamp workoutTime;
+  final Timestamp workoutDate;
   final List<Map<String, dynamic>> sets;
 
   const WorkoutRecordsModel({
     required this.description,
-    required this.workoutTime,
+    required this.workoutDate,
     required this.sets,
   });
 
   WorkoutRecordsModel copyWith({
     String? description,
-    Timestamp? workoutTime,
+    Timestamp? workoutDate,
     List<Map<String, dynamic>>? sets,
   }) {
     return WorkoutRecordsModel(
       description: description ?? this.description,
-      workoutTime: workoutTime ?? this.workoutTime,
+      workoutDate: workoutDate ?? this.workoutDate,
       sets: sets ?? this.sets,
     );
   }
@@ -28,7 +28,7 @@ class WorkoutRecordsModel extends Equatable {
     final data = snapshot.data() as Map<String, dynamic>;
     return WorkoutRecordsModel(
       description: data['description'],
-      workoutTime: data['workoutTime'],
+      workoutDate: data['workoutDate'],
       // sets: List.castFrom<dynamic, String>(data['tools']),
       sets: data['sets'],
     );
@@ -37,7 +37,7 @@ class WorkoutRecordsModel extends Equatable {
   factory WorkoutRecordsModel.empty() {
     return WorkoutRecordsModel(
       description: '',
-      workoutTime: Timestamp.now(),
+      workoutDate: Timestamp.now(),
       sets: const [],
     );
   }
@@ -45,7 +45,7 @@ class WorkoutRecordsModel extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'description': description,
-      'workoutTime': workoutTime,
+      'workoutDate': workoutDate,
       'sets': sets,
     };
   }
@@ -53,7 +53,7 @@ class WorkoutRecordsModel extends Equatable {
   @override
   List<Object?> get props => [
         description,
-        workoutTime,
+        workoutDate,
         sets,
       ];
 }

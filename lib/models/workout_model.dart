@@ -7,7 +7,7 @@ class WorkoutModel extends Equatable {
   final String description;
   final List<String> tools;
   final bool isBookmarked;
-  final WorkoutRecordsModel workoutRecords;
+  final List<WorkoutRecordsModel> workoutRecords;
 
   const WorkoutModel({
     required this.title,
@@ -22,7 +22,7 @@ class WorkoutModel extends Equatable {
     String? description,
     List<String>? tools,
     bool? isBookmarked,
-    WorkoutRecordsModel? workoutRecords,
+    List<WorkoutRecordsModel>? workoutRecords,
   }) {
     return WorkoutModel(
       title: title ?? this.title,
@@ -45,16 +45,12 @@ class WorkoutModel extends Equatable {
   }
 
   factory WorkoutModel.empty() {
-    return WorkoutModel(
+    return const WorkoutModel(
       title: '',
       description: '',
-      tools: const [],
+      tools: [],
       isBookmarked: false,
-      workoutRecords: WorkoutRecordsModel(
-        description: '',
-        workoutTime: Timestamp.now(),
-        sets: const [],
-      ),
+      workoutRecords: [],
     );
   }
 

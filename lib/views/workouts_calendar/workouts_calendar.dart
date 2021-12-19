@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/calender_provider.dart';
 import 'package:stronger/provider/schedule_provider.dart';
-import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/utils/define.dart';
-import 'package:stronger/widgets/common/common_button.dart';
 import 'package:stronger/widgets/common/common_card.dart';
 import 'package:stronger/widgets/common/common_small_button.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -16,9 +14,6 @@ class WorkoutsCalendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -31,7 +26,7 @@ class WorkoutsCalendar extends StatelessWidget {
                   firstDay: DateTime(2000),
                   lastDay: DateTime(2060),
                   onDaySelected: (selectDay, focusDay) {
-                    sp.getSchedules(selectDay);
+                    sp.getSchedules(Timestamp.fromDate(selectDay));
                     cp.onDaySelect(selectDay, focusDay);
                   },
                   selectedDayPredicate: (day) {
@@ -165,25 +160,75 @@ class WorkoutsCalendar extends StatelessWidget {
                   const SizedBox(
                     height: 15,
                   ),
-                  Consumer2<ScheduleProvider, UserProvider>(
-                    builder: (_, sp, up, __) {
-                      Map<String, dynamic> daySchedule = sp.scheduleData;
-                      // print(sp.scheduleData.keys
-                      //     .where((element) => sp.scheduleData[element]));
+                  Consumer2<ScheduleProvider, CalendarProvider>(
+                    builder: (_, sp, cp, __) {
+                      final scheduleModel = sp.scheduleModel;
                       return Container(
                         margin: const EdgeInsets.only(top: 15),
-                        height: 35,
+                        height: 200,
+                        width: double.infinity,
                         child: CustomScrollView(
                           scrollDirection: Axis.vertical,
                           slivers: [
                             SliverList(
                               delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
-                                  return Container(
-                                    child: Text('a'),
+                                  return CommonCard(
+                                    // onTap: () {},
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    scheduleModel
+                                                        .workouts[index],
+                                                    style: const TextStyle(
+                                                        fontSize: 18),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  const Text(
+                                                    '하체',
+                                                    style: TextStyle(
+                                                      color:
+                                                          ColorsStronger.grey,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const Icon(
+                                                  Icons.check_circle_outline),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: const [
+                                              Text('50kg x 20회'),
+                                              Text('총합 1000kg'),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    height: 80,
                                   );
                                 },
-                                childCount: sp.scheduleData.length,
+                                childCount: sp.scheduleModel.workouts.length,
                               ),
                             ),
                           ],
