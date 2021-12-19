@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/provider/calender_provider.dart';
 import 'package:stronger/provider/schedule_provider.dart';
 import 'package:stronger/utils/define.dart';
@@ -14,6 +15,8 @@ class WorkoutsCalendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String? uid = AuthProvider().uid;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -26,7 +29,7 @@ class WorkoutsCalendar extends StatelessWidget {
                   firstDay: DateTime(2000),
                   lastDay: DateTime(2060),
                   onDaySelected: (selectDay, focusDay) {
-                    sp.getSchedules(Timestamp.fromDate(selectDay));
+                    sp.getSchedules(uid!, Timestamp.fromDate(selectDay));
                     cp.onDaySelect(selectDay, focusDay);
                   },
                   selectedDayPredicate: (day) {

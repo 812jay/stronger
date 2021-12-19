@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger/models/schedule_model.dart';
-import 'package:stronger/provider/auth_provider.dart';
 
 class ScheduleService {
   final firestore = FirebaseFirestore.instance;
-  final String? uid = AuthProvider().uid;
 
-  Future<ScheduleModel?> getScheduleModel(Timestamp selectedDay) async {
+  Future<ScheduleModel?> getScheduleModel(
+      String uid, Timestamp selectedDay) async {
     try {
       Timestamp scheduleDate;
       ScheduleModel scheduleModel = ScheduleModel(

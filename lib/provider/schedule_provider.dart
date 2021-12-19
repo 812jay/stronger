@@ -8,9 +8,10 @@ class ScheduleProvider extends EasyNotifier {
 
   ScheduleModel scheduleModel = ScheduleModel.empty();
 
-  Future<void> getSchedules(Timestamp selectDay) async {
+  Future<void> getSchedules(String uid, Timestamp selectDay) async {
     try {
-      final scheduleModel = await scheduleService.getScheduleModel(selectDay);
+      final scheduleModel =
+          await scheduleService.getScheduleModel(uid, selectDay);
       notify(() {
         this.scheduleModel = this.scheduleModel.copyWith(
               scheduleDate: scheduleModel!.scheduleDate,
