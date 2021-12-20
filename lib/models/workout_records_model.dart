@@ -4,23 +4,27 @@ import 'package:equatable/equatable.dart';
 class WorkoutRecordsModel extends Equatable {
   final String description;
   final Timestamp workoutDate;
-  final List<Map<String, dynamic>> sets;
+  final List<Map<String, int>> sets;
+  final List<String> imageRecords;
 
   const WorkoutRecordsModel({
     required this.description,
     required this.workoutDate,
     required this.sets,
+    required this.imageRecords,
   });
 
   WorkoutRecordsModel copyWith({
     String? description,
     Timestamp? workoutDate,
-    List<Map<String, dynamic>>? sets,
+    List<Map<String, int>>? sets,
+    List<String>? imageRecords,
   }) {
     return WorkoutRecordsModel(
       description: description ?? this.description,
       workoutDate: workoutDate ?? this.workoutDate,
       sets: sets ?? this.sets,
+      imageRecords: imageRecords ?? this.imageRecords,
     );
   }
 
@@ -30,7 +34,8 @@ class WorkoutRecordsModel extends Equatable {
       description: data['description'],
       workoutDate: data['workoutDate'],
       // sets: List.castFrom<dynamic, String>(data['tools']),
-      sets: data['sets'],
+      sets: List.castFrom<dynamic, Map<String, int>>(data['sets']),
+      imageRecords: data['imageRecords'],
     );
   }
 
@@ -39,6 +44,7 @@ class WorkoutRecordsModel extends Equatable {
       description: '',
       workoutDate: Timestamp.now(),
       sets: const [],
+      imageRecords: const [],
     );
   }
 
@@ -47,6 +53,7 @@ class WorkoutRecordsModel extends Equatable {
       'description': description,
       'workoutDate': workoutDate,
       'sets': sets,
+      'imageRecords': imageRecords,
     };
   }
 
@@ -55,5 +62,6 @@ class WorkoutRecordsModel extends Equatable {
         description,
         workoutDate,
         sets,
+        imageRecords,
       ];
 }

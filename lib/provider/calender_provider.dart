@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stronger/provider/easy_notifier.dart';
+import 'package:stronger/provider/library_provider.dart';
+import 'package:stronger/provider/schedule_provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 enum WorkoutViewTypes {
@@ -25,7 +28,7 @@ class CalendarProvider extends EasyNotifier {
     });
   }
 
-  void onDaySelect(DateTime selectDay, DateTime focusDay) {
+  void onDaySelect(DateTime selectDay, DateTime focusDay) async {
     notify(() {
       _selectedDay = selectDay;
       _focusedDay = focusDay;

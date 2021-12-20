@@ -30,8 +30,9 @@ class LibraryProvider extends EasyNotifier {
       final workoutModel = await workoutService.getWorkoutModel(uid, workout);
       notify(() {
         this.workoutModel = this.workoutModel.copyWith(
-              title: workoutModel.title,
+              title: workoutModel!.title,
               description: workoutModel.description,
+              category: workoutModel.category,
               tools: workoutModel.tools,
               isBookmarked: workoutModel.isBookmarked,
               workoutRecords: workoutModel.workoutRecords,

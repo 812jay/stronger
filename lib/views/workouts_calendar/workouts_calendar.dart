@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/provider/calender_provider.dart';
+import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/provider/schedule_provider.dart';
 import 'package:stronger/utils/define.dart';
 import 'package:stronger/widgets/common/common_card.dart';
@@ -22,8 +23,8 @@ class WorkoutsCalendar extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Consumer2<CalendarProvider, ScheduleProvider>(
-              builder: (_, cp, sp, __) {
+            Consumer3<CalendarProvider, ScheduleProvider, LibraryProvider>(
+              builder: (_, cp, sp, lp, __) {
                 return TableCalendar(
                   locale: 'ko-KR',
                   firstDay: DateTime(2000),
@@ -163,9 +164,11 @@ class WorkoutsCalendar extends StatelessWidget {
                   const SizedBox(
                     height: 15,
                   ),
-                  Consumer2<ScheduleProvider, CalendarProvider>(
-                    builder: (_, sp, cp, __) {
+                  Consumer2<ScheduleProvider, LibraryProvider>(
+                    builder: (_, sp, lp, __) {
                       final scheduleModel = sp.scheduleModel;
+                      // final workoutModel = lp.workoutModel;
+                      // print(workoutModel);
                       return Container(
                         margin: const EdgeInsets.only(top: 15),
                         height: 200,
@@ -176,6 +179,10 @@ class WorkoutsCalendar extends StatelessWidget {
                             SliverList(
                               delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
+                                  // lp.getWorkouts(
+                                  //   uid!,
+                                  //   scheduleModel.workouts[index],
+                                  // );
                                   return CommonCard(
                                     // onTap: () {},
                                     child: Padding(
@@ -199,9 +206,9 @@ class WorkoutsCalendar extends StatelessWidget {
                                                   const SizedBox(
                                                     width: 5,
                                                   ),
-                                                  const Text(
-                                                    '하체',
-                                                    style: TextStyle(
+                                                  Text(
+                                                    '${scheduleModel.workouts[index]}',
+                                                    style: const TextStyle(
                                                       color:
                                                           ColorsStronger.grey,
                                                     ),

@@ -26,6 +26,7 @@ class ScheduleService {
           scheduleModel = ScheduleModel.fromDocument(doc);
         }
       }
+
       return scheduleModel;
     } catch (e) {
       throw Exception('getscheduleModel: $e');
