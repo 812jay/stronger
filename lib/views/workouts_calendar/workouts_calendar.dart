@@ -167,8 +167,15 @@ class WorkoutsCalendar extends StatelessWidget {
                   Consumer2<ScheduleProvider, LibraryProvider>(
                     builder: (_, sp, lp, __) {
                       final scheduleModel = sp.scheduleModel;
-                      // final workoutModel = lp.workoutModel;
-                      // print(workoutModel);
+                      final workoutModel = lp.workoutModel;
+                      if (scheduleModel.workouts.isNotEmpty) {
+                        // print(scheduleModel.workouts.length);
+                        for (var workout in scheduleModel.workouts) {
+                          // lp.getWorkouts(uid!, workout);
+                        }
+                      }
+                      // print(lp.workoutModel.title);
+
                       return Container(
                         margin: const EdgeInsets.only(top: 15),
                         height: 200,
@@ -184,7 +191,6 @@ class WorkoutsCalendar extends StatelessWidget {
                                   //   scheduleModel.workouts[index],
                                   // );
                                   return CommonCard(
-                                    // onTap: () {},
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(

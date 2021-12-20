@@ -6,7 +6,6 @@ class WorkoutService {
 
   // Future<WorkoutModel> getWorkoutModel(String uid) async {
   Future<WorkoutModel?> getWorkoutModel(String uid, String workout) async {
-    // print('service workout : $workout');
     try {
       WorkoutModel workoutModel = const WorkoutModel(
         title: '',
@@ -16,23 +15,28 @@ class WorkoutService {
         isBookmarked: false,
         workoutRecords: [],
       );
+
       final snapshot = await firestore
           .collection('users')
           .doc(uid)
           .collection('workouts')
-          // .doc()
-          .get();
-      for (var doc in snapshot.docs) {
-        // workouts.add(doc.data());
-        String title = doc.get('title');
-        // print(workout);
-        // print(doc.get('title'));
-        if (title == workout) {
-          workoutModel = WorkoutModel.fromDocument(doc);
+          .get()
+          .then((querySnapshot) {
+        // querySnapshot.docs.forEach(
+        //   (doc) {
+        //     if (workout == doc.get('title')) {
+        //       workoutModel = WorkoutModel.fromDocument(doc);
+        //     }
+        //   },
+        // );
+        for (var doc in querySnapshot.docs) {
+          if (workout == doc.get('title')) {
+            workoutModel = WorkoutModel.fromDocument(doc);
+          }
         }
-        return workoutModel;
-      }
-      // print(workouts);
+      });
+
+      return workoutModel;
     } catch (e) {
       throw Exception('getWorkoutModel: $e');
     }

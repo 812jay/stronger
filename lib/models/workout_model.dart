@@ -8,7 +8,8 @@ class WorkoutModel extends Equatable {
   final String category;
   final List<String> tools;
   final bool isBookmarked;
-  final List<WorkoutRecordsModel> workoutRecords;
+  // final List<WorkoutRecordsModel> workoutRecords;
+  final List<dynamic> workoutRecords;
 
   const WorkoutModel({
     required this.title,
@@ -25,7 +26,8 @@ class WorkoutModel extends Equatable {
     String? category,
     List<String>? tools,
     bool? isBookmarked,
-    List<WorkoutRecordsModel>? workoutRecords,
+    // List<WorkoutRecordsModel>? workoutRecords,
+    List<dynamic>? workoutRecords,
   }) {
     return WorkoutModel(
       title: title ?? this.title,
@@ -43,9 +45,10 @@ class WorkoutModel extends Equatable {
       title: data['title'],
       description: data['description'],
       category: data['category'],
-      tools: List.castFrom<dynamic, String>(data['types']),
+      tools: List.castFrom<dynamic, String>(data['tools']),
       isBookmarked: data['isBookmarked'],
-      workoutRecords: data['workoutRecords'],
+      // workoutRecords: data['workoutRecords'],
+      workoutRecords: List.castFrom<dynamic, dynamic>(data['workoutRecords']),
     );
   }
 
