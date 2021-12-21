@@ -55,15 +55,16 @@ class _AuthViewState extends State<AuthView> {
                   'assets/splash/weightlifting.png',
                   height: 58.0,
                 ),
-                SizedBox(
-                  height: 52,
+                const Text('STRONGER'),
+                const SizedBox(
+                  height: 32,
                 ),
                 CommonCard(
                   child: TextFormField(
                     maxLines: 1,
                     keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'email',
                     ),
@@ -71,7 +72,7 @@ class _AuthViewState extends State<AuthView> {
                     onSaved: (value) => _emailController.text = value!.trim(),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 22,
                 ),
                 CommonCard(
@@ -80,7 +81,7 @@ class _AuthViewState extends State<AuthView> {
                     keyboardType: TextInputType.visiblePassword,
                     autocorrect: false,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'password',
                     ),
@@ -105,7 +106,7 @@ class _AuthViewState extends State<AuthView> {
                         _passwordController.text,
                       );
                     },
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         '로그인',
                         style: TextStyle(
@@ -115,40 +116,38 @@ class _AuthViewState extends State<AuthView> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 22,
                 ),
                 GestureDetector(
                   onTap: () {},
-                  child: Text(
+                  child: const Text(
                     '비밀번호가 기억이 안나시나요?',
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 82,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       '아직 회원이 아니신가요?',
                       style: TextStyle(
                         color: ColorsStronger.grey,
                       ),
                     ),
-                    Container(
-                      child: GestureDetector(
-                        onTap: () {
-                          _authProvider.signUp(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                            name: '이름',
-                          );
-                        },
-                        child: Text(
-                          ' 회원가입',
-                          style: TextStyle(fontSize: 22),
-                        ),
+                    GestureDetector(
+                      onTap: () {
+                        _authProvider.signUp(
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                          name: '이름',
+                        );
+                      },
+                      child: const Text(
+                        ' 회원가입',
+                        style: TextStyle(fontSize: 22),
                       ),
                     ),
                   ],
