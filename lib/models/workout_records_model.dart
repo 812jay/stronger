@@ -35,7 +35,7 @@ class WorkoutRecordsModel extends Equatable {
       workoutDate: data['workoutDate'],
       // sets: List.castFrom<dynamic, String>(data['tools']),
       sets: List.castFrom<dynamic, Map<String, int>>(data['sets']),
-      imageRecords: data['imageRecords'],
+      imageRecords: List.castFrom<dynamic, String>(data['imageRecords']),
     );
   }
 
