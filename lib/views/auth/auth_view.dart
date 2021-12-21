@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
+import 'package:stronger/utils/define.dart';
+import 'package:stronger/widgets/common/common_card.dart';
 
 class AuthView extends StatefulWidget {
   static const routeName = '/signin';
@@ -26,63 +28,134 @@ class _AuthViewState extends State<AuthView> {
   @override
   Widget build(BuildContext context) {
     _authProvider = Provider.of<AuthProvider>(context, listen: false);
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                maxLines: 1,
-                keyboardType: TextInputType.emailAddress,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  hintText: 'email',
+      body: Center(
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              height: height * 0.38,
+              // width: double.infinity,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/auth/main.jpg'),
+                  fit: BoxFit.fill,
                 ),
-                controller: _emailController,
-                onSaved: (value) => _emailController.text = value!.trim(),
               ),
-              TextFormField(
-                style: TextStyle(fontFamily: ''),
-                maxLines: 1,
-                keyboardType: TextInputType.visiblePassword,
-                autocorrect: false,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'password',
+            ),
+            Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: height * 0.345,
                 ),
-                controller: _passwordController,
-                onSaved: (value) => _passwordController.text = value!.trim(),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 20.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    //userProvider가 먼저 실행되지않도록 설정 걸어두자. async await
+                Image.asset(
+                  'assets/splash/weightlifting.png',
+                  height: 58.0,
+                ),
+                SizedBox(
+                  height: 52,
+                ),
+                CommonCard(
+                  child: TextFormField(
+                    maxLines: 1,
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'email',
+                    ),
+                    controller: _emailController,
+                    onSaved: (value) => _emailController.text = value!.trim(),
+                  ),
+                ),
+                SizedBox(
+                  height: 22,
+                ),
+                CommonCard(
+                  child: TextFormField(
+                    maxLines: 1,
+                    keyboardType: TextInputType.visiblePassword,
+                    autocorrect: false,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'password',
+                    ),
+                    controller: _passwordController,
+                    onSaved: (value) =>
+                        _passwordController.text = value!.trim(),
+                  ),
+                ),
+                SizedBox(
+                  height: 22,
+                ),
+                CommonCard(
+                  // width: width * 0.8,
+                  // padding: EdgeInsets.symmetric(vertical: 20.0),
+                  cardColor: ColorsStronger.primaryBG,
+                  child: GestureDetector(
+                    onTap: () {
+                      //userProvider가 먼저 실행되지않도록 설정 걸어두자. async await
 
-                    _authProvider.signIn(
-                      _emailController.text,
-                      _passwordController.text,
-                    );
-                  },
-                  child: Text('sign in'),
+                      _authProvider.signIn(
+                        _emailController.text,
+                        _passwordController.text,
+                      );
+                    },
+                    child: Center(
+                      child: Text(
+                        '로그인',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 20.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    _authProvider.signUp(
-                      email: _emailController.text,
-                      password: _passwordController.text,
-                      name: '이름',
-                    );
-                  },
-                  child: Text('sign up'),
+                SizedBox(
+                  height: 22,
                 ),
-              ),
-            ],
-          ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Text(
+                    '비밀번호가 기억이 안나시나요?',
+                  ),
+                ),
+                SizedBox(
+                  height: 82,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '아직 회원이 아니신가요?',
+                      style: TextStyle(
+                        color: ColorsStronger.grey,
+                      ),
+                    ),
+                    Container(
+                      child: GestureDetector(
+                        onTap: () {
+                          _authProvider.signUp(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                            name: '이름',
+                          );
+                        },
+                        child: Text(
+                          ' 회원가입',
+                          style: TextStyle(fontSize: 22),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
