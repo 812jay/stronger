@@ -3,13 +3,20 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger/models/user_model.dart';
+import 'package:stronger/provider/easy_notifier.dart';
 import 'package:stronger/service/auth_service.dart';
 
-class AuthProvider extends ChangeNotifier {
+class AuthProvider extends EasyNotifier {
   final authService = AuthService();
   final firebaseAuth = FirebaseAuth.instance;
 
   String? get uid => firebaseAuth.currentUser?.uid;
+
+  String _emailAlarm = '';
+  String get emailAlarm => _emailAlarm;
+
+  String _passwordAlarm = '';
+  String get passwordAlarm => _passwordAlarm;
 
   Future<void> signIn(String email, String password) async {
     print('email: $email, password: $password');
@@ -31,6 +38,10 @@ class AuthProvider extends ChangeNotifier {
     required String name,
   }) async {
     try {
+      notify(() {
+        _emailAlarm = '';
+        _passwordAlarm = '';
+      });
       UserCredential userCredential = await authService.signUp(email, password);
 
       if (userCredential.user != null) {
@@ -53,13 +64,66 @@ class AuthProvider extends ChangeNotifier {
       await FirebaseAuth.instance.signOut();
       log('success signup');
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        log('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
+      if (e.code == 'email-already-in-use') {
         log('The account already exists for that email.');
+        notify(() {
+          _emailAlarm = '이미 존재하는 이메일 입니다';
+        });
+      } else if (e.code == 'weak-password') {
+        log('The password provided is too weak.');
+        notify(() {
+          _passwordAlarm = '비밀번호 보안성이 취약합니다';
+        });
       }
     } catch (e) {
       log('$e');
     }
   }
+
+  // Future<bool> validationCheck(
+  //   String name,
+  //   String email,
+  //   String password,
+  //   String confirmPassword,
+  // ) async {
+  //   bool result = false;
+  //   try {
+  //     notify(() {
+  //       _nameAlarm = '';
+  //       _emailAlarm = '';
+  //       _passwordAlarm = '';
+  //       _confirmPasswordAlarm = '';
+  //       if (name == '') {
+  //         _nameAlarm = '이름을 입력해주세요';
+  //       } else if (name.length > 8) {
+  //         _nameAlarm = '이름을 8글자 아래로 적어주세요';
+  //       }
+
+  //       if (email == '') {
+  //         _emailAlarm = 'email을 입력해주세요';
+  //       } else if (!email.contains('@')) {
+  //         _emailAlarm = '@를 입력해주세요';
+  //       } else if (!email.contains('.')) {
+  //         _emailAlarm = '.을 입력해주세요';
+  //       }
+
+  //       // if (password == '') {
+  //       //   _passwordAlarm = '비밀번호를 입력해주세요';
+  //       // } else if (name.length < 6) {
+  //       //   _passwordAlarm = '비밀번호를 6글자 이상 적어주세요';
+  //       // }
+
+  //       if (confirmPassword == '') {
+  //         _confirmPasswordAlarm = '비밀번호 확인을 적어주세요';
+  //       } else if (confirmPassword != password) {
+  //         _confirmPasswordAlarm = '비밀번호와 일치하지 않습니다';
+  //       }
+  //     });
+  //     result = true;
+  //   } catch (e) {
+  //     print(e);
+  //   }
+
+  //   return result;
+  // }
 }

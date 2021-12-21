@@ -50,7 +50,9 @@ class _HomeState extends State<Home> {
     if (uid is String) {
       await userProvider.getUserData(uid);
       await Future.delayed(const Duration(seconds: 3));
-      setState(() => isSignedIn = true);
+      if (mounted) {
+        setState(() => isSignedIn = true);
+      }
     }
   }
 
@@ -84,14 +86,16 @@ class _HomeState extends State<Home> {
               onTap: () {
                 final int currentIndex = item['currentIndex'];
                 setState(() {
-                  if (_selectedIndex != currentIndex) {
-                    _selectedIndex = currentIndex;
-                  } else {
-                    final GlobalKey<NavigatorState> state =
-                        _navigators[currentIndex].key
-                            as GlobalKey<NavigatorState>;
+                  if (mounted) {
+                    if (_selectedIndex != currentIndex) {
+                      _selectedIndex = currentIndex;
+                    } else {
+                      final GlobalKey<NavigatorState> state =
+                          _navigators[currentIndex].key
+                              as GlobalKey<NavigatorState>;
 
-                    state.currentState!.popUntil((route) => route.isFirst);
+                      state.currentState!.popUntil((route) => route.isFirst);
+                    }
                   }
                 });
               },

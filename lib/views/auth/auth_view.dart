@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/utils/define.dart';
+import 'package:stronger/views/auth/sign_up_view.dart';
 import 'package:stronger/widgets/common/common_card.dart';
 
 class AuthView extends StatefulWidget {
@@ -66,7 +67,7 @@ class _AuthViewState extends State<AuthView> {
                     autocorrect: false,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'email',
+                      hintText: '이메일',
                     ),
                     controller: _emailController,
                     onSaved: (value) => _emailController.text = value!.trim(),
@@ -83,30 +84,30 @@ class _AuthViewState extends State<AuthView> {
                     obscureText: true,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'password',
+                      hintText: '비밀번호',
                     ),
                     controller: _passwordController,
                     onSaved: (value) =>
                         _passwordController.text = value!.trim(),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 22,
                 ),
-                CommonCard(
-                  // width: width * 0.8,
-                  // padding: EdgeInsets.symmetric(vertical: 20.0),
-                  cardColor: ColorsStronger.primaryBG,
-                  child: GestureDetector(
-                    onTap: () {
-                      //userProvider가 먼저 실행되지않도록 설정 걸어두자. async await
+                GestureDetector(
+                  onTap: () {
+                    //userProvider가 먼저 실행되지않도록 설정 걸어두자. async await
 
-                      _authProvider.signIn(
-                        _emailController.text,
-                        _passwordController.text,
-                      );
-                    },
-                    child: const Center(
+                    _authProvider.signIn(
+                      _emailController.text,
+                      _passwordController.text,
+                    );
+                  },
+                  child: const CommonCard(
+                    // width: width * 0.8,
+                    // padding: EdgeInsets.symmetric(vertical: 20.0),
+                    cardColor: Colors.black,
+                    child: Center(
                       child: Text(
                         '로그인',
                         style: TextStyle(
@@ -139,10 +140,17 @@ class _AuthViewState extends State<AuthView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        _authProvider.signUp(
-                          email: _emailController.text,
-                          password: _passwordController.text,
-                          name: '이름',
+                        // _authProvider.signUp(
+                        //   email: _emailController.text,
+                        //   password: _passwordController.text,
+                        //   name: '이름',
+                        // );
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const SignUpView();
+                            },
+                          ),
                         );
                       },
                       child: const Text(
