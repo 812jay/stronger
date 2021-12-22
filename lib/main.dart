@@ -8,6 +8,7 @@ import 'package:stronger/provider/calender_provider.dart';
 import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/provider/schedule_provider.dart';
 import 'package:stronger/provider/user_provider.dart';
+import 'package:stronger/views/auth/sign_up_view.dart';
 import 'package:stronger/views/setting/category_edit_view.dart';
 import 'package:stronger/views/setting/tool_edit_view.dart';
 import 'package:stronger/views/stronger.dart';
@@ -54,6 +55,9 @@ class MyApp extends StatelessWidget {
           },
           CategoryEditView.routeName: (context) {
             return const CategoryEditView();
+          },
+          SignUpView.routeName: (context) {
+            return const SignUpView();
           }
         },
       ),

@@ -12,6 +12,9 @@ class AuthProvider extends EasyNotifier {
 
   String? get uid => firebaseAuth.currentUser?.uid;
 
+  String _signInAlarm = '';
+  String get signInAlarm => _emailAlarm;
+
   String _emailAlarm = '';
   String get emailAlarm => _emailAlarm;
 
@@ -19,16 +22,30 @@ class AuthProvider extends EasyNotifier {
   String get passwordAlarm => _passwordAlarm;
 
   Future<void> signIn(String email, String password) async {
-    print('email: $email, password: $password');
+    log('email: $email, password: $password');
+    notify(() {
+      _signInAlarm = '';
+    });
     try {
       authService.signIn(email, password);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+      if (e.code == 'invalid-email') {
+        log('invalid-email');
+        notify(() {
+          _signInAlarm = '해당 이메일이나 비밀번호가 일치하지 않습니다.';
+        });
+      } else if (e.code == 'user-not-found') {
+        notify(() {
+          _signInAlarm = '해당 이메일이나 비밀번호가 일치하지 않습니다.';
+        });
+        log('No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        notify(() {
+          _signInAlarm = '해당 이메일이나 비밀번호가 일치하지 않습니다.';
+        });
+        log('Wrong password provided for that user.');
       }
-      print(e.code);
+      log(e.code);
     }
   }
 

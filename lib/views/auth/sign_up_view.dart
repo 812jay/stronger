@@ -196,14 +196,14 @@ class _SignUpViewState extends State<SignUpView> {
                   height: 100,
                 ),
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
+                    await _authProvider.signUp(
+                      name: _nameController.text,
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                    );
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      _authProvider.signUp(
-                        name: _nameController.text,
-                        email: _emailController.text,
-                        password: _passwordController.text,
-                      );
                       Navigator.of(context).popAndPushNamed('stronger');
                     }
                   },
