@@ -8,13 +8,11 @@ class LibraryProvider extends EasyNotifier {
   final workoutService = WorkoutService();
   final firestore = FirebaseFirestore.instance;
 
-  WorkoutModel workoutModel = WorkoutModel.empty();
-
   List<String> _selectedCategories = [];
   List<String> get selectedCategories => _selectedCategories;
 
-  // List<WorkoutModel> _workoutModels = [];
-  // List<WorkoutModel> get workoutModels => _workoutModels;
+  List<WorkoutModel> _workoutModels = [];
+  List<WorkoutModel> get workoutModels => _workoutModels;
 
   bool isSelectedCategory(String categoryString) {
     return _selectedCategories.contains(categoryString);
@@ -31,26 +29,33 @@ class LibraryProvider extends EasyNotifier {
     });
   }
 
-  Future<List<WorkoutModel>> getWorkouts(
-      String uid, List<String> workouts) async {
-    List<WorkoutModel> workoutModels = [];
-    for (var workout in workouts) {
-      final workoutsData = await workoutService.getWorkoutModel(uid, workout);
-      workoutModels.add(workoutsData!);
-      // workoutModels.add(workoutsData!);
-    }
-    // print(workoutModels);
-    return workoutModels;
-    // notify(() {
-    //   this.workoutModel = this.workoutModel.copyWith(
-    //       title: workoutModel?.title,
-    //       description: workoutModel?.description,
-    //       category: workoutModel?.category,
-    //       tools: workoutModel?.tools,
-    //       isBookmarked: workoutModel?.isBookmarked,
-    //       workoutRecords: workoutModel?.workoutRecords);
-    // });
+  void clearWorkouts() {
+    notify(() => _workoutModels.clear());
   }
+
+  Future<void> getWorkouts(String uid) async {
+    final List<WorkoutModel> workouts = await workoutService.getWorkouts(uid);
+    _workoutModels = [...workouts];
+  }
+  // Future<void> getWorkouts(String uid, List<String> workouts) async {
+  //   _workoutModels.clear();
+  //   for (String workout in workouts) {
+  //     final workoutData = await workoutService.getWorkoutModel(uid, workout);
+
+  //     _workoutModels = [...workoutModels, workoutData];
+  //   }
+  //   // print(workoutModels);
+  //   notify();
+  //   // notify(() {
+  //   //   this.workoutModel = this.workoutModel.copyWith(
+  //   //       title: workoutModel?.title,
+  //   //       description: workoutModel?.description,
+  //   //       category: workoutModel?.category,
+  //   //       tools: workoutModel?.tools,
+  //   //       isBookmarked: workoutModel?.isBookmarked,
+  //   //       workoutRecords: workoutModel?.workoutRecords);
+  //   // });
+  // }
 
   // Future<void> getWorkouts(String uid, String workout) async {
   //   print('object');

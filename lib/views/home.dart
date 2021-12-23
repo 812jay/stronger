@@ -45,11 +45,10 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _getUserData() async {
-    final userProvider = context.read<UserProvider>();
     final String? uid = context.read<AuthProvider>().uid;
     if (uid is String) {
-      await userProvider.getUserData(uid);
-      await Future.delayed(const Duration(seconds: 3));
+      await context.read<UserProvider>().getUserData(uid);
+      await context.read<LibraryProvider>().getWorkouts(uid);
       if (mounted) {
         setState(() => isSignedIn = true);
       }
