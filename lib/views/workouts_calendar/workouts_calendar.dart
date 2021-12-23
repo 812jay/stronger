@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:stronger/models/workout_model.dart';
 import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/provider/calender_provider.dart';
 import 'package:stronger/provider/library_provider.dart';
@@ -10,59 +12,68 @@ import 'package:stronger/widgets/common/common_card.dart';
 import 'package:stronger/widgets/common/common_small_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class WorkoutsCalendar extends StatelessWidget {
+class WorkoutsCalendar extends StatefulWidget {
   static const routeName = 'calendar';
   const WorkoutsCalendar({Key? key}) : super(key: key);
 
   @override
+  State<WorkoutsCalendar> createState() => _WorkoutsCalendarState();
+}
+
+List<WorkoutModel> workoutsData = [];
+
+class _WorkoutsCalendarState extends State<WorkoutsCalendar> {
+  @override
   Widget build(BuildContext context) {
     final String? uid = AuthProvider().uid;
+
+    final sp = context.watch<ScheduleProvider>();
+    final lp = context.select((LibraryProvider value) => value);
+    final cp = context.watch<CalendarProvider>();
 
     return Scaffold(
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Consumer3<CalendarProvider, ScheduleProvider, LibraryProvider>(
-              builder: (_, cp, sp, lp, __) {
-                return TableCalendar(
-                  locale: 'ko-KR',
-                  firstDay: DateTime(2000),
-                  lastDay: DateTime(2060),
-                  onDaySelected: (selectDay, focusDay) {
-                    sp.getSchedules(uid!, Timestamp.fromDate(selectDay));
-                    cp.onDaySelect(selectDay, focusDay);
-                  },
-                  selectedDayPredicate: (day) {
-                    return isSameDay(cp.selectedDay, day);
-                  },
-                  focusedDay: cp.selectedDay,
-                  calendarFormat: cp.format,
-                  startingDayOfWeek: StartingDayOfWeek.sunday,
-                  daysOfWeekVisible: true,
-                  onPageChanged: (focusedDay) {
-                    cp.onPageChange(focusedDay);
-                  },
-                  onFormatChanged: (format) {
-                    cp.onFormatChange(format);
-                  },
-                  calendarStyle: const CalendarStyle(
-                    isTodayHighlighted: true,
-                    selectedDecoration: BoxDecoration(
-                      color: ColorsStronger.primaryBG,
-                      shape: BoxShape.circle,
-                    ),
-                    selectedTextStyle: TextStyle(color: Colors.white),
-                    todayDecoration: BoxDecoration(
-                      color: Colors.transparent,
-                      shape: BoxShape.circle,
-                    ),
-                    todayTextStyle: TextStyle(
-                      color: ColorsStronger.primaryBG,
-                    ),
-                  ),
-                );
+            TableCalendar(
+              locale: 'ko-KR',
+              firstDay: DateTime(2000),
+              lastDay: DateTime(2060),
+              onDaySelected: (selectDay, focusDay) {
+                cp.onDaySelect(selectDay, focusDay);
+                sp.getSchedules(uid!, Timestamp.fromDate(selectDay));
+
+                // print('dayworkout : ${lp.dayWorkouts}');
               },
+              selectedDayPredicate: (day) {
+                return isSameDay(cp.selectedDay, day);
+              },
+              focusedDay: cp.selectedDay,
+              calendarFormat: cp.format,
+              startingDayOfWeek: StartingDayOfWeek.sunday,
+              daysOfWeekVisible: true,
+              onPageChanged: (focusedDay) {
+                cp.onPageChange(focusedDay);
+              },
+              onFormatChanged: (format) {
+                cp.onFormatChange(format);
+              },
+              calendarStyle: const CalendarStyle(
+                isTodayHighlighted: true,
+                selectedDecoration: BoxDecoration(
+                  color: ColorsStronger.primaryBG,
+                  shape: BoxShape.circle,
+                ),
+                selectedTextStyle: TextStyle(color: Colors.white),
+                todayDecoration: BoxDecoration(
+                  color: Colors.transparent,
+                  shape: BoxShape.circle,
+                ),
+                todayTextStyle: TextStyle(
+                  color: ColorsStronger.primaryBG,
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -72,9 +83,9 @@ class WorkoutsCalendar extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        '2021.12.14',
-                        style: TextStyle(fontSize: 18),
+                      Text(
+                        DateFormat('yyyy-MM-dd').format(cp.selectedDay),
+                        style: const TextStyle(fontSize: 18),
                       ),
                       CommonSmallButton(
                         onTap: () {},
@@ -164,32 +175,23 @@ class WorkoutsCalendar extends StatelessWidget {
                   const SizedBox(
                     height: 15,
                   ),
-                  Consumer2<ScheduleProvider, LibraryProvider>(
-                    builder: (_, sp, lp, __) {
-                      final scheduleModel = sp.scheduleModel;
-                      final workoutModel = lp.workoutModel;
-                      if (scheduleModel.workouts.isNotEmpty) {
-                        // print(scheduleModel.workouts.length);
-                        for (var workout in scheduleModel.workouts) {
-                          // lp.getWorkouts(uid!, workout);
-                        }
-                      }
-                      // print(lp.workoutModel.title);
-
-                      return Container(
-                        margin: const EdgeInsets.only(top: 15),
-                        height: 200,
-                        width: double.infinity,
-                        child: CustomScrollView(
-                          scrollDirection: Axis.vertical,
-                          slivers: [
-                            SliverList(
+                  (Container(
+                    margin: const EdgeInsets.only(top: 15),
+                    height: 200,
+                    width: double.infinity,
+                    child: CustomScrollView(
+                      scrollDirection: Axis.vertical,
+                      slivers: [
+                        FutureBuilder(
+                          future: LibraryProvider()
+                              .getWorkouts(uid!, sp.scheduleModel.workouts),
+                          builder: (context, snapshot) {
+                            List<WorkoutModel> workoutsData =
+                                snapshot.data as List<WorkoutModel>;
+                            print(workoutsData.length);
+                            return SliverList(
                               delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
-                                  // lp.getWorkouts(
-                                  //   uid!,
-                                  //   scheduleModel.workouts[index],
-                                  // );
                                   return CommonCard(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -204,7 +206,7 @@ class WorkoutsCalendar extends StatelessWidget {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    scheduleModel
+                                                    sp.scheduleModel
                                                         .workouts[index],
                                                     style: const TextStyle(
                                                         fontSize: 18),
@@ -213,7 +215,8 @@ class WorkoutsCalendar extends StatelessWidget {
                                                     width: 5,
                                                   ),
                                                   Text(
-                                                    '${scheduleModel.workouts[index]}',
+                                                    '${workoutsData[index].category}',
+                                                    // '',
                                                     style: const TextStyle(
                                                       color:
                                                           ColorsStronger.grey,
@@ -244,62 +247,18 @@ class WorkoutsCalendar extends StatelessWidget {
                                     height: 80,
                                   );
                                 },
-                                childCount: sp.scheduleModel.workouts.length,
+                                // childCount: 1,
+
+                                // childCount: lp.dayWorkouts.length,
+                                childCount: workoutsData.length,
                               ),
-                            ),
-                          ],
+                            );
+                          },
                         ),
-                      );
-                      // CommonCard(
-                      //   // onTap: () {},
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.all(8.0),
-                      //     child: Column(
-                      //       mainAxisAlignment: MainAxisAlignment.center,
-                      //       children: [
-                      //         Row(
-                      //           mainAxisAlignment:
-                      //               MainAxisAlignment.spaceBetween,
-                      //           children: [
-                      //             Row(
-                      //               children: const [
-                      //                 Text(
-                      //                   '스쿼트',
-                      //                   style: TextStyle(fontSize: 18),
-                      //                 ),
-                      //                 SizedBox(
-                      //                   width: 5,
-                      //                 ),
-                      //                 Text(
-                      //                   '하체',
-                      //                   style: TextStyle(
-                      //                     color: ColorsStronger.grey,
-                      //                   ),
-                      //                 ),
-                      //               ],
-                      //             ),
-                      //             const Icon(Icons.check_circle_outline),
-                      //           ],
-                      //         ),
-                      //         const SizedBox(
-                      //           height: 5,
-                      //         ),
-                      //         Row(
-                      //           mainAxisAlignment:
-                      //               MainAxisAlignment.spaceBetween,
-                      //           crossAxisAlignment: CrossAxisAlignment.end,
-                      //           children: const [
-                      //             Text('50kg x 20회'),
-                      //             Text('총합 1000kg'),
-                      //           ],
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      //   height: 80,
-                      // );
-                    },
-                  ),
+                      ],
+                    ),
+                  ))
+                  // : (Container())
                 ],
               ),
             ),
