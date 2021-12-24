@@ -14,6 +14,7 @@ class WorkoutList extends StatelessWidget {
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
+              final setsData = sp.dayWorkoutSets[index][0];
               return CommonCard(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -40,7 +41,7 @@ class WorkoutList extends StatelessWidget {
                               ),
                             ],
                           ),
-                          sp.dayWorkoutsets[index][0]['isChecked']
+                          setsData['isChecked']
                               ? const Icon(
                                   Icons.check_circle_rounded,
                                   color: ColorsStronger.lightGreen,
@@ -56,8 +57,8 @@ class WorkoutList extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                              '${sp.dayWorkoutsets[index][0]['weight']}kg x ${sp.dayWorkoutsets[index][0]['reps']}회'),
-                          Text('총합 1000kg'),
+                              '${setsData['weight']}kg x ${setsData['reps']}회'),
+                          Text('총합 ${setsData['weight'] * setsData['reps']}kg'),
                         ],
                       ),
                     ],

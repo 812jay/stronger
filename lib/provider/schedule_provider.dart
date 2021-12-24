@@ -24,7 +24,7 @@ class ScheduleProvider extends EasyNotifier {
 
   List<WorkoutModel> dayWorkouts = [];
   List<Map<String, dynamic>> dayWorkoutRecords = [];
-  List<dynamic> dayWorkoutsets = [];
+  List<dynamic> dayWorkoutSets = [];
 
   Future<void> setSchedule(String uid, Timestamp selectDay) async {
     try {
@@ -64,12 +64,10 @@ class ScheduleProvider extends EasyNotifier {
   }
 
   void setDayWorkoutSets(Timestamp selectedDay) {
-    dayWorkoutsets.clear();
+    dayWorkoutSets.clear();
     notify(() {
-      final data = dayWorkoutRecords.where((element) => scheduleService
-          .compareTimestampToDatetime(element['workoutDate'], selectedDay));
-      for (var workoutRecord in data) {
-        dayWorkoutsets = [...dayWorkoutsets, workoutRecord['sets']];
+      for (var workoutRecord in dayWorkoutRecords) {
+        dayWorkoutSets = [...dayWorkoutSets, workoutRecord['sets']];
       }
     });
   }
