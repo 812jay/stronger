@@ -23,8 +23,10 @@ class ScheduleProvider extends EasyNotifier {
   WorkoutViewTypes get selectedViewType => _selectedViewType;
 
   List<WorkoutModel> dayWorkouts = [];
+  List<Map<String, dynamic>> dayWorkoutRecords = [];
+  List<dynamic> dayWorkoutsets = [];
 
-  Future<void> getSchedule(String uid, Timestamp selectDay) async {
+  Future<void> setSchedule(String uid, Timestamp selectDay) async {
     try {
       final scheduleModel =
           await scheduleService.getScheduleModel(uid, selectDay);
@@ -43,8 +45,31 @@ class ScheduleProvider extends EasyNotifier {
     dayWorkouts.clear();
     notify(() {
       for (String workout in scheduleModel.workouts) {
-        final a = workouts.firstWhere((element) => element.title == workout);
-        dayWorkouts = [...dayWorkouts, a];
+        final data = workouts.firstWhere((element) => element.title == workout);
+        dayWorkouts = [...dayWorkouts, data];
+      }
+    });
+  }
+
+  void setDayWorkoutRecords(Timestamp selectedDay) {
+    dayWorkoutRecords.clear();
+    notify(() {
+      for (WorkoutModel dayWorkout in dayWorkouts) {
+        final data = dayWorkout.workoutRecords.firstWhere((element) =>
+            scheduleService.compareTimestampToDatetime(
+                selectedDay, element['workoutDate']));
+        dayWorkoutRecords = [...dayWorkoutRecords, data];
+      }
+    });
+  }
+
+  void setDayWorkoutSets(Timestamp selectedDay) {
+    dayWorkoutsets.clear();
+    notify(() {
+      final data = dayWorkoutRecords.where((element) => scheduleService
+          .compareTimestampToDatetime(element['workoutDate'], selectedDay));
+      for (var workoutRecord in data) {
+        dayWorkoutsets = [...dayWorkoutsets, workoutRecord['sets']];
       }
     });
   }

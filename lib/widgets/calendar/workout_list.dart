@@ -40,7 +40,12 @@ class WorkoutList extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const Icon(Icons.check_circle_outline),
+                          sp.dayWorkoutsets[index][0]['isChecked']
+                              ? const Icon(
+                                  Icons.check_circle_rounded,
+                                  color: ColorsStronger.lightGreen,
+                                )
+                              : const Icon(Icons.check_circle_outline),
                         ],
                       ),
                       const SizedBox(
@@ -49,8 +54,9 @@ class WorkoutList extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
-                        children: const [
-                          Text('50kg x 20회'),
+                        children: [
+                          Text(
+                              '${sp.dayWorkoutsets[index][0]['weight']}kg x ${sp.dayWorkoutsets[index][0]['reps']}회'),
                           Text('총합 1000kg'),
                         ],
                       ),

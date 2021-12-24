@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/provider/calender_provider.dart';
@@ -78,10 +79,12 @@ class _WorkoutsCalendarState extends State<WorkoutsCalendar> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Text(
-                      // DateFormat('yyyy-MM-dd').format(cp.selectedDay),
-                      //   style: const TextStyle(fontSize: 18),
-                      // ),
+                      Consumer<CalendarProvider>(builder: (_, cp, __) {
+                        return Text(
+                          DateFormat('yyyy-MM-dd').format(cp.selectedDay),
+                          style: const TextStyle(fontSize: 18),
+                        );
+                      }),
                       CommonSmallButton(
                         onTap: () {},
                         buttonText: '편집하기',
@@ -195,7 +198,9 @@ class _WorkoutsCalendarState extends State<WorkoutsCalendar> {
     final String uid = context.read<AuthProvider>().uid!;
 
     cp.onDaySelect(selectedDay);
-    await sp.getSchedule(uid, Timestamp.fromDate(selectedDay));
+    await sp.setSchedule(uid, Timestamp.fromDate(selectedDay));
     sp.setDayWorkouts(lp.workoutModels);
+    sp.setDayWorkoutRecords(Timestamp.fromDate(selectedDay));
+    sp.setDayWorkoutSets(Timestamp.fromDate(selectedDay));
   }
 }
