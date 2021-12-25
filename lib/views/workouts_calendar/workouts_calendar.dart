@@ -201,6 +201,6 @@ class _WorkoutsCalendarState extends State<WorkoutsCalendar> {
     await sp.setSchedule(uid, Timestamp.fromDate(selectedDay));
     sp.setDayWorkouts(lp.workoutModels);
     sp.setDayWorkoutRecords(Timestamp.fromDate(selectedDay));
-    sp.setDayWorkoutSets(Timestamp.fromDate(selectedDay));
+    // sp.setDayWorkoutSets(Timestamp.fromDate(selectedDay));
   }
 }

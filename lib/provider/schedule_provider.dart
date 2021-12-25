@@ -53,6 +53,7 @@ class ScheduleProvider extends EasyNotifier {
 
   void setDayWorkoutRecords(Timestamp selectedDay) {
     dayWorkoutRecords.clear();
+    dayWorkoutSets.clear();
     notify(() {
       for (WorkoutModel dayWorkout in dayWorkouts) {
         final data = dayWorkout.workoutRecords.firstWhere((element) =>
@@ -60,17 +61,21 @@ class ScheduleProvider extends EasyNotifier {
                 selectedDay, element['workoutDate']));
         dayWorkoutRecords = [...dayWorkoutRecords, data];
       }
-    });
-  }
 
-  void setDayWorkoutSets(Timestamp selectedDay) {
-    dayWorkoutSets.clear();
-    notify(() {
       for (var workoutRecord in dayWorkoutRecords) {
         dayWorkoutSets = [...dayWorkoutSets, workoutRecord['sets']];
       }
     });
   }
+
+  // void setDayWorkoutSets(Timestamp selectedDay) {
+  //   dayWorkoutSets.clear();
+  //   notify(() {
+  //     for (var workoutRecord in dayWorkoutRecords) {
+  //       dayWorkoutSets = [...dayWorkoutSets, workoutRecord['sets']];
+  //     }
+  //   });
+  // }
 
   void onSelectViewType(WorkoutViewTypes type) {
     notify(() {
