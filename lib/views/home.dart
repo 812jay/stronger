@@ -48,7 +48,7 @@ class _HomeState extends State<Home> {
     final String? uid = context.read<AuthProvider>().uid;
     if (uid is String) {
       await context.read<UserProvider>().getUserData(uid);
-      await context.read<LibraryProvider>().getWorkouts(uid);
+      await context.read<LibraryProvider>().setWorkouts(uid);
       if (mounted) {
         setState(() => isSignedIn = true);
       }

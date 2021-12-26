@@ -14,6 +14,9 @@ class LibraryProvider extends EasyNotifier {
   List<WorkoutModel> _workoutModels = [];
   List<WorkoutModel> get workoutModels => _workoutModels;
 
+  List<WorkoutModel> _selectedWorkoutModels = [];
+  List<WorkoutModel> get selectedWorkoutModels => _selectedWorkoutModels;
+
   bool isSelectedCategory(String categoryString) {
     return _selectedCategories.contains(categoryString);
   }
@@ -33,10 +36,21 @@ class LibraryProvider extends EasyNotifier {
     notify(() => _workoutModels.clear());
   }
 
-  Future<void> getWorkouts(String uid) async {
+  Future<void> setWorkouts(String uid) async {
     final List<WorkoutModel> workouts = await workoutService.getWorkouts(uid);
     _workoutModels = [...workouts];
   }
+
+  Future<void> setWorkoutsByCategories(String uid) async {
+    if (_selectedCategories.isNotEmpty) {
+      final List<WorkoutModel> selectedWorkouts = await workoutService
+          .getWorkoutsByCategories(uid, _selectedCategories);
+      notify(() {
+        _selectedWorkoutModels = [...selectedWorkouts];
+      });
+    }
+  }
+
   // Future<void> getWorkouts(String uid, List<String> workouts) async {
   //   _workoutModels.clear();
   //   for (String workout in workouts) {

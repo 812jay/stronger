@@ -23,24 +23,42 @@ class WorkoutService {
     }
   }
 
-  Future<WorkoutModel> getWorkoutModel(String uid, String workout) async {
+  Future<List<WorkoutModel>> getWorkoutsByCategories(
+      String uid, List<String> categories) async {
     try {
       final QuerySnapshot snapshot = await firestore
           .collection('users')
           .doc(uid)
           .collection('workouts')
-          .where('title', isEqualTo: workout)
+          .where('category', whereIn: categories)
           .get();
 
-      if (snapshot.docs.isEmpty) {
-        throw UnimplementedError('getWorkoutModel');
-      }
-
-      final DocumentSnapshot workoutData = snapshot.docs[0];
-      final workoutModel = WorkoutModel.fromDocument(workoutData);
-      return workoutModel;
+      final List<WorkoutModel> selectedWorkouts =
+          snapshot.docs.map((doc) => WorkoutModel.fromDocument(doc)).toList();
+      return selectedWorkouts;
     } catch (e) {
-      throw Exception('getWorkoutModel: $e');
+      throw Exception('getWorkoutsByCategories: $e');
     }
   }
+
+  // Future<WorkoutModel> getWorkoutModel(String uid, String workout) async {
+  //   try {
+  //     final QuerySnapshot snapshot = await firestore
+  //         .collection('users')
+  //         .doc(uid)
+  //         .collection('workouts')
+  //         .where('title', isEqualTo: workout)
+  //         .get();
+
+  //     if (snapshot.docs.isEmpty) {
+  //       throw UnimplementedError('getWorkoutModel');
+  //     }
+
+  //     final DocumentSnapshot workoutData = snapshot.docs[0];
+  //     final workoutModel = WorkoutModel.fromDocument(workoutData);
+  //     return workoutModel;
+  //   } catch (e) {
+  //     throw Exception('getWorkoutModel: $e');
+  //   }
+  // }
 }
