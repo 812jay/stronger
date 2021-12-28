@@ -43,6 +43,7 @@ dependencies:
   cloud_firestore: ^3.1.4
   equatable: ^2.0.3
   tuple: ^2.0.0
+  syncfusion_flutter_charts: ^19.4.38
 
 dev_dependencies:
   flutter_test:

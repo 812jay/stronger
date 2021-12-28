@@ -6,6 +6,7 @@ import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/utils/define.dart';
 import 'package:stronger/widgets/library/workout_card.dart';
+import 'package:stronger/views/workouts_library/workout_info_view.dart';
 
 class LibraryView extends StatelessWidget {
   static const routeName = 'library';
@@ -96,70 +97,64 @@ class LibraryView extends StatelessWidget {
                   );
                 },
               ),
-              Consumer<LibraryProvider>(builder: (_, lp, __) {
-                return Container(
-                  margin: const EdgeInsets.only(top: 15.0),
-                  height: height * 0.7,
-                  width: width * 0.9,
-                  child: CustomScrollView(
-                    slivers: [
-                      Consumer<LibraryProvider>(
-                        builder: (_, lp, __) {
-                          return SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                return lp.selectedCategories.isNotEmpty
-                                    ? (WorkoutCard(
-                                        workoutName: lp
-                                            .selectedWorkoutModels[index].title,
-                                        bodyPart: lp
-                                            .selectedWorkoutModels[index]
-                                            .category,
-                                        isBookmarked: lp
-                                            .selectedWorkoutModels[index]
-                                            .isBookmarked,
-                                        onTap: () {
-                                          print('1');
-                                        },
-                                      ))
-                                    : (WorkoutCard(
-                                        workoutName:
-                                            lp.workoutModels[index].title,
-                                        bodyPart:
-                                            lp.workoutModels[index].category,
-                                        isBookmarked: lp
-                                            .workoutModels[index].isBookmarked,
-                                        onTap: () {
-                                          print('1');
-                                        },
-                                      ));
-                              },
-                              childCount: lp.selectedCategories.isNotEmpty
-                                  ? lp.selectedWorkoutModels.length
-                                  : lp.workoutModels.length,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              }),
-
-              // WorkoutCard(
-              //   workoutName: '벤치프레스',
-              //   bodyPart: '가슴',
-              //   isBookmarked: false,
-              //   onTap: () {
-              //     print('1');
-              //   },
-              // ),
-              // WorkoutCard(
-              //   workoutName: '프랭크',
-              //   bodyPart: '전신',
-              //   isBookmarked: true,
-              //   onTap: () => print('2'),
-              // ),
+              Container(
+                margin: const EdgeInsets.only(top: 15.0),
+                height: height * 0.7,
+                width: width * 0.9,
+                child: CustomScrollView(
+                  slivers: [
+                    Consumer2<AuthProvider, LibraryProvider>(
+                      builder: (_, ap, lp, __) {
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return lp.selectedCategories.isNotEmpty
+                                  ? (WorkoutCard(
+                                      workoutName:
+                                          lp.selectedWorkoutModels[index].title,
+                                      bodyPart: lp.selectedWorkoutModels[index]
+                                          .category,
+                                      isBookmarked: lp
+                                          .selectedWorkoutModels[index]
+                                          .isBookmarked,
+                                      onTap: () {
+                                        lp.setWorkoutInfo(
+                                          ap.uid!,
+                                          lp.selectedWorkoutModels[index].title,
+                                        );
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pushNamed('workout/info');
+                                      },
+                                    ))
+                                  : (WorkoutCard(
+                                      workoutName:
+                                          lp.workoutModels[index].title,
+                                      bodyPart:
+                                          lp.workoutModels[index].category,
+                                      isBookmarked:
+                                          lp.workoutModels[index].isBookmarked,
+                                      onTap: () {
+                                        lp.setWorkoutInfo(
+                                          ap.uid!,
+                                          lp.workoutModels[index].title,
+                                        );
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pushNamed('workout/info');
+                                      },
+                                    ));
+                            },
+                            childCount: lp.selectedCategories.isNotEmpty
+                                ? lp.selectedWorkoutModels.length
+                                : lp.workoutModels.length,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

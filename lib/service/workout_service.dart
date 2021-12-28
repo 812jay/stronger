@@ -33,11 +33,27 @@ class WorkoutService {
           .where('category', whereIn: categories)
           .get();
 
-      final List<WorkoutModel> selectedWorkouts =
+      final List<WorkoutModel> workoutsByCategories =
           snapshot.docs.map((doc) => WorkoutModel.fromDocument(doc)).toList();
-      return selectedWorkouts;
+      return workoutsByCategories;
     } catch (e) {
       throw Exception('getWorkoutsByCategories: $e');
+    }
+  }
+
+  Future<WorkoutModel> getWorkoutInfo(String uid, String title) async {
+    try {
+      final QuerySnapshot snapshot = await firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .where('title', isEqualTo: title)
+          .get();
+      final WorkoutModel workoutInfo =
+          WorkoutModel.fromDocument(snapshot.docs.single);
+      return workoutInfo;
+    } catch (e) {
+      throw Exception('getWorkoutInfo : $e');
     }
   }
 

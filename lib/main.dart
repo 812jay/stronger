@@ -12,6 +12,7 @@ import 'package:stronger/views/auth/sign_up_view.dart';
 import 'package:stronger/views/setting/category_edit_view.dart';
 import 'package:stronger/views/setting/tool_edit_view.dart';
 import 'package:stronger/views/stronger.dart';
+import 'package:stronger/views/workouts_library/workout_info_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,6 +59,9 @@ class MyApp extends StatelessWidget {
           },
           SignUpView.routeName: (context) {
             return const SignUpView();
+          },
+          WorkoutInfoView.routeName: (context) {
+            return const WorkoutInfoView();
           }
         },
       ),

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:stronger/models/workout_model.dart';
 import 'package:stronger/provider/easy_notifier.dart';
 import 'package:stronger/service/workout_service.dart';
@@ -16,6 +15,23 @@ class LibraryProvider extends EasyNotifier {
 
   List<WorkoutModel> _selectedWorkoutModels = [];
   List<WorkoutModel> get selectedWorkoutModels => _selectedWorkoutModels;
+
+  WorkoutModel _workoutModelInfo = const WorkoutModel(
+    title: '',
+    description: '',
+    category: '',
+    tools: [],
+    isBookmarked: false,
+    workoutRecords: [],
+  );
+
+  WorkoutModel get workoutInfo => _workoutModelInfo;
+
+  List<Timestamp> _workoutInfoDates = [];
+  List<Timestamp> get workoutInfoDates => _workoutInfoDates;
+
+  List<dynamic> _workoutInfoSets = [];
+  List<dynamic> get workoutInfoSets => _workoutInfoSets;
 
   bool isSelectedCategory(String categoryString) {
     return _selectedCategories.contains(categoryString);
@@ -51,45 +67,18 @@ class LibraryProvider extends EasyNotifier {
     }
   }
 
-  // Future<void> getWorkouts(String uid, List<String> workouts) async {
-  //   _workoutModels.clear();
-  //   for (String workout in workouts) {
-  //     final workoutData = await workoutService.getWorkoutModel(uid, workout);
+  Future<void> setWorkoutInfo(String uid, String title) async {
+    _workoutInfoDates.clear();
+    _workoutInfoSets.clear();
+    final WorkoutModel workoutInfo =
+        await workoutService.getWorkoutInfo(uid, title);
+    notify(() {
+      _workoutModelInfo = workoutInfo;
 
-  //     _workoutModels = [...workoutModels, workoutData];
-  //   }
-  //   // print(workoutModels);
-  //   notify();
-  //   // notify(() {
-  //   //   this.workoutModel = this.workoutModel.copyWith(
-  //   //       title: workoutModel?.title,
-  //   //       description: workoutModel?.description,
-  //   //       category: workoutModel?.category,
-  //   //       tools: workoutModel?.tools,
-  //   //       isBookmarked: workoutModel?.isBookmarked,
-  //   //       workoutRecords: workoutModel?.workoutRecords);
-  //   // });
-  // }
-
-  // Future<void> getWorkouts(String uid, String workout) async {
-  //   print('object');
-  //   try {
-  //     final workoutModel = await workoutService.getWorkoutModel(uid, workout);
-
-  //     return workoutModel;
-  //     // notify(() {
-  //     //   this.workoutModel = this.workoutModel.copyWith(
-  //     //       title: workoutModel?.title,
-  //     //       description: workoutModel?.description,
-  //     //       category: workoutModel?.category,
-  //     //       tools: workoutModel?.tools,
-  //     //       isBookmarked: workoutModel?.isBookmarked,
-  //     //       workoutRecords: workoutModel?.workoutRecords);
-  //     // });
-  //   } catch (e) {
-  //     throw Exception('getWorkouts: $e');
-  //   }
-  // }
-
-  Future<void> getCategories() async {}
+      for (var workoutRecord in workoutInfo.workoutRecords) {
+        _workoutInfoDates = [...workoutInfoDates, workoutRecord['workoutDate']];
+        _workoutInfoSets = [...workoutInfoSets, workoutRecord['sets']];
+      }
+    });
+  }
 }
