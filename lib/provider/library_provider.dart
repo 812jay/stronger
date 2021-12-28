@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:stronger/models/workout_model.dart';
 import 'package:stronger/provider/easy_notifier.dart';
 import 'package:stronger/service/workout_service.dart';
+import 'package:stronger/views/workouts_library/workout_info_view.dart';
 
 class LibraryProvider extends EasyNotifier {
   final workoutService = WorkoutService();
@@ -74,11 +76,23 @@ class LibraryProvider extends EasyNotifier {
         await workoutService.getWorkoutInfo(uid, title);
     notify(() {
       _workoutModelInfo = workoutInfo;
-
       for (var workoutRecord in workoutInfo.workoutRecords) {
         _workoutInfoDates = [...workoutInfoDates, workoutRecord['workoutDate']];
         _workoutInfoSets = [...workoutInfoSets, workoutRecord['sets']];
       }
     });
+  }
+
+  List<WorkoutsData> getWorkoutsChartData() {
+    List<WorkoutsData> result = [];
+    int index = 0;
+    for (var set in _workoutInfoSets) {
+      int volume = set[0]['weight'] * set[0]['reps'];
+      result.add(WorkoutsData(
+          DateFormat('yy.MM.dd').format(_workoutInfoDates[index].toDate()),
+          volume));
+      index++;
+    }
+    return result;
   }
 }
