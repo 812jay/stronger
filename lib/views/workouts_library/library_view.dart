@@ -27,6 +27,7 @@ class LibraryView extends StatelessWidget {
               const SizedBox(height: 20.0),
 
               /// search bar
+              //TODO: 운동이름 검색어 입력시 해당단어 포함되는 운동들 불러오도록 해야한다.
               Align(
                 alignment: Alignment.center,
                 child: Container(

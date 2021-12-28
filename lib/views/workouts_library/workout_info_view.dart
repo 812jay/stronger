@@ -120,6 +120,8 @@ class WorkoutInfoView extends StatelessWidget {
               const SizedBox(
                 height: 10.0,
               ),
+              //TODO: 데이터 많을 시 대비하여 그래프 좌우 이동가능하도록 해야한다.
+              //VOL/MAX 버튼,기능 추가해야 한다.
               SfCartesianChart(
                   primaryXAxis: CategoryAxis(),
                   series: <LineSeries<WorkoutsData, String>>[
@@ -146,6 +148,9 @@ class WorkoutInfoView extends StatelessWidget {
               const SizedBox(
                 height: 10.0,
               ),
+              //TODO: 날짜당 세트 전부 나오게해야함
+              //왼쪽이나 오른쪽 화살표 누르면 이전이나 다음일자로 이동
+              //(이전이나 다음 데이터 없으면 해당버튼 비활성화)
               lp.workoutInfoDates.isNotEmpty
                   ? Container(
                       width: double.infinity,
@@ -230,10 +235,4 @@ class WorkoutInfoView extends StatelessWidget {
       );
     });
   }
-}
-
-class WorkoutsData {
-  WorkoutsData(this.workoutDate, this.volume);
-  final String workoutDate;
-  final int volume;
 }

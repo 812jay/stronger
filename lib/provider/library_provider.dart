@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:stronger/models/workout_model.dart';
 import 'package:stronger/provider/easy_notifier.dart';
 import 'package:stronger/service/workout_service.dart';
-import 'package:stronger/views/workouts_library/workout_info_view.dart';
 
 class LibraryProvider extends EasyNotifier {
   final workoutService = WorkoutService();
@@ -86,6 +85,7 @@ class LibraryProvider extends EasyNotifier {
   List<WorkoutsData> getWorkoutsChartData() {
     List<WorkoutsData> result = [];
     int index = 0;
+    //TODO: 한 날짜에서 세트중 가장높은 weight나 가장높은 volume 계산해야 한다.
     for (var set in _workoutInfoSets) {
       int volume = set[0]['weight'] * set[0]['reps'];
       result.add(WorkoutsData(
@@ -95,4 +95,10 @@ class LibraryProvider extends EasyNotifier {
     }
     return result;
   }
+}
+
+class WorkoutsData {
+  WorkoutsData(this.workoutDate, this.volume);
+  final String workoutDate;
+  final int volume;
 }

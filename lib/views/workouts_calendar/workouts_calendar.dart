@@ -94,6 +94,7 @@ class _WorkoutsCalendarState extends State<WorkoutsCalendar> {
                   const SizedBox(
                     height: 10,
                   ),
+                  //TODO: VOL/MAX 기능 추가해야 한다.
                   Consumer<ScheduleProvider>(
                     builder: (_, cp, __) {
                       WorkoutViewTypes viewType = cp.selectedViewType;

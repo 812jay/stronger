@@ -21,6 +21,8 @@ class WorkoutList extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      //TODO: 0번째 index가 아닌 체크된 항목중 가장높은 VOL이나 MAX따라 세트의 데이터가 나와야 한다.
+                      //체크된 세트 없을 시 isChecked, weight, reps, time, 총합등은 0
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
