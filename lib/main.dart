@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
           },
           WorkoutInfoView.routeName: (context) {
             return const WorkoutInfoView();
-          }
+          },
         },
       ),
     );

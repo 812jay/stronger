@@ -11,6 +11,8 @@ class LibraryProvider extends EasyNotifier {
   List<String> _selectedCategories = [];
   List<String> get selectedCategories => _selectedCategories;
 
+  // String _
+
   List<WorkoutModel> _workoutModels = [];
   List<WorkoutModel> get workoutModels => _workoutModels;
 
@@ -28,11 +30,16 @@ class LibraryProvider extends EasyNotifier {
 
   WorkoutModel get workoutInfo => _workoutModelInfo;
 
-  List<Timestamp> _workoutInfoDates = [];
-  List<Timestamp> get workoutInfoDates => _workoutInfoDates;
+  List<Map<String, dynamic>> _workoutInfoRecords = [];
+  List<Map<String, dynamic>> get workoutInfoRecords => _workoutInfoRecords;
 
-  List<dynamic> _workoutInfoSets = [];
-  List<dynamic> get workoutInfoSets => _workoutInfoSets;
+  //이전기록 현재 페이지
+  int _currentRecordIndex = 0;
+  int get currentRecordIndex => _currentRecordIndex;
+
+  //이전기록 데이터
+  List _currentRecordSets = [];
+  List get currentRecordSets => _currentRecordSets;
 
   bool isSelectedCategory(String categoryString) {
     return _selectedCategories.contains(categoryString);
@@ -69,31 +76,52 @@ class LibraryProvider extends EasyNotifier {
   }
 
   Future<void> setWorkoutInfo(String uid, String title) async {
-    _workoutInfoDates.clear();
-    _workoutInfoSets.clear();
+    _workoutInfoRecords.clear();
     final WorkoutModel workoutInfo =
         await workoutService.getWorkoutInfo(uid, title);
     notify(() {
       _workoutModelInfo = workoutInfo;
       for (var workoutRecord in workoutInfo.workoutRecords) {
-        _workoutInfoDates = [...workoutInfoDates, workoutRecord['workoutDate']];
-        _workoutInfoSets = [...workoutInfoSets, workoutRecord['sets']];
+        _workoutInfoRecords = [..._workoutInfoRecords, workoutRecord];
       }
     });
+    setWorkoutRecord();
   }
 
-  List<WorkoutsData> getWorkoutsChartData() {
-    List<WorkoutsData> result = [];
-    int index = 0;
-    //TODO: 한 날짜에서 세트중 가장높은 weight나 가장높은 volume 계산해야 한다.
-    for (var set in _workoutInfoSets) {
-      int volume = set[0]['weight'] * set[0]['reps'];
-      result.add(WorkoutsData(
-          DateFormat('yy.MM.dd').format(_workoutInfoDates[index].toDate()),
-          volume));
-      index++;
+  // List<WorkoutsData> getWorkoutsChartData() {
+  //   List<WorkoutsData> result = [];
+  //   int index = 0;
+  //   //TODO: 한 날짜에서 세트중 가장높은 weight나 가장높은 volume 계산해야 한다.
+  //   for (var set in _workoutInfoSets) {
+  //     int volume = set[0]['weight'] * set[0]['reps'];
+  //     result.add(WorkoutsData(
+  //         DateFormat('yy.MM.dd').format(_workoutInfoDates[index].toDate()),
+  //         volume));
+  //     index++;
+  //   }
+  //   return result;
+  // }
+
+  void setWorkoutRecord([String? changeRecord]) {
+    if (changeRecord == null) {
+      notify(() {
+        _currentRecordIndex = _workoutInfoRecords.length - 1;
+      });
+    } else if (changeRecord == 'prev') {
+      notify(() {
+        _currentRecordIndex--;
+      });
+    } else if (changeRecord == 'next') {
+      notify(() {
+        _currentRecordIndex++;
+      });
     }
-    return result;
+    currentRecordSets.clear();
+    for (var set in _workoutInfoRecords[_currentRecordIndex]['sets']) {
+      notify(() {
+        currentRecordSets.add(set);
+      });
+    }
   }
 }
 
