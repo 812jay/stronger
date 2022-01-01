@@ -92,4 +92,39 @@ class WorkoutService {
       print('error : $e');
     }
   }
+
+  Future<void> editWorkoutBookmark(
+    String uid,
+    String title,
+    bool isBookmarked,
+  ) async {
+    try {
+      if (isBookmarked) {
+        isBookmarked = false;
+      } else {
+        isBookmarked = true;
+      }
+      final snapshot = await firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .where('title', isEqualTo: title)
+          .get();
+
+      final workoutId = snapshot.docs[0].id;
+
+      firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .doc(workoutId)
+          .update(
+        {
+          'isBookmarked': isBookmarked,
+        },
+      );
+    } catch (e) {
+      print('error : $e');
+    }
+  }
 }

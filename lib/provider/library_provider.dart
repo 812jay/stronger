@@ -190,6 +190,12 @@ class LibraryProvider extends EasyNotifier {
     );
     setWorkoutInfo(uid, title);
   }
+
+  void setIsBookmarked(String uid, String title, bool isBookmarked) async {
+    await workoutService.editWorkoutBookmark(uid, title, isBookmarked);
+    setWorkouts(uid);
+    setWorkoutInfo(uid, title);
+  }
 }
 
 //차트데이터에서 쓰임

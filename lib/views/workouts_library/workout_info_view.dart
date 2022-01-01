@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/library_provider.dart';
+import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/utils/define.dart';
 import 'package:stronger/views/workouts_library/workout_edit_view.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -14,8 +15,9 @@ class WorkoutInfoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LibraryProvider>(builder: (_, lp, __) {
+    return Consumer2<UserProvider, LibraryProvider>(builder: (_, up, lp, __) {
       final workoutInfo = lp.workoutInfo;
+      final uid = up.userModel.uid;
 
       List<Widget> getRecordSetsDatas(String type) {
         List<Widget> result = [];
@@ -76,13 +78,27 @@ class WorkoutInfoView extends StatelessWidget {
                     style: const TextStyle(color: Colors.black),
                   ),
                   workoutInfo.isBookmarked
-                      ? const Icon(
-                          Icons.bookmark,
-                          color: ColorsStronger.primaryBG,
+                      ? GestureDetector(
+                          onTap: () => lp.setIsBookmarked(
+                            uid,
+                            lp.workoutInfo.title,
+                            lp.workoutInfo.isBookmarked,
+                          ),
+                          child: const Icon(
+                            Icons.bookmark,
+                            color: ColorsStronger.primaryBG,
+                          ),
                         )
-                      : const Icon(
-                          Icons.bookmark_border,
-                          color: Colors.black,
+                      : GestureDetector(
+                          onTap: () => lp.setIsBookmarked(
+                            uid,
+                            lp.workoutInfo.title,
+                            lp.workoutInfo.isBookmarked,
+                          ),
+                          child: const Icon(
+                            Icons.bookmark_border,
+                            color: Colors.black,
+                          ),
                         ),
                 ],
               ),
