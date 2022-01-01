@@ -57,24 +57,39 @@ class WorkoutService {
     }
   }
 
-  // Future<WorkoutModel> getWorkoutModel(String uid, String workout) async {
-  //   try {
-  //     final QuerySnapshot snapshot = await firestore
-  //         .collection('users')
-  //         .doc(uid)
-  //         .collection('workouts')
-  //         .where('title', isEqualTo: workout)
-  //         .get();
+  Future<void> editWorkoutInfo(
+    String uid,
+    String prevTitle,
+    String title,
+    String category,
+    List<String> tools,
+    String description,
+  ) async {
+    try {
+      final snapshot = await firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .where('title', isEqualTo: prevTitle)
+          .get();
 
-  //     if (snapshot.docs.isEmpty) {
-  //       throw UnimplementedError('getWorkoutModel');
-  //     }
+      final workoutId = snapshot.docs[0].id;
 
-  //     final DocumentSnapshot workoutData = snapshot.docs[0];
-  //     final workoutModel = WorkoutModel.fromDocument(workoutData);
-  //     return workoutModel;
-  //   } catch (e) {
-  //     throw Exception('getWorkoutModel: $e');
-  //   }
-  // }
+      firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .doc(workoutId)
+          .update(
+        {
+          'title': title,
+          'category': category,
+          'tools': tools,
+          'description': description,
+        },
+      );
+    } catch (e) {
+      print('error : $e');
+    }
+  }
 }

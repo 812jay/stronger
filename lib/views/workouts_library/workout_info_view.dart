@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/provider/library_provider.dart';
-import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/utils/define.dart';
-import 'package:stronger/widgets/common/common_chip.dart';
+import 'package:stronger/views/workouts_library/workout_edit_view.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class WorkoutInfoView extends StatelessWidget {
@@ -16,8 +14,6 @@ class WorkoutInfoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return Consumer<LibraryProvider>(builder: (_, lp, __) {
       final workoutInfo = lp.workoutInfo;
 
@@ -33,17 +29,17 @@ class WorkoutInfoView extends StatelessWidget {
         } else if (type == 'weight') {
           result.add(const Text('무게'));
           for (var set in lp.currentRecordSets) {
-            result.add(Text(set['weight'].toString()));
+            result.add(Text('${set['weight']}kg'));
           }
         } else if (type == 'reps') {
           result.add(const Text('횟수'));
           for (var set in lp.currentRecordSets) {
-            result.add(Text(set['reps'].toString()));
+            result.add(Text('${set['reps']}회'));
           }
         } else {
           result.add(const Text('시간'));
           for (var set in lp.currentRecordSets) {
-            result.add(Text(set['time'].toString()));
+            result.add(Text('${set['time']}초'));
           }
         }
         return result;
@@ -95,71 +91,9 @@ class WorkoutInfoView extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return AlertDialog(
-                        content: Container(
-                          width: width * 0.9,
-                          height: height * 0.6,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => Navigator.pop(context),
-                                    child: Icon(Icons.close),
-                                  ),
-                                  const Text('운동편집'),
-                                  const Icon(
-                                    Icons.close,
-                                    color: Colors.transparent,
-                                  ),
-                                ],
-                              ), // appbar
-                              TextFormField(),
-                              const Text('카테고리'),
-                              Consumer2<UserProvider, AuthProvider>(
-                                builder: (_, up, ap, __) {
-                                  final categories = up.userModel.categories;
-                                  return Container(
-                                    margin: const EdgeInsets.only(top: 15.0),
-                                    height: 35.0,
-                                    child: CustomScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      slivers: [
-                                        SliverList(
-                                          delegate: SliverChildBuilderDelegate(
-                                            (BuildContext context, int index) {
-                                              return Padding(
-                                                padding: index == 0
-                                                    ? EdgeInsets.only(
-                                                        left: width * 0.05)
-                                                    : EdgeInsets.zero,
-                                                child: CommonChip(
-                                                    text: categories[index],
-                                                    isSelected:
-                                                        lp.isSelectedCategory(
-                                                            categories[index]),
-                                                    onSelect: () {
-                                                      lp.onCategorySelect(
-                                                          categories[index]);
-                                                      lp.setWorkoutsByCategories(
-                                                          ap.uid!);
-                                                    }),
-                                              );
-                                            },
-                                            childCount: categories.length,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
+                      return WorkoutEditView(
+                        title: lp.workoutInfo.title,
+                        description: lp.workoutInfo.description,
                       );
                     },
                   );
@@ -295,7 +229,6 @@ class WorkoutInfoView extends StatelessWidget {
                                     .toDate()),
                                 style: const TextStyle(fontSize: 20.0),
                               ),
-                              // getWorkoutDate(lp.workoutInfoDates),
                               lp.currentRecordIndex <
                                       lp.workoutInfoRecords.length - 1
                                   ? GestureDetector(
@@ -335,7 +268,7 @@ class WorkoutInfoView extends StatelessWidget {
                           ),
                           Center(
                             child: Text(
-                              '${getRecordsTotalVolume()}kg',
+                              '총 ${getRecordsTotalVolume()}kg',
                             ),
                           )
                         ],
