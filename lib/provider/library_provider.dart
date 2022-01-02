@@ -192,6 +192,7 @@ class LibraryProvider extends EasyNotifier {
   }
 
   void setIsBookmarked(String uid, String title, bool isBookmarked) async {
+    print('uid: $uid, title : $title, isbookmarked: $isBookmarked');
     await workoutService.editWorkoutBookmark(uid, title, isBookmarked);
     setWorkouts(uid);
     setWorkoutInfo(uid, title);

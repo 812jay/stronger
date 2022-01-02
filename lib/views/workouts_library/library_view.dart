@@ -5,6 +5,8 @@ import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/utils/define.dart';
+import 'package:stronger/widgets/common/common_card.dart';
+import 'package:stronger/widgets/common/workout_text.dart';
 import 'package:stronger/widgets/library/workout_card.dart';
 import 'package:stronger/views/workouts_library/workout_info_view.dart';
 
@@ -110,40 +112,110 @@ class LibraryView extends StatelessWidget {
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
                               return lp.selectedCategories.isNotEmpty
-                                  ? (WorkoutCard(
-                                      workoutName:
-                                          lp.selectedWorkoutModels[index].title,
-                                      bodyPart: lp.selectedWorkoutModels[index]
-                                          .category,
-                                      isBookmarked: lp
-                                          .selectedWorkoutModels[index]
-                                          .isBookmarked,
+                                  ? (GestureDetector(
                                       onTap: () {
                                         lp.setWorkoutInfo(
-                                          ap.uid!,
-                                          lp.selectedWorkoutModels[index].title,
-                                        );
+                                            ap.uid!,
+                                            lp.selectedWorkoutModels[index]
+                                                .title);
+
                                         Navigator.of(context,
                                                 rootNavigator: true)
                                             .pushNamed('workout/info');
                                       },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 15),
+                                        child: CommonCard(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              WorkoutText(
+                                                workoutName: lp
+                                                    .selectedWorkoutModels[
+                                                        index]
+                                                    .title,
+                                                bodyPart: lp
+                                                    .selectedWorkoutModels[
+                                                        index]
+                                                    .category,
+                                              ),
+                                              GestureDetector(
+                                                onTap: () => lp.setIsBookmarked(
+                                                    ap.uid!,
+                                                    lp
+                                                        .selectedWorkoutModels[
+                                                            index]
+                                                        .title,
+                                                    lp
+                                                        .selectedWorkoutModels[
+                                                            index]
+                                                        .isBookmarked),
+                                                child: Icon(
+                                                  lp.selectedWorkoutModels[index]
+                                                          .isBookmarked
+                                                      ? Icons.bookmark
+                                                      : Icons.bookmark_border,
+                                                  size: 20,
+                                                  color: lp
+                                                          .selectedWorkoutModels[
+                                                              index]
+                                                          .isBookmarked
+                                                      ? ColorsStronger.primaryBG
+                                                      : Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ))
-                                  : (WorkoutCard(
-                                      workoutName:
-                                          lp.workoutModels[index].title,
-                                      bodyPart:
-                                          lp.workoutModels[index].category,
-                                      isBookmarked:
-                                          lp.workoutModels[index].isBookmarked,
+                                  : (GestureDetector(
                                       onTap: () {
-                                        lp.setWorkoutInfo(
-                                          ap.uid!,
-                                          lp.workoutModels[index].title,
-                                        );
+                                        lp.setWorkoutInfo(ap.uid!,
+                                            lp.workoutModels[index].title);
+
                                         Navigator.of(context,
                                                 rootNavigator: true)
                                             .pushNamed('workout/info');
                                       },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 15),
+                                        child: CommonCard(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              WorkoutText(
+                                                workoutName: lp
+                                                    .workoutModels[index].title,
+                                                bodyPart: lp
+                                                    .workoutModels[index]
+                                                    .category,
+                                              ),
+                                              GestureDetector(
+                                                onTap: () => lp.setIsBookmarked(
+                                                    ap.uid!,
+                                                    lp.workoutModels[index]
+                                                        .title,
+                                                    lp.workoutModels[index]
+                                                        .isBookmarked),
+                                                child: Icon(
+                                                  lp.workoutModels[index]
+                                                          .isBookmarked
+                                                      ? Icons.bookmark
+                                                      : Icons.bookmark_border,
+                                                  size: 20,
+                                                  color: lp.workoutModels[index]
+                                                          .isBookmarked
+                                                      ? ColorsStronger.primaryBG
+                                                      : Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ));
                             },
                             childCount: lp.selectedCategories.isNotEmpty
