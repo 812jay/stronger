@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
@@ -7,8 +6,6 @@ import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/utils/define.dart';
 import 'package:stronger/widgets/common/common_card.dart';
 import 'package:stronger/widgets/common/workout_text.dart';
-import 'package:stronger/widgets/library/workout_card.dart';
-import 'package:stronger/views/workouts_library/workout_info_view.dart';
 
 class LibraryView extends StatelessWidget {
   static const routeName = 'library';
@@ -111,6 +108,8 @@ class LibraryView extends StatelessWidget {
                         return SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
+                              //TODO: workout 데이터 변동 생겼을때 바로 적용 안되고 refresh 해야
+                              //변동사항 적용되는 오류있음.
                               return lp.selectedCategories.isNotEmpty
                                   ? (GestureDetector(
                                       onTap: () {

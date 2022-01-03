@@ -49,20 +49,21 @@ class CategoryEditView extends StatelessWidget {
                               key: ValueKey(category),
                               endActionPane: ActionPane(
                                 motion: const DrawerMotion(),
-                                extentRatio: 0.35,
+                                extentRatio: 0.14,
                                 children: [
+                                  // SlidableAction(
+                                  //   onPressed: (context) {
+                                  //     print('edit');
+                                  //   },
+                                  //   // TODO: change color
+                                  //   backgroundColor: ColorsStronger.primaryBG,
+                                  //   // TODO: change icon
+                                  //   icon: Icons.edit,
+                                  // ),
                                   SlidableAction(
                                     onPressed: (context) {
-                                      print('edit');
-                                    },
-                                    // TODO: change color
-                                    backgroundColor: ColorsStronger.primaryBG,
-                                    // TODO: change icon
-                                    icon: Icons.edit,
-                                  ),
-                                  SlidableAction(
-                                    onPressed: (context) {
-                                      print('remove');
+                                      up.removeCategoryData(
+                                          up.userModel.uid, category);
                                     },
                                     // TODO: changed color
                                     backgroundColor: Colors.red,
@@ -120,7 +121,14 @@ class CategoryEditView extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: CommonButton(
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const CategoryAddView();
+                      },
+                    );
+                  },
                   buttonText: '카테고리 추가하기',
                 ),
               ),
@@ -129,5 +137,54 @@ class CategoryEditView extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CategoryAddView extends StatelessWidget {
+  const CategoryAddView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _categoryController = TextEditingController();
+    double height = MediaQuery.of(context).size.height;
+
+    return Consumer<UserProvider>(builder: (_, up, __) {
+      return AlertDialog(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(Icons.close),
+            ),
+            const Text('카테고리 추가'),
+            const Icon(
+              Icons.close,
+              color: Colors.transparent,
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _categoryController,
+            ),
+            SizedBox(
+              height: height * 0.05,
+            ),
+            CommonButton(
+              onTap: () {
+                up.addCategoryData(up.userModel.uid, _categoryController.text);
+                Navigator.pop(context);
+              },
+              buttonText: '추가하기',
+            )
+          ],
+        ),
+      );
+    });
   }
 }

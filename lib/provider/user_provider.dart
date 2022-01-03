@@ -40,4 +40,20 @@ class UserProvider extends EasyNotifier {
     userService.addTool(uid, userTools);
     getUserData(uid);
   }
+
+  //category 삭제
+  void removeCategoryData(String uid, String removeCategory) {
+    userModel.categories.remove(removeCategory);
+    List<String> userCategories = userModel.categories;
+    userService.removeCategory(uid, userCategories, removeCategory);
+    getUserData(uid);
+  }
+
+  //category 추가
+  void addCategoryData(String uid, String category) {
+    userModel.categories.add(category);
+    final List<String> userCategories = userModel.categories;
+    userService.addCategory(uid, userCategories);
+    getUserData(uid);
+  }
 }
