@@ -12,8 +12,6 @@ class ToolEditView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: const CommonAppBar(
         title: '도구 설정',
@@ -131,39 +129,7 @@ class ToolEditView extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return AlertDialog(
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Icon(Icons.close),
-                              ),
-                              const Text('도구 추가'),
-                              const Icon(
-                                Icons.close,
-                                color: Colors.transparent,
-                              ),
-                            ],
-                          ),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const TextField(),
-                              SizedBox(
-                                height: height * 0.05,
-                              ),
-                              CommonButton(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                buttonText: '추가하기',
-                              )
-                            ],
-                          ),
-                        );
+                        return ToolAddView();
                       },
                     );
                   },
@@ -175,5 +141,54 @@ class ToolEditView extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ToolAddView extends StatelessWidget {
+  const ToolAddView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _toolController = TextEditingController();
+    double height = MediaQuery.of(context).size.height;
+
+    return Consumer<UserProvider>(builder: (_, up, __) {
+      return AlertDialog(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(Icons.close),
+            ),
+            const Text('도구 추가'),
+            const Icon(
+              Icons.close,
+              color: Colors.transparent,
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _toolController,
+            ),
+            SizedBox(
+              height: height * 0.05,
+            ),
+            CommonButton(
+              onTap: () {
+                up.addToolData(up.userModel.uid, _toolController.text);
+                Navigator.pop(context);
+              },
+              buttonText: '추가하기',
+            )
+          ],
+        ),
+      );
+    });
   }
 }

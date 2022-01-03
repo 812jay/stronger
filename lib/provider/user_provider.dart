@@ -25,10 +25,19 @@ class UserProvider extends EasyNotifier {
     }
   }
 
+  //tool 삭제
   void removeToolData(String uid, String removeTool) {
     userModel.tools.remove(removeTool);
     List<String> userTools = userModel.tools;
     userService.removeTool(uid, userTools, removeTool);
+    getUserData(uid);
+  }
+
+  //tool 추가
+  void addToolData(String uid, String tool) {
+    userModel.tools.add(tool);
+    final List<String> userTools = userModel.tools;
+    userService.addTool(uid, userTools);
     getUserData(uid);
   }
 }

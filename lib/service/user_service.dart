@@ -20,7 +20,10 @@ class UserService {
       String uid, List<String> tools, String removeTool) async {
     try {
       final userDocs = firestore.collection('users').doc(uid);
+      //user정보에 tool 삭제
       await userDocs.update({'tools': tools});
+
+      //workouts에서 삭제한 tool 제거
       final workoutsContainedRomoveTools = await userDocs
           .collection('workouts')
           .where('tools', arrayContains: removeTool)
@@ -36,6 +39,15 @@ class UserService {
       }
     } catch (e) {
       throw Exception('removeTool : $e');
+    }
+  }
+
+  Future<void> addTool(String uid, List<String> tools) async {
+    try {
+      final userDocs = firestore.collection('users').doc(uid);
+      userDocs.update({'tools': tools});
+    } catch (e) {
+      throw Exception('addTool : $e');
     }
   }
 }
