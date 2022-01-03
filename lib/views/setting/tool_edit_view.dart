@@ -12,6 +12,8 @@ class ToolEditView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: const CommonAppBar(
         title: '도구 설정',
@@ -45,24 +47,29 @@ class ToolEditView extends StatelessWidget {
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
                             final String tool = tools[index];
+
                             return Slidable(
                               key: ValueKey(tool),
                               endActionPane: ActionPane(
                                 motion: const DrawerMotion(),
-                                extentRatio: 0.35,
+                                extentRatio: 0.14,
                                 children: [
+                                  // SlidableAction(
+                                  //   onPressed: (context) {
+                                  //     showDialog(
+                                  //         context: context,
+                                  //         builder: (context) {
+                                  //           return Container();
+                                  //         });
+                                  //   },
+                                  //   // TODO: change color
+                                  //   backgroundColor: ColorsStronger.primaryBG,
+                                  //   // TODO: change icon
+                                  //   icon: Icons.edit,
+                                  // ),
                                   SlidableAction(
                                     onPressed: (context) {
-                                      print('edit');
-                                    },
-                                    // TODO: change color
-                                    backgroundColor: ColorsStronger.primaryBG,
-                                    // TODO: change icon
-                                    icon: Icons.edit,
-                                  ),
-                                  SlidableAction(
-                                    onPressed: (context) {
-                                      print('remove');
+                                      up.removeToolData(up.userModel.uid, tool);
                                     },
                                     // TODO: changed color
                                     backgroundColor: Colors.red,
@@ -120,7 +127,46 @@ class ToolEditView extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: CommonButton(
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Icon(Icons.close),
+                              ),
+                              const Text('도구 추가'),
+                              const Icon(
+                                Icons.close,
+                                color: Colors.transparent,
+                              ),
+                            ],
+                          ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const TextField(),
+                              SizedBox(
+                                height: height * 0.05,
+                              ),
+                              CommonButton(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                buttonText: '추가하기',
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
                   buttonText: '도구 추가하기',
                 ),
               ),

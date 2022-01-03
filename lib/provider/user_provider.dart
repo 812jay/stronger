@@ -24,4 +24,11 @@ class UserProvider extends EasyNotifier {
       throw Exception('getUserData: $e');
     }
   }
+
+  void removeToolData(String uid, String removeTool) {
+    userModel.tools.remove(removeTool);
+    List<String> userTools = userModel.tools;
+    userService.removeTool(uid, userTools, removeTool);
+    getUserData(uid);
+  }
 }

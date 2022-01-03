@@ -15,4 +15,27 @@ class UserService {
       throw Exception('getUserModel: $e');
     }
   }
+
+  Future<void> removeTool(
+      String uid, List<String> tools, String removeTool) async {
+    try {
+      final userDocs = firestore.collection('users').doc(uid);
+      await userDocs.update({'tools': tools});
+      final workoutsContainedRomoveTools = await userDocs
+          .collection('workouts')
+          .where('tools', arrayContains: removeTool)
+          .get();
+      List<dynamic> workoutTools = [];
+      for (var doc in workoutsContainedRomoveTools.docs) {
+        workoutTools = doc['tools'];
+        workoutTools.remove(removeTool);
+        userDocs
+            .collection('workouts')
+            .doc(doc.id)
+            .update({'tools': workoutTools});
+      }
+    } catch (e) {
+      throw Exception('removeTool : $e');
+    }
+  }
 }
