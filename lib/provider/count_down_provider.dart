@@ -88,6 +88,7 @@ class CountDownProvider extends ChangeNotifier {
     _startEnable = true;
     _continueEnable = false;
     _stopEnable = false;
+    _endTime = true;
     _timer.cancel();
     notifyListeners();
   }
