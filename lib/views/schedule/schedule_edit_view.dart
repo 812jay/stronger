@@ -31,8 +31,8 @@ class ScheduleEditView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: const [
-              CountUp(),
               CountDown(),
+              CountUp(),
             ],
           ),
           const Divider(thickness: 1),

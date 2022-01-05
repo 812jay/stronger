@@ -5,6 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/provider/calender_provider.dart';
+import 'package:stronger/provider/count_down_provider.dart';
 import 'package:stronger/provider/count_up_provider.dart';
 import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/provider/schedule_provider.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
         ChangeNotifierProvider(create: (context) => ScheduleProvider()),
         ChangeNotifierProvider(create: (context) => CountUpProvider()),
+        ChangeNotifierProvider(create: (context) => CountDownProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

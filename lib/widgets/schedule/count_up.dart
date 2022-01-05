@@ -3,19 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:stronger/provider/count_up_provider.dart';
 import 'package:stronger/utils/define.dart';
 
-class CountUp extends StatefulWidget {
+class CountUp extends StatelessWidget {
   const CountUp({Key? key}) : super(key: key);
-
-  @override
-  _CountUpState createState() => _CountUpState();
-}
-
-class _CountUpState extends State<CountUp> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   String parsedTime(int number) {
     String result = '';
@@ -33,7 +22,7 @@ class _CountUpState extends State<CountUp> {
       builder: (_, cp, __) {
         return Column(
           children: [
-            const Text('스탑워치'),
+            const Text('운동시간'),
             Text(
               '${parsedTime(cp.hour)}:${parsedTime(cp.minute)}:${parsedTime(cp.seconds)}',
               style: const TextStyle(
@@ -45,10 +34,10 @@ class _CountUpState extends State<CountUp> {
                 GestureDetector(
                   onTap: cp.startEnable ? cp.startTimer : cp.pauseTimer,
                   child: Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
                       color: Colors.black,
-                      borderRadius: BorderRadius.circular(25),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: cp.startEnable
                         ? const Icon(
@@ -63,15 +52,14 @@ class _CountUpState extends State<CountUp> {
                           ),
                   ),
                 ),
-                const SizedBox(width: 20),
+                const SizedBox(width: 10),
                 GestureDetector(
                   onTap: cp.stopEnable ? cp.stopTimer : null,
                   child: Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
-                        color:
-                            cp.stopEnable ? Colors.black : ColorsStronger.grey,
-                        borderRadius: BorderRadius.circular(25),
+                        color: cp.stopEnable ? Colors.red : ColorsStronger.grey,
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Icon(
                         Icons.stop,
@@ -79,26 +67,8 @@ class _CountUpState extends State<CountUp> {
                         color: Colors.white,
                       )),
                 )
-                // (cp.startEnable)
-                //     ? ElevatedButton(
-                //         onPressed: cp.startTimer,
-                //         child: Icon(Icons.play_arrow),
-                //       )
-                //     : ElevatedButton(
-                //         onPressed: cp.pauseTimer,
-                //         child: Icon(Icons.pause),
-                //       ),
-                // (cp.stopEnable)
-                //     ? ElevatedButton(
-                //         onPressed: cp.stopTimer,
-                //         child: Icon(Icons.stop),
-                //       )
-                //     : const ElevatedButton(
-                //         onPressed: null,
-                //         child: Icon(Icons.stop),
-                //       ),
               ],
-            )
+            ),
           ],
         );
       },
