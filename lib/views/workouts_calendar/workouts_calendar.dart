@@ -7,8 +7,8 @@ import 'package:stronger/provider/calender_provider.dart';
 import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/provider/schedule_provider.dart';
 import 'package:stronger/utils/define.dart';
+import 'package:stronger/views/schedule/schedule_edit_view.dart';
 import 'package:stronger/widgets/calendar/workout_list.dart';
-import 'package:stronger/widgets/common/common_card.dart';
 import 'package:stronger/widgets/common/common_small_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -76,21 +76,29 @@ class _WorkoutsCalendarState extends State<WorkoutsCalendar> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Consumer<CalendarProvider>(builder: (_, cp, __) {
-                        return Text(
+                  Consumer<CalendarProvider>(builder: (_, cp, __) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
                           DateFormat('yyyy-MM-dd').format(cp.selectedDay),
                           style: const TextStyle(fontSize: 18),
-                        );
-                      }),
-                      CommonSmallButton(
-                        onTap: () {},
-                        buttonText: '편집하기',
-                      ),
-                    ],
-                  ),
+                        ),
+                        CommonSmallButton(
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ScheduleEditView(
+                                  selectedDay: cp.selectedDay,
+                                );
+                              },
+                            ),
+                          ),
+                          buttonText: '편집하기',
+                        ),
+                      ],
+                    );
+                  }),
                   const SizedBox(
                     height: 10,
                   ),
