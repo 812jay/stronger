@@ -44,23 +44,15 @@ class CountDown extends StatelessWidget {
             Row(
               children: [
                 GestureDetector(
-                  onTap: cp.startEnable
-                      ? cp.endTime
-                          ? null
-                          : cp.startTimer
-                      : cp.pauseTimer,
+                  onTap: cp.startEnable ? cp.startTimer : cp.pauseTimer,
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
-                      color: cp.endTime ? ColorsStronger.grey : Colors.black,
+                      color: Colors.black,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Icon(
-                      cp.startEnable
-                          ? Icons.play_arrow
-                          : cp.endTime
-                              ? Icons.play_arrow
-                              : Icons.pause,
+                      cp.startEnable ? Icons.play_arrow : Icons.pause,
                       size: 32,
                       color: Colors.white,
                     ),

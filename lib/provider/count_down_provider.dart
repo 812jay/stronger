@@ -8,7 +8,6 @@ class CountDownProvider extends ChangeNotifier {
   int _seconds = 0;
   int _selectedMinute = 0;
   int _selectedSeconds = 0;
-  bool _endTime = true;
   bool _startEnable = true;
   bool _stopEnable = false;
   bool _continueEnable = false;
@@ -18,7 +17,6 @@ class CountDownProvider extends ChangeNotifier {
   int get selectedMinute => _selectedMinute;
   int get selectedSeconds => _selectedSeconds;
 
-  bool get endTime => _endTime;
   bool get startEnable => _startEnable;
   bool get stopEnable => _stopEnable;
   bool get continueEnable => _continueEnable;
@@ -34,11 +32,6 @@ class CountDownProvider extends ChangeNotifier {
   }
 
   void setTime() {
-    if (_selectedMinute == 0 && _selectedSeconds == 0) {
-      _endTime = true;
-    } else {
-      _endTime = false;
-    }
     _stopEnable = false;
     _minute = _selectedMinute;
     _seconds = _selectedSeconds;
@@ -49,7 +42,6 @@ class CountDownProvider extends ChangeNotifier {
     _startEnable = false;
     _stopEnable = true;
     _continueEnable = false;
-    _endTime = false;
 
     _timer = Timer.periodic(
       const Duration(seconds: 1),
@@ -62,7 +54,9 @@ class CountDownProvider extends ChangeNotifier {
             _minute = _minute - 1;
           } else {
             print('끄읏');
-            _endTime = true;
+            _minute = _selectedMinute;
+            _seconds = _selectedSeconds;
+            _startEnable = true;
             _stopEnable = false;
             timer.cancel();
           }
@@ -83,12 +77,11 @@ class CountDownProvider extends ChangeNotifier {
   }
 
   void stopTimer() {
-    _minute = 0;
-    _seconds = 0;
+    _minute = _selectedMinute;
+    _seconds = _selectedSeconds;
     _startEnable = true;
     _continueEnable = false;
     _stopEnable = false;
-    _endTime = true;
     _timer.cancel();
     notifyListeners();
   }

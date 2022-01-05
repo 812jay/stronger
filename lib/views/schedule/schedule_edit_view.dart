@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:stronger/widgets/common/common_button.dart';
 import 'package:stronger/widgets/schedule/count_down.dart';
 import 'package:stronger/widgets/schedule/count_up.dart';
 
@@ -26,17 +27,28 @@ class ScheduleEditView extends StatelessWidget {
         elevation: 0,
       ),
       body: SafeArea(
-        child: Column(children: [
-          const Divider(thickness: 1),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
-              CountDown(),
-              CountUp(),
-            ],
-          ),
-          const Divider(thickness: 1),
-        ]),
+        child: Column(
+          children: [
+            const Divider(thickness: 1),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: const [
+                CountDown(),
+                CountUp(),
+              ],
+            ),
+            const Divider(thickness: 1),
+            CommonButton(onTap: () {}, buttonText: '운동 추가'),
+            const TextField(
+              decoration: InputDecoration(
+                hintText: '오늘의 메모',
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1),
+                ),
+              ),
+            ),
+          ],
+        ),
         // child: Column(
         //   children: [
         //     const Divider(thickness: 1),
