@@ -26,6 +26,9 @@ class ScheduleProvider extends EasyNotifier {
   List<Map<String, dynamic>> dayWorkoutRecords = [];
   List<dynamic> dayWorkoutSets = [];
 
+  List<String> _selectedWorkouts = [];
+  List<String> get selectedWorkouts => _selectedWorkouts;
+
   Future<void> setSchedule(String uid, Timestamp selectDay) async {
     try {
       final scheduleModel =
@@ -81,5 +84,16 @@ class ScheduleProvider extends EasyNotifier {
     notify(() {
       _selectedViewType = type;
     });
+  }
+
+  void setAddWorkouts(String workout) {
+    notify(() {
+      if (!_selectedWorkouts.contains(workout)) {
+        _selectedWorkouts.add(workout);
+      } else {
+        _selectedWorkouts.remove(workout);
+      }
+    });
+    print(_selectedWorkouts);
   }
 }

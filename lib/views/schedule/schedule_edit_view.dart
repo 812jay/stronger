@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:stronger/provider/schedule_provider.dart';
 import 'package:stronger/widgets/common/common_button.dart';
 import 'package:stronger/widgets/schedule/count_down.dart';
 import 'package:stronger/widgets/schedule/count_up.dart';
@@ -38,7 +40,29 @@ class ScheduleEditView extends StatelessWidget {
               ],
             ),
             const Divider(thickness: 1),
-            CommonButton(onTap: () {}, buttonText: '운동 추가'),
+            CommonButton(
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true)
+                      .pushNamed('schedule/addworkouts');
+                },
+                buttonText: '운동 추가'),
+            const Divider(thickness: 1),
+            Expanded(
+              child: Consumer<ScheduleProvider>(builder: (_, sp, __) {
+                return CustomScrollView(
+                  slivers: [
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return Text(sp.selectedWorkouts[index]);
+                        },
+                        childCount: sp.selectedWorkouts.length,
+                      ),
+                    )
+                  ],
+                );
+              }),
+            ),
             const TextField(
               decoration: InputDecoration(
                 hintText: '오늘의 메모',
@@ -49,44 +73,6 @@ class ScheduleEditView extends StatelessWidget {
             ),
           ],
         ),
-        // child: Column(
-        //   children: [
-        //     const Divider(thickness: 1),
-        //     Row(
-        //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //       children: const [
-        //         CountDown(),
-        //         CountUp(),
-        //       ],
-        //     ),
-        //     const Divider(
-        //       thickness: 1,
-        //     ),
-        //     CommonButton(onTap: () {}, buttonText: '운동추가'),
-        //     Expanded(
-        //       child: CustomScrollView(
-        //         slivers: [
-        //           SliverList(
-        //             delegate: SliverChildBuilderDelegate(
-        //               (context, index) {
-        //                 return Center(child: Container(child: Text('1')));
-        //               },
-        //               childCount: 10,
-        //             ),
-        //           )
-        //         ],
-        //       ),
-        //     )
-        // CountDown(),
-        // Divider(
-        //   thickness: 1,
-        // ),
-        // CountUp(),
-        // Divider(
-        //   thickness: 1,
-        // ),
-        //     ],
-        //   ),
       ),
     );
   }

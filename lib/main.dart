@@ -11,6 +11,7 @@ import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/provider/schedule_provider.dart';
 import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/views/auth/sign_up_view.dart';
+import 'package:stronger/views/schedule/schedule_add_workouts.dart';
 import 'package:stronger/views/setting/category_edit_view.dart';
 import 'package:stronger/views/setting/tool_edit_view.dart';
 import 'package:stronger/views/stronger.dart';
@@ -67,6 +68,9 @@ class MyApp extends StatelessWidget {
           WorkoutInfoView.routeName: (context) {
             return const WorkoutInfoView();
           },
+          ScheduleAddWorkouts.routeName: (context) {
+            return const ScheduleAddWorkouts();
+          }
         },
       ),
     );

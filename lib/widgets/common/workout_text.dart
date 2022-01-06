@@ -5,11 +5,13 @@ class WorkoutText extends StatelessWidget {
   const WorkoutText({
     required this.workoutName,
     required this.bodyPart,
+    this.textColor = Colors.black,
     Key? key,
   }) : super(key: key);
 
   final String workoutName;
   final String bodyPart;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +20,9 @@ class WorkoutText extends StatelessWidget {
       children: [
         Text(
           workoutName,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 17,
-            color: Colors.black,
+            color: textColor,
           ),
         ),
         const SizedBox(width: 8),
