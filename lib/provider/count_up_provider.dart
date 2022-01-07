@@ -1,91 +1,87 @@
 import 'dart:async';
-
-import 'package:flutter/material.dart';
 import 'package:stronger/provider/easy_notifier.dart';
 
-class CountUpProvider extends ChangeNotifier {
-  late Timer _timer;
-  int _hour = 0;
-  int _minute = 0;
-  int _seconds = 0;
-  bool _startEnable = true;
-  bool _stopEnable = false;
-  bool _continueEnable = false;
-
-  int get hour => _hour;
-  int get minute => _minute;
-  int get seconds => _seconds;
-  bool get startEnable => _startEnable;
-  bool get stopEnable => _stopEnable;
-  bool get continueEnable => _continueEnable;
+class CountUpProvider extends EasyNotifier {
+  late Timer timer;
+  int hour = 0;
+  int minute = 0;
+  int seconds = 0;
+  bool startEnable = true;
+  bool stopEnable = false;
+  bool continueEnable = false;
 
   void startTimer() {
-    _startEnable = false;
-    // _pauseEnable = true;
-    _stopEnable = true;
-    _continueEnable = false;
+    notify(() {
+      startEnable = false;
+      stopEnable = true;
+      continueEnable = false;
+    });
 
-    _timer = Timer.periodic(
+    timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
-        if (_seconds < 59) {
-          _seconds++;
-        } else if (_seconds == 59) {
-          _seconds = 0;
-          if (_minute == 59) {
-            _hour++;
-            _minute = 0;
-          } else {
-            _minute++;
+        notify(() {
+          if (seconds < 59) {
+            seconds++;
+          } else if (seconds == 59) {
+            seconds = 0;
+            if (minute == 59) {
+              hour++;
+              minute = 0;
+            } else {
+              minute++;
+            }
           }
-        }
-        notifyListeners();
+        });
       },
     );
   }
 
   void pauseTimer() {
-    if (_startEnable == false) {
-      _startEnable = true;
-      _continueEnable = true;
-      // _pauseEnable = false;
-      _timer.cancel();
-    }
-    notifyListeners();
+    notify(() {
+      if (startEnable == false) {
+        startEnable = true;
+        continueEnable = true;
+        // pauseEnable = false;
+        timer.cancel();
+      }
+    });
   }
 
   void stopTimer() {
-    _hour = 0;
-    _minute = 0;
-    _seconds = 0;
-    _startEnable = true;
-    _continueEnable = false;
-    // _pauseEnable = false;
-    _stopEnable = false;
-    _timer.cancel();
-    notifyListeners();
+    notify(() {
+      hour = 0;
+      minute = 0;
+      seconds = 0;
+      startEnable = true;
+      continueEnable = false;
+      // pauseEnable = false;
+      stopEnable = false;
+      timer.cancel();
+    });
   }
 
   void continueTimer() {
-    _startEnable = false;
-    // _pauseEnable = true;
-    _continueEnable = false;
+    startEnable = false;
+    // pauseEnable = true;
+    continueEnable = false;
 
-    _timer = Timer.periodic(
+    timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
-        if (_seconds < 59) {
-          _seconds++;
-        } else if (_seconds == 59) {
-          _seconds = 0;
-          if (_minute == 59) {
-            _hour++;
-            _minute = 0;
-          } else {
-            _minute++;
+        notify(() {
+          if (seconds < 59) {
+            seconds++;
+          } else if (seconds == 59) {
+            seconds = 0;
+            if (minute == 59) {
+              hour++;
+              minute = 0;
+            } else {
+              minute++;
+            }
           }
-        }
-        notifyListeners();
+        });
       },
     );
   }

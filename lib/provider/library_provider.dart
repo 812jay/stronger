@@ -25,8 +25,8 @@ class LibraryProvider extends EasyNotifier {
   List<WorkoutModel> get workoutModels => _workoutModels;
 
   //카테고리에서 분류된 운동 목록
-  List<WorkoutModel> _selectedWorkoutModels = [];
-  List<WorkoutModel> get selectedWorkoutModels => _selectedWorkoutModels;
+  List<WorkoutModel> _filteredWorkoutModels = [];
+  List<WorkoutModel> get filteredWorkoutModels => _filteredWorkoutModels;
 
   //운동 상세정보에서 보이는 운동
   WorkoutModel _workoutInfo = const WorkoutModel(
@@ -64,8 +64,15 @@ class LibraryProvider extends EasyNotifier {
     notify(() {
       if (isSelected) {
         _selectedCategories.remove(categoryString);
+        final List<WorkoutModel> filteredWorkouts =
+            _filteredWorkoutModels.where((workoutModel) => workoutModel.category != categoryString).toList();
+        _filteredWorkoutModels = [...filteredWorkouts];
       } else {
         _selectedCategories = [..._selectedCategories, categoryString];
+        final List<WorkoutModel> selectedWorkoutsByCategory =
+            workoutModels.where((workoutModel) => workoutModel.category == categoryString).toList();
+
+        _filteredWorkoutModels = [..._filteredWorkoutModels, ...selectedWorkoutsByCategory];
       }
     });
   }
@@ -106,21 +113,19 @@ class LibraryProvider extends EasyNotifier {
   }
 
   //운동목록에서 카테고리별 운동 불러오기
-  Future<void> setWorkoutsByCategories(String uid) async {
-    if (_selectedCategories.isNotEmpty) {
-      final List<WorkoutModel> selectedWorkouts = await workoutService
-          .getWorkoutsByCategories(uid, _selectedCategories);
-      notify(() {
-        _selectedWorkoutModels = [...selectedWorkouts];
-      });
-    }
-  }
+  // Future<void> setWorkoutsByCategories(String uid) async {
+  //   if (_selectedCategories.isNotEmpty) {
+  //     final List<WorkoutModel> selectedWorkouts = await workoutService.getWorkoutsByCategories(uid, _selectedCategories);
+  //     notify(() {
+  //       _selectedWorkoutModels = [...selectedWorkouts];
+  //     });
+  //   }
+  // }
 
   //운동 상세정보에서 운동정보 불러오기
   Future<void> setWorkoutInfo(String uid, String title) async {
     _workoutInfoRecords.clear();
-    final WorkoutModel workoutInfo =
-        await workoutService.getWorkoutInfo(uid, title);
+    final WorkoutModel workoutInfo = await workoutService.getWorkoutInfo(uid, title);
 
     notify(() {
       _workoutInfo = workoutInfo;
