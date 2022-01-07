@@ -3,6 +3,7 @@ import 'package:stronger/models/schedule_model.dart';
 import 'package:stronger/models/workout_model.dart';
 import 'package:stronger/provider/easy_notifier.dart';
 import 'package:stronger/service/schedule_service.dart';
+import 'package:stronger/utils/calculator.dart';
 
 extension WorkoutViewTypesX on WorkoutViewTypes {
   bool get isVol => this == WorkoutViewTypes.vol;
@@ -16,6 +17,7 @@ enum WorkoutViewTypes {
 
 class ScheduleProvider extends EasyNotifier {
   final scheduleService = ScheduleService();
+  final calculator = Calculator();
 
   ScheduleModel scheduleModel = ScheduleModel.empty();
 
@@ -26,9 +28,15 @@ class ScheduleProvider extends EasyNotifier {
   List<Map<String, dynamic>> dayWorkoutRecords = [];
   List<dynamic> dayWorkoutSets = [];
 
+  //운동선택에서 선택한 운동
   List<String> _selectedWorkouts = [];
   List<String> get selectedWorkouts => _selectedWorkouts;
 
+  //스케줄에 선택되어있는 운동
+  List<Map<String, dynamic>> _todayWorkouts = [];
+  List<Map<String, dynamic>> get todayWorkouts => _todayWorkouts;
+
+  //클릭한 날짜 schdule 정보 불러오기
   Future<void> setSchedule(String uid, Timestamp selectDay) async {
     try {
       final scheduleModel =
@@ -44,6 +52,7 @@ class ScheduleProvider extends EasyNotifier {
     }
   }
 
+  //불러온 schedule에서 workout 정보 가져오기
   void setDayWorkouts(List<WorkoutModel> workouts) {
     dayWorkouts.clear();
     notify(() {
@@ -54,13 +63,14 @@ class ScheduleProvider extends EasyNotifier {
     });
   }
 
+  //불러온 schedule workout정보에서 workoutRecord가져오기
   void setDayWorkoutRecords(Timestamp selectedDay) {
     dayWorkoutRecords.clear();
     dayWorkoutSets.clear();
     notify(() {
       for (WorkoutModel dayWorkout in dayWorkouts) {
         final data = dayWorkout.workoutRecords.firstWhere((element) =>
-            scheduleService.compareTimestampToDatetime(
+            calculator.compareTimestampToDatetime(
                 selectedDay, element['workoutDate']));
         dayWorkoutRecords = [...dayWorkoutRecords, data];
       }
@@ -71,21 +81,21 @@ class ScheduleProvider extends EasyNotifier {
     });
   }
 
-  // void setDayWorkoutSets(Timestamp selectedDay) {
-  //   dayWorkoutSets.clear();
-  //   notify(() {
-  //     for (var workoutRecord in dayWorkoutRecords) {
-  //       dayWorkoutSets = [...dayWorkoutSets, workoutRecord['sets']];
-  //     }
-  //   });
-  // }
-
+  //캘린더에서 스케줄 클릭시 vol, max별로 보여주는 방식
   void onSelectViewType(WorkoutViewTypes type) {
     notify(() {
       _selectedViewType = type;
     });
   }
 
+  //운동선택에서 클릭했던 운동들 clear
+  void clearSelectedWorkouts() {
+    notify(() {
+      _selectedWorkouts.clear();
+    });
+  }
+
+  //운동선택에서 운동 클릭시 이벤트
   void setAddWorkouts(String workout) {
     notify(() {
       if (!_selectedWorkouts.contains(workout)) {
@@ -94,6 +104,37 @@ class ScheduleProvider extends EasyNotifier {
         _selectedWorkouts.remove(workout);
       }
     });
-    print(_selectedWorkouts);
+  }
+
+  //운동선택에서 클릭한 운동을 운동추가했을때 해당 스케줄 일자에 담아줌
+  void setTodayWorkouts(Timestamp selectedDay) {
+    if (_todayWorkouts.isEmpty) {
+      _todayWorkouts.add(
+        {
+          'scheduleDate': selectedDay,
+          'workouts': [..._selectedWorkouts]
+        },
+      );
+    } else {
+      for (var todayWorkout in _todayWorkouts) {
+        final bool compareDate = calculator.compareTimestampToDatetime(
+            selectedDay, todayWorkout['scheduleDate']);
+        if (compareDate) {
+          todayWorkout.update(
+              'workouts', (value) => value = [...selectedWorkouts]);
+          break;
+        }
+        if (todayWorkout == _todayWorkouts[_todayWorkouts.length - 1] &&
+            !compareDate) {
+          _todayWorkouts = [
+            ..._todayWorkouts,
+            {
+              'scheduleDate': selectedDay,
+              'workouts': [..._selectedWorkouts]
+            },
+          ];
+        }
+      }
+    }
   }
 }

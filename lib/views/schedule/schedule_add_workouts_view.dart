@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
+import 'package:stronger/provider/calender_provider.dart';
 import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/provider/schedule_provider.dart';
 import 'package:stronger/provider/user_provider.dart';
@@ -9,9 +11,9 @@ import 'package:stronger/widgets/common/common_button.dart';
 import 'package:stronger/widgets/common/common_card.dart';
 import 'package:stronger/widgets/common/workout_text.dart';
 
-class ScheduleAddWorkouts extends StatelessWidget {
-  static const routeName = 'schedule/addworkouts';
-  const ScheduleAddWorkouts({Key? key}) : super(key: key);
+class ScheduleAddWorkoutsView extends StatelessWidget {
+  static const routeName = 'schedule/add/workouts';
+  const ScheduleAddWorkoutsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -267,11 +269,16 @@ class ScheduleAddWorkouts extends StatelessWidget {
                   ),
                 );
               }),
-              CommonButton(
-                onTap: () {
-                  Navigator.pop(context);
+              Consumer2<ScheduleProvider, CalendarProvider>(
+                builder: (_, sp, cp, __) {
+                  return CommonButton(
+                    onTap: () {
+                      sp.setTodayWorkouts(Timestamp.fromDate(cp.selectedDay));
+                      Navigator.pop(context);
+                    },
+                    buttonText: '운동 추가하기',
+                  );
                 },
-                buttonText: '운동 추가하기',
               )
             ],
           ),
