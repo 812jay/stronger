@@ -1,88 +1,64 @@
 import 'dart:async';
+import 'package:stronger/provider/count_up_provider.dart';
 
-import 'package:flutter/material.dart';
-
-class CountDownProvider extends ChangeNotifier {
-  late Timer _timer;
-  int _minute = 0;
-  int _seconds = 0;
+class CountDownProvider extends CountUpProvider {
   int _selectedMinute = 0;
   int _selectedSeconds = 0;
-  bool _startEnable = true;
-  bool _stopEnable = false;
-  bool _continueEnable = false;
-
-  int get minute => _minute;
-  int get seconds => _seconds;
   int get selectedMinute => _selectedMinute;
   int get selectedSeconds => _selectedSeconds;
 
-  bool get startEnable => _startEnable;
-  bool get stopEnable => _stopEnable;
-  bool get continueEnable => _continueEnable;
+  void setMinute(int value) => notify(() => _selectedMinute = value);
 
-  void setMinute(int value) {
-    _selectedMinute = value;
-    notifyListeners();
-  }
-
-  void setSeconds(int value) {
-    _selectedSeconds = value;
-    notifyListeners();
-  }
+  void setSeconds(int value) => notify(() => _selectedSeconds = value);
 
   void setTime() {
-    _stopEnable = false;
-    _minute = _selectedMinute;
-    _seconds = _selectedSeconds;
-    notifyListeners();
+    notify(() {
+      stopEnable = false;
+      minute = _selectedMinute;
+      seconds = _selectedSeconds;
+    });
   }
 
+  @override
   void startTimer() {
-    _startEnable = false;
-    _stopEnable = true;
-    _continueEnable = false;
+    notify(() {
+      startEnable = false;
+      stopEnable = true;
+      continueEnable = false;
+    });
 
-    _timer = Timer.periodic(
+    timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
-        if (_seconds > 0) {
-          _seconds--;
-        } else if (_seconds == 0) {
-          if (_minute > 0) {
-            _seconds = _seconds + 59;
-            _minute = _minute - 1;
-          } else {
-            print('끄읏');
-            _minute = _selectedMinute;
-            _seconds = _selectedSeconds;
-            _startEnable = true;
-            _stopEnable = false;
-            timer.cancel();
+        notify(() {
+          if (seconds > 0) {
+            seconds--;
+          } else if (seconds == 0) {
+            if (minute > 0) {
+              seconds = seconds + 59;
+              minute = minute - 1;
+            } else {
+              print('끄읏');
+              minute = _selectedMinute;
+              seconds = _selectedSeconds;
+              startEnable = true;
+              stopEnable = false;
+              timer.cancel();
+            }
           }
-        }
-
-        notifyListeners();
+        });
       },
     );
   }
 
-  void pauseTimer() {
-    if (_startEnable == false) {
-      _startEnable = true;
-      _continueEnable = true;
-      _timer.cancel();
-    }
-    notifyListeners();
-  }
-
+  @override
   void stopTimer() {
-    _minute = _selectedMinute;
-    _seconds = _selectedSeconds;
-    _startEnable = true;
-    _continueEnable = false;
-    _stopEnable = false;
-    _timer.cancel();
+    minute = _selectedMinute;
+    seconds = _selectedSeconds;
+    startEnable = true;
+    continueEnable = false;
+    stopEnable = false;
+    timer.cancel();
     notifyListeners();
   }
 }

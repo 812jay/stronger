@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:stronger/models/workout_model.dart';
 
 class UserModel extends Equatable {
   final String emailAddress;
@@ -17,6 +20,18 @@ class UserModel extends Equatable {
     required this.categories,
     required this.tools,
   });
+
+  List<WorkoutModel?> getSelectedWorkoutsByCategories(List<WorkoutModel> workouts) {
+    final List<WorkoutModel?> selectedWorkouts = workouts.map((workout) {
+      if (categories.contains(workout.category)) {
+        return workout;
+      }
+    }).toList();
+
+    log('ddd $selectedWorkouts');
+
+    return selectedWorkouts;
+  }
 
   UserModel copyWith({
     String? emailAddress,

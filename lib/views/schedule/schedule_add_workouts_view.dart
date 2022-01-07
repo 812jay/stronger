@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stronger/models/workout_model.dart';
 import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/provider/calender_provider.dart';
 import 'package:stronger/provider/library_provider.dart';
@@ -65,8 +66,7 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                       fontSize: 18.0,
                     ),
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.only(left: 15.0, right: 15.0, top: 2.0),
+                      contentPadding: EdgeInsets.only(left: 15.0, right: 15.0, top: 2.0),
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -95,17 +95,12 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
                               return Padding(
-                                padding: index == 0
-                                    ? EdgeInsets.only(left: width * 0.05)
-                                    : EdgeInsets.zero,
+                                padding: index == 0 ? EdgeInsets.only(left: width * 0.05) : EdgeInsets.zero,
                                 child: _CategoryChip(
-                                    text: categories[index],
-                                    isSelected: lp
-                                        .isSelectedCategory(categories[index]),
-                                    onSelect: () {
-                                      lp.onCategorySelect(categories[index]);
-                                      lp.setWorkoutsByCategories(ap.uid!);
-                                    }),
+                                  text: categories[index],
+                                  isSelected: lp.isSelectedCategory(categories[index]),
+                                  onSelect: () => lp.onCategorySelect(categories[index]),
+                                ),
                               );
                             },
                             childCount: categories.length,
@@ -124,93 +119,36 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                   slivers: [
                     Consumer3<AuthProvider, LibraryProvider, ScheduleProvider>(
                       builder: (_, ap, lp, sp, __) {
+                        final bool isSelectedCategoriesEmpty = lp.selectedCategories.isEmpty;
+                        final List<WorkoutModel> workouts = isSelectedCategoriesEmpty ? lp.workoutModels : lp.filteredWorkoutModels;
+
                         return SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
-                              return lp.selectedCategories.isNotEmpty
-                                  ? (GestureDetector(
-                                      onTap: () {
-                                        sp.setAddWorkouts(
-                                          lp.selectedWorkoutModels[index].title,
-                                        );
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 15),
-                                        child: CommonCard(
-                                          cardColor: sp.selectedWorkouts
-                                                  .contains(lp
-                                                      .workoutModels[index]
-                                                      .title)
-                                              ? ColorsStronger.primaryBG
-                                              : Colors.white,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              WorkoutText(
-                                                textColor: sp.selectedWorkouts
-                                                        .contains(lp
-                                                            .workoutModels[
-                                                                index]
-                                                            .title)
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                                workoutName: lp
-                                                    .selectedWorkoutModels[
-                                                        index]
-                                                    .title,
-                                                bodyPart: lp
-                                                    .selectedWorkoutModels[
-                                                        index]
-                                                    .category,
-                                              ),
-                                            ],
-                                          ),
+                              return GestureDetector(
+                                onTap: () {
+                                  sp.setAddWorkouts(workouts[index].title);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 15),
+                                  child: CommonCard(
+                                    cardColor:
+                                        sp.selectedWorkouts.contains(workouts[index].title) ? ColorsStronger.primaryBG : Colors.white,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        WorkoutText(
+                                          textColor: sp.selectedWorkouts.contains(workouts[index].title) ? Colors.white : Colors.black,
+                                          workoutName: workouts[index].title,
+                                          bodyPart: workouts[index].category,
                                         ),
-                                      ),
-                                    ))
-                                  : (GestureDetector(
-                                      onTap: () {
-                                        sp.setAddWorkouts(
-                                          lp.workoutModels[index].title,
-                                        );
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 15),
-                                        child: CommonCard(
-                                          cardColor: sp.selectedWorkouts
-                                                  .contains(lp
-                                                      .workoutModels[index]
-                                                      .title)
-                                              ? ColorsStronger.primaryBG
-                                              : Colors.white,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              WorkoutText(
-                                                textColor: sp.selectedWorkouts
-                                                        .contains(lp
-                                                            .workoutModels[
-                                                                index]
-                                                            .title)
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                                workoutName: lp
-                                                    .workoutModels[index].title,
-                                                bodyPart: lp
-                                                    .workoutModels[index]
-                                                    .category,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ));
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
                             },
-                            childCount: lp.selectedCategories.isNotEmpty
-                                ? lp.selectedWorkoutModels.length
-                                : lp.workoutModels.length,
+                            childCount: isSelectedCategoriesEmpty ? lp.workoutModels.length : lp.filteredWorkoutModels.length,
                           ),
                         );
                       },
