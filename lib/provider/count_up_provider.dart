@@ -66,27 +66,27 @@ class CountUpProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void continueTimer() {
-    _startEnable = false;
-    // _pauseEnable = true;
-    _continueEnable = false;
+  // void continueTimer() {
+  //   _startEnable = false;
+  //   // _pauseEnable = true;
+  //   _continueEnable = false;
 
-    _timer = Timer.periodic(
-      const Duration(seconds: 1),
-      (timer) {
-        if (_seconds < 59) {
-          _seconds++;
-        } else if (_seconds == 59) {
-          _seconds = 0;
-          if (_minute == 59) {
-            _hour++;
-            _minute = 0;
-          } else {
-            _minute++;
-          }
-        }
-        notifyListeners();
-      },
-    );
-  }
+  //   _timer = Timer.periodic(
+  //     const Duration(seconds: 1),
+  //     (timer) {
+  //       if (_seconds < 59) {
+  //         _seconds++;
+  //       } else if (_seconds == 59) {
+  //         _seconds = 0;
+  //         if (_minute == 59) {
+  //           _hour++;
+  //           _minute = 0;
+  //         } else {
+  //           _minute++;
+  //         }
+  //       }
+  //       notifyListeners();
+  //     },
+  //   );
+  // }
 }
