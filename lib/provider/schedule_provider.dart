@@ -41,6 +41,10 @@ class ScheduleProvider extends EasyNotifier {
   List<WorkoutModel> _todayWorkoutsInfo = [];
   List<WorkoutModel> get todayWorkoutsInfo => _todayWorkoutsInfo;
 
+  //스케줄 운동의 세트
+  List<Map<String, dynamic>> _todayWorkoutSets = [];
+  List<Map<String, dynamic>> get todayWorkoutSets => _todayWorkoutSets;
+
   //클릭한 날짜 schdule 정보 불러오기
   Future<void> setSchedule(String uid, Timestamp selectDay) async {
     try {
@@ -109,7 +113,6 @@ class ScheduleProvider extends EasyNotifier {
         _selectedworkoutsTitle.remove(workout);
       }
     });
-    print(_selectedworkoutsTitle);
   }
 
   //운동선택에서 클릭한 운동을 운동추가했을때 해당 스케줄 일자에 담아줌
@@ -118,7 +121,8 @@ class ScheduleProvider extends EasyNotifier {
       _todayWorkouts.add(
         {
           'scheduleDate': selectedDay,
-          'workoutsTitle': [..._selectedworkoutsTitle]
+          'titles': [..._selectedworkoutsTitle],
+          // 'sets': [],
         },
       );
     } else {
@@ -127,7 +131,7 @@ class ScheduleProvider extends EasyNotifier {
             selectedDay, todayWorkout['scheduleDate']);
         if (compareDate) {
           todayWorkout.update(
-              'workoutsTitle', (value) => value = [...selectedWorkouts]);
+              'titles', (value) => value = [...selectedWorkouts]);
           break;
         }
         if (todayWorkout == _todayWorkouts[_todayWorkouts.length - 1] &&
@@ -136,7 +140,8 @@ class ScheduleProvider extends EasyNotifier {
             ..._todayWorkouts,
             {
               'scheduleDate': selectedDay,
-              'workoutsTitle': [..._selectedworkoutsTitle]
+              'titles': [..._selectedworkoutsTitle],
+              // 'sets': [],
             },
           ];
         }
@@ -144,7 +149,7 @@ class ScheduleProvider extends EasyNotifier {
     }
   }
 
-  Future<void> setTodayWorkoutInfo(String uid, List<String> titles) async {
+  void setTodayWorkoutInfo(String uid, List<String> titles) async {
     _todayWorkoutsInfo.clear();
     List<WorkoutModel> workoutsInfo = [];
     for (String title in titles) {
@@ -153,5 +158,97 @@ class ScheduleProvider extends EasyNotifier {
     notify(() {
       _todayWorkoutsInfo = workoutsInfo;
     });
+  }
+
+  void setTodayWorkoutSets(
+    Timestamp scheduleDate,
+    String title,
+  ) {
+    // _todayWorkouts.where((element) => calculator.compareTimestampToDatetime(element['scheduleDate'], scheduleDate) );
+
+    // for (var todayWorkout in _todayWorkouts) {
+    //   final compareDate = calculator.compareTimestampToDatetime(
+    //     todayWorkout['scheduleDate'],
+    //     scheduleDate,
+    //   );
+    //   // if (compareDate && todayWorkout['title'] == title) {
+    //   //   final Map<String, dynamic> prevSets = todayWorkout['sets'];
+    //   //   todayWorkout['sets'] = [_todayWorkoutSets, prevSets];
+    //   // } else {
+
+    //   // }
+    // }
+
+    print('title: $title');
+    notify(() {
+      if (_todayWorkoutSets.isEmpty) {
+        _todayWorkoutSets = [
+          {
+            'scheduleDate': scheduleDate,
+            'title': title,
+            // 'weight': 1,
+            // 'reps': 1,
+            // 'time': 1,
+            'sets': [
+              {
+                'weight': 0,
+                'reps': 0,
+                'time': 0,
+                'isChecked': false,
+              }
+            ],
+          }
+        ];
+      } else {
+        // final Map<String, dynamic> prevSets =
+        //     _todayWorkoutSets[_todayWorkoutSets.length - 1];
+
+        for (var todayWorkoutSet in _todayWorkoutSets) {
+          final Map<String, dynamic> prevSets =
+              todayWorkoutSet['sets'][todayWorkoutSet.length - 1];
+          if (calculator.compareTimestampToDatetime(
+                  todayWorkoutSet['scheduleDate'], scheduleDate) &&
+              todayWorkoutSet['title'] == title) {
+            todayWorkoutSet['sets'] = [...todayWorkoutSet['sets'], prevSets];
+          } else {
+            _todayWorkoutSets = [
+              ..._todayWorkoutSets,
+              {
+                'scheduleDate': scheduleDate,
+                'title': title,
+                'sets': {'weight': 0, 'reps': 0, 'time': 0, 'isChecked': false},
+                'isChecked': prevSets['isChecked']
+              }
+            ];
+          }
+        }
+
+        // print(prevSets);
+        // print(
+        //   _todayWorkoutSets.where(
+        //     (element) => calculator.compareTimestampToDatetime(
+        //       element['scheduleDate'],
+        //       scheduleDate,
+        //     ),
+        //   ),
+        // );
+
+        // element['scheduleDate'] == scheduleDate &&
+        // element['title'] == title));
+        // _todayWorkoutSets = [
+        //   ..._todayWorkoutSets,
+        //   {
+        //     'scheduleDate': scheduleDate,
+        //     'title': title,
+        //     // 'weight': prevSets['weight'],
+        //     // 'reps': prevSets['reps'],
+        //     // 'time': prevSets['time'],
+        //     'sets': prevSets['sets'],
+        //     'isChecked': prevSets['isChecked']
+        //   }
+        // ];
+      }
+    });
+    print(_todayWorkoutSets);
   }
 }
