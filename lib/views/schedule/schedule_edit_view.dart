@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:stronger/provider/calender_provider.dart';
 import 'package:stronger/provider/schedule_provider.dart';
 import 'package:stronger/utils/calculator.dart';
 import 'package:stronger/utils/define.dart';
@@ -19,7 +18,6 @@ class ScheduleEditView extends StatelessWidget {
   Widget build(BuildContext context) {
     final sp = Provider.of<ScheduleProvider>(context);
     final calculator = Calculator();
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     List<String> getTodayWorkoutsDatas() {
@@ -28,7 +26,7 @@ class ScheduleEditView extends StatelessWidget {
         final bool compareDate = calculator.compareTimestampToDatetime(
             todayWorkout['scheduleDate'], Timestamp.fromDate(selectedDay));
         if (compareDate) {
-          result = todayWorkout['workouts'];
+          result = todayWorkout['workoutsTitle'];
         }
       }
       return result;
@@ -63,7 +61,7 @@ class ScheduleEditView extends StatelessWidget {
             const Divider(thickness: 1),
             CommonButton(
               onTap: () {
-                sp.clearSelectedWorkouts();
+                sp.clearSelectedworkoutsTitle();
                 Navigator.of(context, rootNavigator: true)
                     .pushNamed('schedule/add/workouts');
               },
@@ -71,50 +69,51 @@ class ScheduleEditView extends StatelessWidget {
             ),
             const Divider(thickness: 1),
             Expanded(
-              child: Consumer<ScheduleProvider>(builder: (_, sp, __) {
-                return CustomScrollView(
-                  slivers: [
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 10),
-                                width: width * 0.85,
-                                decoration: BoxDecoration(
-                                  border: Border.all(width: 1),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          getTodayWorkoutsDatas()[index],
-                                          style: const TextStyle(fontSize: 23),
-                                        ),
-                                        const Text(
-                                          '부위',
-                                          style: TextStyle(
-                                              color: ColorsStronger.grey),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          );
-                        },
-                        childCount: getTodayWorkoutsDatas().length,
-                      ),
-                    )
-                  ],
-                );
-              }),
+              child: CustomScrollView(
+                slivers: [
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              width: width * 0.85,
+                              decoration: BoxDecoration(
+                                border: Border.all(width: 1),
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        getTodayWorkoutsDatas()[index],
+                                        style: const TextStyle(fontSize: 23),
+                                      ),
+                                      Text(
+                                        sp.todayWorkoutsInfo.isNotEmpty
+                                            ? sp.todayWorkoutsInfo[index]
+                                                .category
+                                            : '',
+                                        style: const TextStyle(
+                                            color: ColorsStronger.grey),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                      childCount: getTodayWorkoutsDatas().length,
+                    ),
+                  )
+                ],
+              ),
             ),
             const TextField(
               decoration: InputDecoration(

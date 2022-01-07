@@ -3,6 +3,7 @@ import 'package:stronger/models/schedule_model.dart';
 import 'package:stronger/models/workout_model.dart';
 import 'package:stronger/provider/easy_notifier.dart';
 import 'package:stronger/service/schedule_service.dart';
+import 'package:stronger/service/workout_service.dart';
 import 'package:stronger/utils/calculator.dart';
 
 extension WorkoutViewTypesX on WorkoutViewTypes {
@@ -17,6 +18,7 @@ enum WorkoutViewTypes {
 
 class ScheduleProvider extends EasyNotifier {
   final scheduleService = ScheduleService();
+  final workoutService = WorkoutService();
   final calculator = Calculator();
 
   ScheduleModel scheduleModel = ScheduleModel.empty();
@@ -29,12 +31,15 @@ class ScheduleProvider extends EasyNotifier {
   List<dynamic> dayWorkoutSets = [];
 
   //운동선택에서 선택한 운동
-  List<String> _selectedWorkouts = [];
-  List<String> get selectedWorkouts => _selectedWorkouts;
+  List<String> _selectedworkoutsTitle = [];
+  List<String> get selectedWorkouts => _selectedworkoutsTitle;
 
   //스케줄에 선택되어있는 운동
   List<Map<String, dynamic>> _todayWorkouts = [];
   List<Map<String, dynamic>> get todayWorkouts => _todayWorkouts;
+
+  List<WorkoutModel> _todayWorkoutsInfo = [];
+  List<WorkoutModel> get todayWorkoutsInfo => _todayWorkoutsInfo;
 
   //클릭한 날짜 schdule 정보 불러오기
   Future<void> setSchedule(String uid, Timestamp selectDay) async {
@@ -89,21 +94,22 @@ class ScheduleProvider extends EasyNotifier {
   }
 
   //운동선택에서 클릭했던 운동들 clear
-  void clearSelectedWorkouts() {
+  void clearSelectedworkoutsTitle() {
     notify(() {
-      _selectedWorkouts.clear();
+      _selectedworkoutsTitle.clear();
     });
   }
 
   //운동선택에서 운동 클릭시 이벤트
   void setAddWorkouts(String workout) {
     notify(() {
-      if (!_selectedWorkouts.contains(workout)) {
-        _selectedWorkouts.add(workout);
+      if (!_selectedworkoutsTitle.contains(workout)) {
+        _selectedworkoutsTitle.add(workout);
       } else {
-        _selectedWorkouts.remove(workout);
+        _selectedworkoutsTitle.remove(workout);
       }
     });
+    print(_selectedworkoutsTitle);
   }
 
   //운동선택에서 클릭한 운동을 운동추가했을때 해당 스케줄 일자에 담아줌
@@ -112,7 +118,7 @@ class ScheduleProvider extends EasyNotifier {
       _todayWorkouts.add(
         {
           'scheduleDate': selectedDay,
-          'workouts': [..._selectedWorkouts]
+          'workoutsTitle': [..._selectedworkoutsTitle]
         },
       );
     } else {
@@ -121,7 +127,7 @@ class ScheduleProvider extends EasyNotifier {
             selectedDay, todayWorkout['scheduleDate']);
         if (compareDate) {
           todayWorkout.update(
-              'workouts', (value) => value = [...selectedWorkouts]);
+              'workoutsTitle', (value) => value = [...selectedWorkouts]);
           break;
         }
         if (todayWorkout == _todayWorkouts[_todayWorkouts.length - 1] &&
@@ -130,11 +136,22 @@ class ScheduleProvider extends EasyNotifier {
             ..._todayWorkouts,
             {
               'scheduleDate': selectedDay,
-              'workouts': [..._selectedWorkouts]
+              'workoutsTitle': [..._selectedworkoutsTitle]
             },
           ];
         }
       }
     }
+  }
+
+  Future<void> setTodayWorkoutInfo(String uid, List<String> titles) async {
+    _todayWorkoutsInfo.clear();
+    List<WorkoutModel> workoutsInfo = [];
+    for (String title in titles) {
+      workoutsInfo.add(await workoutService.getWorkoutInfo(uid, title));
+    }
+    notify(() {
+      _todayWorkoutsInfo = workoutsInfo;
+    });
   }
 }
