@@ -66,7 +66,8 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                       fontSize: 18.0,
                     ),
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(left: 15.0, right: 15.0, top: 2.0),
+                      contentPadding:
+                          EdgeInsets.only(left: 15.0, right: 15.0, top: 2.0),
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -95,11 +96,15 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
                               return Padding(
-                                padding: index == 0 ? EdgeInsets.only(left: width * 0.05) : EdgeInsets.zero,
+                                padding: index == 0
+                                    ? EdgeInsets.only(left: width * 0.05)
+                                    : EdgeInsets.zero,
                                 child: _CategoryChip(
                                   text: categories[index],
-                                  isSelected: lp.isSelectedCategory(categories[index]),
-                                  onSelect: () => lp.onCategorySelect(categories[index]),
+                                  isSelected:
+                                      lp.isSelectedCategory(categories[index]),
+                                  onSelect: () =>
+                                      lp.onCategorySelect(categories[index]),
                                 ),
                               );
                             },
@@ -119,8 +124,12 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                   slivers: [
                     Consumer3<AuthProvider, LibraryProvider, ScheduleProvider>(
                       builder: (_, ap, lp, sp, __) {
-                        final bool isSelectedCategoriesEmpty = lp.selectedCategories.isEmpty;
-                        final List<WorkoutModel> workouts = isSelectedCategoriesEmpty ? lp.workoutModels : lp.filteredWorkoutModels;
+                        final bool isSelectedCategoriesEmpty =
+                            lp.selectedCategories.isEmpty;
+                        final List<WorkoutModel> workouts =
+                            isSelectedCategoriesEmpty
+                                ? lp.workoutModels
+                                : lp.filteredWorkoutModels;
 
                         return SliverList(
                           delegate: SliverChildBuilderDelegate(
@@ -132,13 +141,20 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.only(top: 15),
                                   child: CommonCard(
-                                    cardColor:
-                                        sp.selectedWorkouts.contains(workouts[index].title) ? ColorsStronger.primaryBG : Colors.white,
+                                    cardColor: sp.selectedWorkouts
+                                            .contains(workouts[index].title)
+                                        ? ColorsStronger.primaryBG
+                                        : Colors.white,
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         WorkoutText(
-                                          textColor: sp.selectedWorkouts.contains(workouts[index].title) ? Colors.white : Colors.black,
+                                          textColor: sp.selectedWorkouts
+                                                  .contains(
+                                                      workouts[index].title)
+                                              ? Colors.white
+                                              : Colors.black,
                                           workoutName: workouts[index].title,
                                           bodyPart: workouts[index].category,
                                         ),
@@ -148,7 +164,9 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                                 ),
                               );
                             },
-                            childCount: isSelectedCategoriesEmpty ? lp.workoutModels.length : lp.filteredWorkoutModels.length,
+                            childCount: isSelectedCategoriesEmpty
+                                ? lp.workoutModels.length
+                                : lp.filteredWorkoutModels.length,
                           ),
                         );
                       },
@@ -211,8 +229,8 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                 builder: (_, sp, cp, ap, __) {
                   return CommonButton(
                     onTap: () {
-                      sp.setTodayWorkouts(Timestamp.fromDate(cp.selectedDay));
-                      sp.setTodayWorkoutInfo(ap.uid!, sp.selectedWorkouts);
+                      // sp.setTodayWorkouts(Timestamp.fromDate(cp.selectedDay));
+                      // sp.setTodayWorkoutInfo(ap.uid!, sp.selectedWorkouts);
                       Navigator.pop(context);
                     },
                     buttonText: '운동 추가하기',
