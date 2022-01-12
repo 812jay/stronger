@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stronger/models/schedule_model.dart';
+import 'package:stronger/models/workout_model.dart';
 import 'package:stronger/utils/calculator.dart';
 
 class ScheduleService {
@@ -32,5 +33,17 @@ class ScheduleService {
     } catch (e) {
       throw Exception('getscheduleModel: $e');
     }
+  }
+
+  Future<void> addScheduleWorkouts(String uid, List<String> workouts) async {
+    try {
+      final schedules = await firestore
+          .collection('users')
+          .doc(uid)
+          .collection('schedules')
+          .get();
+      print(schedules);
+      // await firestore.collection('users').doc(uid).collection('workouts');
+    } catch (e) {}
   }
 }

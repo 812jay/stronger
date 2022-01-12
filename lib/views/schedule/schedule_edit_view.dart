@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:stronger/models/workout_model.dart';
 import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/provider/schedule_provider.dart';
 import 'package:stronger/utils/calculator.dart';
@@ -17,51 +18,10 @@ class ScheduleEditView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sp = Provider.of<ScheduleProvider>(context);
-    final lp = Provider.of<LibraryProvider>(context);
 
     final calculator = Calculator();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
-    // List<String> getTodayWorkoutsDatas() {
-    //   List<String> result = [];
-    //   for (var todayWorkout in sp.todayWorkouts) {
-    //     final bool compareDate = calculator.compareTimestampToDatetime(
-    //         todayWorkout['scheduleDate'], Timestamp.fromDate(selectedDay));
-    //     if (compareDate) {
-    //       result = todayWorkout['titles'];
-    //     }
-    //   }
-    //   return result;
-    // }
-
-    // List<Widget> getDayWorkoutsDatas(List<dynamic> dayWorkouts) {
-    //   List<Widget> dayWorkoutsResult = [];
-    //   print(dayWorkouts);
-    //   return [Container()];
-    // }
-
-    // List<Widget> getDayWorkoutSets(List<List<Map<String,dynamic>>> workoutSets) {
-    //   List<Widget> result = [];
-    //   int index = 0;
-    //   print(workoutSets);
-    //   for (var set in workoutSets) {
-    //     print(set['reps']);
-    //     index++;
-    //     result.add(
-    //       Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //         children: [
-    //           Text('$index'),
-    //           Text('${set['weight']}kg'),
-    //           Text('${set['reps']}회'),
-    //           Text('${set['time']}초'),
-    //         ],
-    //       ),
-    //     );
-    //   }
-    //   return result;
-    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -107,144 +67,10 @@ class ScheduleEditView extends StatelessWidget {
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          return Card(
-                            elevation: 4,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: height * 0.01),
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: width * 0.05,
-                                    vertical: height * 0.01,
-                                  ),
-                                  width: width * 0.95,
-
-                                  // decoration: BoxDecoration(
-                                  //   border: Border.all(
-                                  //     width: 1,
-                                  //     color: ColorsStronger.grey,
-                                  //   ),
-                                  //   borderRadius: BorderRadius.circular(5),
-                                  // ),
-
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            // mainAxisAlignment:
-                                            //     MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                sp.dayWorkouts[index].title,
-                                                style: const TextStyle(
-                                                    fontSize: 23),
-                                              ),
-                                              const SizedBox(width: 5),
-                                              Text(
-                                                sp.dayWorkouts[index].category,
-                                                style: const TextStyle(
-                                                  color: ColorsStronger.grey,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {},
-                                            child: const Icon(
-                                              Icons.delete_outline,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      // Row(
-                                      //   mainAxisAlignment:
-                                      //       MainAxisAlignment.spaceBetween,
-                                      //   children: [
-                                      //     Text('세트'),
-                                      //     Text('무게'),
-                                      //     Text('횟수'),
-                                      //     // Text('시간'),
-                                      //     Text('')
-                                      //     // Icon(Icons.check_box_outline_blank)
-                                      //   ],
-                                      // ),
-
-                                      // Row(
-                                      //   mainAxisAlignment:
-                                      //       MainAxisAlignment.spaceBetween,
-                                      //   children: [
-                                      //     Column(
-                                      //       children: getDayWorkoutSets(sp.),
-                                      //     ),
-                                      //     Column(
-                                      //       children: getRecordSetsDatas('weight'),
-                                      //     ),
-                                      //     Column(
-                                      //       children: getRecordSetsDatas('reps'),
-                                      //     ),
-                                      //     Column(
-                                      //       children: getRecordSetsDatas('time'),
-                                      //     ),
-                                      //   ],
-                                      // ),
-                                      // Column(
-                                      //   children: getDayWorkoutSets(
-                                      //       sp.dayWorkoutSets[index]),
-                                      // ),
-                                      // getDayWorkoutSets(sp.dayWorkoutSets[index]),
-                                      const SizedBox(
-                                        height: 30,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              print(
-                                                  'dayWorkoutSet : ${sp.dayWorkoutSets}');
-                                            },
-                                            child: Container(
-                                              width: width * 0.4,
-                                              height: 40,
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(width: 1)),
-                                              child: const Center(
-                                                  child: Text('세트 삭제')),
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              // sp.setTodayWorkoutSets(
-                                              //   Timestamp.fromDate(selectedDay),
-                                              //   getTodayWorkoutsDatas()[index],
-                                              // );
-                                              // print(sp.dayWorkoutSets[index]);
-                                            },
-                                            child: Container(
-                                              width: width * 0.4,
-                                              height: 40,
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(width: 1)),
-                                              child: const Center(
-                                                  child: Text('세트 추가')),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
+                          return WorkoutCard(
+                            title: sp.dayWorkouts[index].title,
+                            category: sp.dayWorkouts[index].category,
+                            sets: sp.dayWorkoutSets[index],
                           );
                         },
                         childCount: sp.dayWorkouts.length,
@@ -254,128 +80,6 @@ class ScheduleEditView extends StatelessWidget {
                 ),
               ),
             ),
-            // Expanded(
-            //   child: CustomScrollView(
-            //     slivers: [
-            //       SliverList(
-            //         delegate: SliverChildBuilderDelegate(
-            //           (context, index) {
-            //             return Column(
-            //               crossAxisAlignment: CrossAxisAlignment.center,
-            //               children: [
-            //                 Container(
-            //                   margin:
-            //                       EdgeInsets.symmetric(vertical: height * 0.01),
-            //                   padding: EdgeInsets.symmetric(
-            //                     horizontal: width * 0.05,
-            //                     vertical: height * 0.01,
-            //                   ),
-            //                   width: width * 0.95,
-            //                   decoration: BoxDecoration(
-            //                     border: Border.all(
-            //                       width: 1,
-            //                       color: ColorsStronger.grey,
-            //                     ),
-            //                     borderRadius: BorderRadius.circular(5),
-            //                   ),
-            //                   child: Column(
-            //                     children: [
-            //                       Row(
-            //                         mainAxisAlignment:
-            //                             MainAxisAlignment.spaceBetween,
-            //                         children: [
-            //                           Row(
-            //                             // mainAxisAlignment:
-            //                             //     MainAxisAlignment.spaceBetween,
-            //                             children: [
-            //                               Text(
-            //                                 getTodayWorkoutsDatas()[index],
-            //                                 style:
-            //                                     const TextStyle(fontSize: 23),
-            //                               ),
-            //                               const SizedBox(width: 5),
-            //                               Text(
-            //                                 sp.todayWorkoutsInfo.isNotEmpty
-            //                                     ? sp.todayWorkoutsInfo[index]
-            //                                         .category
-            //                                     : '',
-            //                                 style: const TextStyle(
-            //                                   color: ColorsStronger.grey,
-            //                                 ),
-            //                               ),
-            //                             ],
-            //                           ),
-            //                           GestureDetector(
-            //                             onTap: () {},
-            //                             child: const Icon(
-            //                               Icons.delete_outline,
-            //                             ),
-            //                           ),
-            //                         ],
-            //                       ),
-            //                       const SizedBox(
-            //                         height: 10,
-            //                       ),
-            //                       Row(
-            //                         mainAxisAlignment:
-            //                             MainAxisAlignment.spaceBetween,
-            //                         children: [
-            //                           Text('세트'),
-            //                           Text('무게'),
-            //                           Text('횟수'),
-            //                           // Text('시간'),
-            //                           Text('')
-            //                           // Icon(Icons.check_box_outline_blank)
-            //                         ],
-            //                       ),
-            //                       const SizedBox(
-            //                         height: 30,
-            //                       ),
-            //                       Row(
-            //                         mainAxisAlignment:
-            //                             MainAxisAlignment.spaceAround,
-            //                         children: [
-            //                           GestureDetector(
-            //                             onTap: () {},
-            //                             child: Container(
-            //                               width: width * 0.4,
-            //                               height: 40,
-            //                               decoration: BoxDecoration(
-            //                                   border: Border.all(width: 1)),
-            //                               child: const Center(
-            //                                   child: Text('세트 삭제')),
-            //                             ),
-            //                           ),
-            //                           GestureDetector(
-            //                             onTap: () {
-            //                               sp.setTodayWorkoutSets(
-            //                                 Timestamp.fromDate(selectedDay),
-            //                                 getTodayWorkoutsDatas()[index],
-            //                               );
-            //                             },
-            //                             child: Container(
-            //                               width: width * 0.4,
-            //                               height: 40,
-            //                               decoration: BoxDecoration(
-            //                                   border: Border.all(width: 1)),
-            //                               child: const Center(
-            //                                   child: Text('세트 추가')),
-            //                             ),
-            //                           ),
-            //                         ],
-            //                       )
-            //                     ],
-            //                   ),
-            //                 )
-            //               ],
-            //             );
-            //           },
-            //           childCount: getTodayWorkoutsDatas().length,
-            //         ),
-            //       )
-            //     ],
-            //   ),
-            // ),
             const TextField(
               decoration: InputDecoration(
                 hintText: '오늘의 메모',
@@ -386,6 +90,139 @@ class ScheduleEditView extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class WorkoutCard extends StatelessWidget {
+  const WorkoutCard(
+      {required this.title,
+      required this.category,
+      required this.sets,
+      Key? key})
+      : super(key: key);
+
+  final String title;
+  final String category;
+  final List<Map<String, dynamic>> sets;
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    print('title: $title, category: $category, sets: $sets');
+    int index = 0;
+    return Card(
+      elevation: 4,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(vertical: height * 0.01),
+            padding: EdgeInsets.symmetric(
+              horizontal: width * 0.05,
+              vertical: height * 0.01,
+            ),
+            width: width * 0.95,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          title,
+                          style: const TextStyle(fontSize: 23),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          category,
+                          style: const TextStyle(
+                            color: ColorsStronger.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Icon(
+                        Icons.delete_outline,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ...sets.map((set) {
+                  index++;
+                  return Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('$index'),
+                          Text('${set['weight']}kg'),
+                          Text('${set['reps']}회'),
+                          Text('${set['time']}초'),
+                          set['isChecked']
+                              ? GestureDetector(
+                                  onTap: () {
+                                    print('change false');
+                                  },
+                                  child: const Icon(
+                                    Icons.check_box,
+                                    color: ColorsStronger.lightGreen,
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    print('change true');
+                                  },
+                                  child: const Icon(
+                                    Icons.check_box_outline_blank,
+                                  ),
+                                )
+                        ],
+                      )
+                    ],
+                  );
+                }),
+                const SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        width: width * 0.4,
+                        height: 40,
+                        decoration: BoxDecoration(border: Border.all(width: 1)),
+                        child: const Center(
+                          child: Text('세트 삭제'),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        width: width * 0.4,
+                        height: 40,
+                        decoration: BoxDecoration(border: Border.all(width: 1)),
+                        child: const Center(child: Text('세트 추가')),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

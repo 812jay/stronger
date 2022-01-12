@@ -28,22 +28,11 @@ class ScheduleProvider extends EasyNotifier {
 
   List<WorkoutModel> dayWorkouts = [];
   List<Map<String, dynamic>> dayWorkoutRecords = [];
-  List<dynamic> dayWorkoutSets = [];
+  List<List<Map<String, dynamic>>> dayWorkoutSets = [];
 
   //운동선택에서 선택한 운동
   List<String> _selectedworkoutsTitle = [];
   List<String> get selectedWorkouts => _selectedworkoutsTitle;
-
-  // //스케줄에 선택되어있는 운동
-  // List<Map<String, dynamic>> _todayWorkouts = [];
-  // List<Map<String, dynamic>> get todayWorkouts => _todayWorkouts;
-
-  // List<WorkoutModel> _todayWorkoutsInfo = [];
-  // List<WorkoutModel> get todayWorkoutsInfo => _todayWorkoutsInfo;
-
-  // //스케줄 운동의 세트
-  // List<Map<String, dynamic>> _todayWorkoutSets = [];
-  // List<Map<String, dynamic>> get todayWorkoutSets => _todayWorkoutSets;
 
   //클릭한 날짜 schdule 정보 불러오기
   Future<void> setSchedule(String uid, Timestamp selectDay) async {
@@ -85,7 +74,9 @@ class ScheduleProvider extends EasyNotifier {
       }
 
       for (var workoutRecord in dayWorkoutRecords) {
-        dayWorkoutSets = [...dayWorkoutSets, workoutRecord['sets']];
+        List<Map<String, dynamic>> workoutSets =
+            List<Map<String, dynamic>>.from(workoutRecord['sets']);
+        dayWorkoutSets = [...dayWorkoutSets, workoutSets];
       }
     });
   }
@@ -115,140 +106,7 @@ class ScheduleProvider extends EasyNotifier {
     });
   }
 
-  //운동선택에서 클릭한 운동을 운동추가했을때 해당 스케줄 일자에 담아줌
-  // void setTodayWorkouts(Timestamp selectedDay) {
-  //   if (_todayWorkouts.isEmpty) {
-  //     _todayWorkouts.add(
-  //       {
-  //         'scheduleDate': selectedDay,
-  //         'titles': [..._selectedworkoutsTitle],
-  //         // 'sets': [],
-  //       },
-  //     );
-  //   } else {
-  //     for (var todayWorkout in _todayWorkouts) {
-  //       final bool compareDate = calculator.compareTimestampToDatetime(
-  //           selectedDay, todayWorkout['scheduleDate']);
-  //       if (compareDate) {
-  //         todayWorkout.update(
-  //             'titles', (value) => value = [...selectedWorkouts]);
-  //         break;
-  //       }
-  //       if (todayWorkout == _todayWorkouts[_todayWorkouts.length - 1] &&
-  //           !compareDate) {
-  //         _todayWorkouts = [
-  //           ..._todayWorkouts,
-  //           {
-  //             'scheduleDate': selectedDay,
-  //             'titles': [..._selectedworkoutsTitle],
-  //             // 'sets': [],
-  //           },
-  //         ];
-  //       }
-  //     }
-  //   }
-  // }
-
-  // void setTodayWorkoutInfo(String uid, List<String> titles) async {
-  //   _todayWorkoutsInfo.clear();
-  //   List<WorkoutModel> workoutsInfo = [];
-  //   for (String title in titles) {
-  //     workoutsInfo.add(await workoutService.getWorkoutInfo(uid, title));
-  //   }
-  //   notify(() {
-  //     _todayWorkoutsInfo = workoutsInfo;
-  //   });
-  // }
-
-  // void setTodayWorkoutSets(
-  //   Timestamp scheduleDate,
-  //   String title,
-  // ) {
-  //   // _todayWorkouts.where((element) => calculator.compareTimestampToDatetime(element['scheduleDate'], scheduleDate) );
-
-  //   // for (var todayWorkout in _todayWorkouts) {
-  //   //   final compareDate = calculator.compareTimestampToDatetime(
-  //   //     todayWorkout['scheduleDate'],
-  //   //     scheduleDate,
-  //   //   );
-  //   //   // if (compareDate && todayWorkout['title'] == title) {
-  //   //   //   final Map<String, dynamic> prevSets = todayWorkout['sets'];
-  //   //   //   todayWorkout['sets'] = [_todayWorkoutSets, prevSets];
-  //   //   // } else {
-
-  //   //   // }
-  //   // }
-
-  //   print('title: $title');
-  //   notify(() {
-  //     if (_todayWorkoutSets.isEmpty) {
-  //       _todayWorkoutSets = [
-  //         {
-  //           'scheduleDate': scheduleDate,
-  //           'title': title,
-  //           // 'weight': 1,
-  //           // 'reps': 1,
-  //           // 'time': 1,
-  //           'sets': [
-  //             {
-  //               'weight': 0,
-  //               'reps': 0,
-  //               'time': 0,
-  //               'isChecked': false,
-  //             }
-  //           ],
-  //         }
-  //       ];
-  //     } else {
-  //       // final Map<String, dynamic> prevSets =
-  //       //     _todayWorkoutSets[_todayWorkoutSets.length - 1];
-
-  //       for (var todayWorkoutSet in _todayWorkoutSets) {
-  //         final Map<String, dynamic> prevSets =
-  //             todayWorkoutSet['sets'][todayWorkoutSet.length - 1];
-  //         if (calculator.compareTimestampToDatetime(
-  //                 todayWorkoutSet['scheduleDate'], scheduleDate) &&
-  //             todayWorkoutSet['title'] == title) {
-  //           todayWorkoutSet['sets'] = [...todayWorkoutSet['sets'], prevSets];
-  //         } else {
-  //           _todayWorkoutSets = [
-  //             ..._todayWorkoutSets,
-  //             {
-  //               'scheduleDate': scheduleDate,
-  //               'title': title,
-  //               'sets': {'weight': 0, 'reps': 0, 'time': 0, 'isChecked': false},
-  //               'isChecked': prevSets['isChecked']
-  //             }
-  //           ];
-  //         }
-  //       }
-
-  //       // print(prevSets);
-  //       // print(
-  //       //   _todayWorkoutSets.where(
-  //       //     (element) => calculator.compareTimestampToDatetime(
-  //       //       element['scheduleDate'],
-  //       //       scheduleDate,
-  //       //     ),
-  //       //   ),
-  //       // );
-
-  //       // element['scheduleDate'] == scheduleDate &&
-  //       // element['title'] == title));
-  //       // _todayWorkoutSets = [
-  //       //   ..._todayWorkoutSets,
-  //       //   {
-  //       //     'scheduleDate': scheduleDate,
-  //       //     'title': title,
-  //       //     // 'weight': prevSets['weight'],
-  //       //     // 'reps': prevSets['reps'],
-  //       //     // 'time': prevSets['time'],
-  //       //     'sets': prevSets['sets'],
-  //       //     'isChecked': prevSets['isChecked']
-  //       //   }
-  //       // ];
-  //     }
-  //   });
-  //   print(_todayWorkoutSets);
-  // }
+  void setAddScheduleWorkouts(String uid) {
+    scheduleService.addScheduleWorkouts(uid, _selectedworkoutsTitle);
+  }
 }

@@ -14,7 +14,7 @@ class WorkoutList extends StatelessWidget {
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
-              final setsData = sp.dayWorkoutSets[index][0];
+              final Map<String, dynamic> setsData = sp.dayWorkoutSets[index][0];
               return CommonCard(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
