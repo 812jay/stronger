@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:stronger/models/workout_model.dart';
-import 'package:stronger/provider/library_provider.dart';
+import 'package:stronger/provider/auth_provider.dart';
 import 'package:stronger/provider/schedule_provider.dart';
 import 'package:stronger/utils/calculator.dart';
 import 'package:stronger/utils/define.dart';
@@ -68,6 +68,7 @@ class ScheduleEditView extends StatelessWidget {
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           return WorkoutCard(
+                            selectedDay: selectedDay,
                             title: sp.dayWorkouts[index].title,
                             category: sp.dayWorkouts[index].category,
                             sets: sp.dayWorkoutSets[index],
@@ -97,18 +98,22 @@ class ScheduleEditView extends StatelessWidget {
 
 class WorkoutCard extends StatelessWidget {
   const WorkoutCard(
-      {required this.title,
+      {required this.selectedDay,
+      required this.title,
       required this.category,
       required this.sets,
       Key? key})
       : super(key: key);
 
+  final DateTime selectedDay;
   final String title;
   final String category;
   final List<Map<String, dynamic>> sets;
 
   @override
   Widget build(BuildContext context) {
+    final ap = Provider.of<AuthProvider>(context);
+    final sp = Provider.of<ScheduleProvider>(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     int index = 0;
@@ -146,7 +151,13 @@ class WorkoutCard extends StatelessWidget {
                       ],
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        sp.deleteScheduleWorkouts(
+                          ap.uid!,
+                          Timestamp.fromDate(selectedDay),
+                          title,
+                        );
+                      },
                       child: const Icon(
                         Icons.delete_outline,
                       ),

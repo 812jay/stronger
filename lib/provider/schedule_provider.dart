@@ -118,4 +118,10 @@ class ScheduleProvider extends EasyNotifier {
       scheduleDate,
     );
   }
+
+  void deleteScheduleWorkouts(
+      String uid, Timestamp scheduleDate, String workout) {
+    scheduleService.removeScheduleWorkout(uid, scheduleDate, workout);
+    workoutService.removeWorkoutsSchedule(uid, scheduleDate, workout);
+  }
 }

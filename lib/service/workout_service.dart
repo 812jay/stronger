@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stronger/models/workout_model.dart';
+import 'package:stronger/utils/calculator.dart';
 
 class WorkoutService {
   final firestore = FirebaseFirestore.instance;
+  final calculator = Calculator();
 
   // Future<WorkoutModel> getWorkoutModel(String uid) async {
   Future<List<WorkoutModel>> getWorkouts(String uid) async {
@@ -128,7 +130,7 @@ class WorkoutService {
   }
 
   Future<void> addWorkoutsSchedule(
-      String uid, List<String> titles, Timestamp scheduleDate) async {
+      String uid, List<String> titles, Timestamp workoutDate) async {
     try {
       final workoutsCollection = await firestore
           .collection('users')
@@ -142,18 +144,15 @@ class WorkoutService {
         for (String title in titles) {
           if (element['title'] == title) {
             if (element.id.isNotEmpty) {
-              print(element['title']);
               workoutRecords = [
                 ...element['workoutRecords'],
                 {
                   'description': '',
                   'imageRecords': [],
                   'sets': [],
-                  'workoutDate': scheduleDate,
+                  'workoutDate': workoutDate,
                 },
               ];
-              // workoutRecords.add(element['workoutRecords']);
-
               firestore
                   .collection('users')
                   .doc(uid)
@@ -165,22 +164,59 @@ class WorkoutService {
                 },
               );
             } else {
-              print('object2');
               firestore.collection('users').doc(uid).collection('workouts').add(
                 {
                   'description': '',
                   'imageRecords': [],
                   'sets': [],
-                  'workoutDate': scheduleDate,
+                  'workoutDate': workoutDate,
                 },
               );
             }
           }
         }
-        // break;
       }
     } catch (e) {
       throw Exception('addWorkoutsSchedule: $e');
+    }
+  }
+
+  Future<void> removeWorkoutsSchedule(
+      String uid, Timestamp workoutDate, String title) async {
+    try {
+      final workoutsCollection = await firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .get();
+
+      List<Map<String, dynamic>> workoutRecords = [];
+      String workoutId = '';
+
+      for (var workouts in workoutsCollection.docs) {
+        if (workouts['title'] == title) {
+          workoutId = workouts.id;
+          for (var workoutRecord in workouts['workoutRecords']) {
+            workoutRecords.add(workoutRecord);
+            if (calculator.compareTimestampToDatetime(
+                workoutRecord['workoutDate'], workoutDate)) {
+              workoutRecords.remove(workoutRecord);
+            }
+          }
+        }
+      }
+      firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .doc(workoutId)
+          .update(
+        {
+          'workoutRecords': workoutRecords,
+        },
+      );
+    } catch (e) {
+      throw Exception('removeWorkoutsSchedule: $e');
     }
   }
 }

@@ -47,7 +47,6 @@ class ScheduleService {
           .collection('users')
           .doc(uid)
           .collection('schedules')
-          .where('scheduleDate')
           .get();
       for (var element in snapshot.docs) {
         if (calculator.compareTimestampToDatetime(
@@ -57,7 +56,6 @@ class ScheduleService {
         }
       }
       if (scheduleId.isNotEmpty) {
-        print('aa');
         firestore
             .collection('users')
             .doc(uid)
@@ -69,7 +67,6 @@ class ScheduleService {
           },
         );
       } else {
-        print('bb');
         firestore.collection('users').doc(uid).collection('schedules').add(
           {
             'description': '',
@@ -82,5 +79,35 @@ class ScheduleService {
     } catch (e) {
       throw Exception('addScheduleWorkouts: $e');
     }
+  }
+
+  Future<void> removeScheduleWorkout(
+      String uid, Timestamp scheduleDate, String workout) async {
+    List<String> resultWorkouts = [];
+    String scheduleId = '';
+    final snapshot = await firestore
+        .collection('users')
+        .doc(uid)
+        .collection('schedules')
+        .get();
+    for (var element in snapshot.docs) {
+      if (calculator.compareTimestampToDatetime(
+          element['scheduleDate'], scheduleDate)) {
+        scheduleId = element.id;
+        resultWorkouts = [...element['workouts']];
+        resultWorkouts.remove(workout);
+      }
+    }
+
+    firestore
+        .collection('users')
+        .doc(uid)
+        .collection('schedules')
+        .doc(scheduleId)
+        .update(
+      {
+        'workouts': resultWorkouts,
+      },
+    );
   }
 }
