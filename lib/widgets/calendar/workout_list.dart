@@ -14,7 +14,8 @@ class WorkoutList extends StatelessWidget {
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
-              final Map<String, dynamic> setsData = sp.dayWorkoutSets[index][0];
+              final List<Map<String, dynamic>> setsData =
+                  sp.dayWorkoutSets[index];
               return CommonCard(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -43,26 +44,38 @@ class WorkoutList extends StatelessWidget {
                               ),
                             ],
                           ),
-                          setsData['isChecked']
-                              ? const Icon(
-                                  Icons.check_circle_rounded,
-                                  color: ColorsStronger.lightGreen,
-                                )
-                              : const Icon(Icons.check_circle_outline),
+                          setsData.isNotEmpty
+                              ? setsData[0]['isChecked']
+                                  ? const Icon(
+                                      Icons.check_circle_rounded,
+                                      color: ColorsStronger.lightGreen,
+                                    )
+                                  : const Icon(Icons.check_circle_outline)
+                              : const Icon(Icons.check_circle_outline)
                         ],
                       ),
                       const SizedBox(
                         height: 5,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                              '${setsData['weight']}kg x ${setsData['reps']}회'),
-                          Text('총합 ${setsData['weight'] * setsData['reps']}kg'),
-                        ],
-                      ),
+                      setsData.isNotEmpty
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                    '${setsData[0]['weight']}kg x ${setsData[0]['reps']}회'),
+                                Text(
+                                    '총합 ${setsData[0]['weight'] * setsData[0]['reps']}kg'),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: const [
+                                Text('0kg x 0회'),
+                                Text('총합 0kg'),
+                              ],
+                            )
                     ],
                   ),
                 ),

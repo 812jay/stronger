@@ -231,6 +231,10 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                     onTap: () {
                       // sp.setTodayWorkouts(Timestamp.fromDate(cp.selectedDay));
                       // sp.setTodayWorkoutInfo(ap.uid!, sp.selectedWorkouts);
+                      sp.setAddScheduleWorkouts(
+                        ap.uid!,
+                        Timestamp.fromDate(cp.selectedDay),
+                      );
                       Navigator.pop(context);
                     },
                     buttonText: '운동 추가하기',

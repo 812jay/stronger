@@ -111,7 +111,6 @@ class WorkoutCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    print('title: $title, category: $category, sets: $sets');
     int index = 0;
     return Card(
       elevation: 4,

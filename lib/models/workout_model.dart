@@ -9,7 +9,7 @@ class WorkoutModel extends Equatable {
   final List<String> tools;
   final bool isBookmarked;
   // final List<WorkoutRecordsModel> workoutRecords;
-  final List<dynamic> workoutRecords;
+  final List<Map<String, dynamic>> workoutRecords;
 
   const WorkoutModel({
     required this.title,
@@ -27,7 +27,7 @@ class WorkoutModel extends Equatable {
     List<String>? tools,
     bool? isBookmarked,
     // List<WorkoutRecordsModel>? workoutRecords,
-    List<dynamic>? workoutRecords,
+    List<Map<String, dynamic>>? workoutRecords,
   }) {
     return WorkoutModel(
       title: title ?? this.title,
@@ -41,6 +41,7 @@ class WorkoutModel extends Equatable {
 
   factory WorkoutModel.fromDocument(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
+    // print('data: $data');
     return WorkoutModel(
       title: data['title'],
       description: data['description'],
@@ -48,7 +49,8 @@ class WorkoutModel extends Equatable {
       tools: List.castFrom<dynamic, String>(data['tools']),
       isBookmarked: data['isBookmarked'],
       // workoutRecords: data['workoutRecords'],
-      workoutRecords: List.castFrom<dynamic, dynamic>(data['workoutRecords']),
+      workoutRecords:
+          List.castFrom<dynamic, Map<String, dynamic>>(data['workoutRecords']),
     );
   }
 

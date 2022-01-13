@@ -106,7 +106,16 @@ class ScheduleProvider extends EasyNotifier {
     });
   }
 
-  void setAddScheduleWorkouts(String uid) {
-    scheduleService.addScheduleWorkouts(uid, _selectedworkoutsTitle);
+  void setAddScheduleWorkouts(String uid, Timestamp scheduleDate) {
+    scheduleService.addScheduleWorkouts(
+      uid,
+      _selectedworkoutsTitle,
+      scheduleDate,
+    );
+    workoutService.addWorkoutsSchedule(
+      uid,
+      _selectedworkoutsTitle,
+      scheduleDate,
+    );
   }
 }

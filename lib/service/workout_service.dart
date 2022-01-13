@@ -16,7 +16,6 @@ class WorkoutService {
       final List<WorkoutModel> workouts = snapshot.docs.map((doc) {
         return WorkoutModel.fromDocument(doc);
       }).toList();
-
       return workouts;
     } catch (e) {
       throw UnimplementedError('$e');
@@ -125,6 +124,63 @@ class WorkoutService {
       );
     } catch (e) {
       print('error : $e');
+    }
+  }
+
+  Future<void> addWorkoutsSchedule(
+      String uid, List<String> titles, Timestamp scheduleDate) async {
+    try {
+      final workoutsCollection = await firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .get();
+
+      List<Map<String, dynamic>> workoutRecords = [];
+
+      for (var element in workoutsCollection.docs) {
+        for (String title in titles) {
+          if (element['title'] == title) {
+            if (element.id.isNotEmpty) {
+              print(element['title']);
+              workoutRecords = [
+                ...element['workoutRecords'],
+                {
+                  'description': '',
+                  'imageRecords': [],
+                  'sets': [],
+                  'workoutDate': scheduleDate,
+                },
+              ];
+              // workoutRecords.add(element['workoutRecords']);
+
+              firestore
+                  .collection('users')
+                  .doc(uid)
+                  .collection('workouts')
+                  .doc(element.id)
+                  .update(
+                {
+                  'workoutRecords': workoutRecords,
+                },
+              );
+            } else {
+              print('object2');
+              firestore.collection('users').doc(uid).collection('workouts').add(
+                {
+                  'description': '',
+                  'imageRecords': [],
+                  'sets': [],
+                  'workoutDate': scheduleDate,
+                },
+              );
+            }
+          }
+        }
+        // break;
+      }
+    } catch (e) {
+      throw Exception('addWorkoutsSchedule: $e');
     }
   }
 }
