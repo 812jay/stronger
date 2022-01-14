@@ -17,7 +17,8 @@ class ScheduleEditView extends StatelessWidget {
   final DateTime selectedDay;
   @override
   Widget build(BuildContext context) {
-    final sp = Provider.of<ScheduleProvider>(context);
+    final uid = context.read<AuthProvider>().uid;
+    final sp = context.watch<ScheduleProvider>();
 
     final calculator = Calculator();
     double width = MediaQuery.of(context).size.width;
@@ -67,11 +68,137 @@ class ScheduleEditView extends StatelessWidget {
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          return WorkoutCard(
-                            selectedDay: selectedDay,
-                            title: sp.dayWorkouts[index].title,
-                            category: sp.dayWorkouts[index].category,
-                            sets: sp.dayWorkoutSets[index],
+                          final dayWorkouts = sp.dayWorkouts[index];
+                          final dayWorkoutSets = sp.dayWorkoutSets[index];
+                          return Card(
+                            elevation: 4,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: height * 0.01),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: width * 0.05,
+                                    vertical: height * 0.01,
+                                  ),
+                                  width: width * 0.95,
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                dayWorkouts.title,
+                                                style: const TextStyle(
+                                                    fontSize: 23),
+                                              ),
+                                              const SizedBox(width: 5),
+                                              Text(
+                                                dayWorkouts.category,
+                                                style: const TextStyle(
+                                                  color: ColorsStronger.grey,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              sp.deleteScheduleWorkouts(
+                                                uid!,
+                                                Timestamp.fromDate(selectedDay),
+                                                dayWorkouts.title,
+                                              );
+                                            },
+                                            child: const Icon(
+                                              Icons.delete_outline,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      ...dayWorkoutSets.map((set) {
+                                        // index++;
+                                        return Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text('$index'),
+                                                Text('${set['weight']}kg'),
+                                                Text('${set['reps']}회'),
+                                                Text('${set['time']}초'),
+                                                set['isChecked']
+                                                    ? GestureDetector(
+                                                        onTap: () {
+                                                          print('change false');
+                                                        },
+                                                        child: const Icon(
+                                                          Icons.check_box,
+                                                          color: ColorsStronger
+                                                              .lightGreen,
+                                                        ),
+                                                      )
+                                                    : GestureDetector(
+                                                        onTap: () {
+                                                          print('change true');
+                                                        },
+                                                        child: const Icon(
+                                                          Icons
+                                                              .check_box_outline_blank,
+                                                        ),
+                                                      )
+                                              ],
+                                            )
+                                          ],
+                                        );
+                                      }),
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {},
+                                            child: Container(
+                                              width: width * 0.4,
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(width: 1)),
+                                              child: const Center(
+                                                child: Text('세트 삭제'),
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {},
+                                            child: Container(
+                                              width: width * 0.4,
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(width: 1)),
+                                              child: const Center(
+                                                  child: Text('세트 추가')),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           );
                         },
                         childCount: sp.dayWorkouts.length,
@@ -99,24 +226,31 @@ class ScheduleEditView extends StatelessWidget {
 class WorkoutCard extends StatelessWidget {
   const WorkoutCard(
       {required this.selectedDay,
-      required this.title,
-      required this.category,
-      required this.sets,
+      required this.index,
+      // required this.title,
+      // required this.category,
+      // required this.sets,
       Key? key})
       : super(key: key);
 
   final DateTime selectedDay;
-  final String title;
-  final String category;
-  final List<Map<String, dynamic>> sets;
+  final int index;
+  // final String title;
+  // final String category;
+  // final List<Map<String, dynamic>> sets;
 
   @override
   Widget build(BuildContext context) {
-    final ap = Provider.of<AuthProvider>(context);
-    final sp = Provider.of<ScheduleProvider>(context);
+    // final ap = Provider.of<AuthProvider>(context);
+    // final sp = Provider.of<ScheduleProvider>(context);
+    final ap = context.read<AuthProvider>();
+    final sp = context.read<ScheduleProvider>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    int index = 0;
+
+    final dayWorkouts = sp.dayWorkouts[index];
+    final dayWorkoutSets = sp.dayWorkoutSets[index];
+    // int index = 0;
     return Card(
       elevation: 4,
       child: Column(
@@ -138,12 +272,12 @@ class WorkoutCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          title,
+                          dayWorkouts.title,
                           style: const TextStyle(fontSize: 23),
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          category,
+                          dayWorkouts.category,
                           style: const TextStyle(
                             color: ColorsStronger.grey,
                           ),
@@ -155,7 +289,7 @@ class WorkoutCard extends StatelessWidget {
                         sp.deleteScheduleWorkouts(
                           ap.uid!,
                           Timestamp.fromDate(selectedDay),
-                          title,
+                          dayWorkouts.title,
                         );
                       },
                       child: const Icon(
@@ -167,8 +301,8 @@ class WorkoutCard extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                ...sets.map((set) {
-                  index++;
+                ...dayWorkoutSets.map((set) {
+                  // index++;
                   return Column(
                     children: [
                       Row(

@@ -31,8 +31,8 @@ class ScheduleProvider extends EasyNotifier {
   List<List<Map<String, dynamic>>> dayWorkoutSets = [];
 
   //운동선택에서 선택한 운동
-  List<String> _selectedworkoutsTitle = [];
-  List<String> get selectedWorkouts => _selectedworkoutsTitle;
+  List<String> _selectedworkouts = [];
+  List<String> get selectedWorkouts => _selectedworkouts;
 
   //클릭한 날짜 schdule 정보 불러오기
   Future<void> setSchedule(String uid, Timestamp selectDay) async {
@@ -81,6 +81,10 @@ class ScheduleProvider extends EasyNotifier {
     });
   }
 
+  void setWorkoutsSchedule(String uid, Timestamp scheduleDate) {
+    workoutService.getWorkoutsSchedule(uid, scheduleDate);
+  }
+
   //캘린더에서 스케줄 클릭시 vol, max별로 보여주는 방식
   void onSelectViewType(WorkoutViewTypes type) {
     notify(() {
@@ -91,17 +95,17 @@ class ScheduleProvider extends EasyNotifier {
   //운동선택에서 클릭했던 운동들 clear
   void clearSelectedworkoutsTitle() {
     notify(() {
-      _selectedworkoutsTitle.clear();
+      _selectedworkouts.clear();
     });
   }
 
   //운동선택에서 운동 클릭시 이벤트
   void setAddWorkouts(String workout) {
     notify(() {
-      if (!_selectedworkoutsTitle.contains(workout)) {
-        _selectedworkoutsTitle.add(workout);
+      if (!_selectedworkouts.contains(workout)) {
+        _selectedworkouts.add(workout);
       } else {
-        _selectedworkoutsTitle.remove(workout);
+        _selectedworkouts.remove(workout);
       }
     });
   }
@@ -109,12 +113,12 @@ class ScheduleProvider extends EasyNotifier {
   void setAddScheduleWorkouts(String uid, Timestamp scheduleDate) {
     scheduleService.addScheduleWorkouts(
       uid,
-      _selectedworkoutsTitle,
+      _selectedworkouts,
       scheduleDate,
     );
     workoutService.addWorkoutsSchedule(
       uid,
-      _selectedworkoutsTitle,
+      _selectedworkouts,
       scheduleDate,
     );
   }

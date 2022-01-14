@@ -227,6 +227,7 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
               }),
               Consumer3<ScheduleProvider, CalendarProvider, AuthProvider>(
                 builder: (_, sp, cp, ap, __) {
+                  print(sp.selectedWorkouts);
                   return CommonButton(
                     onTap: () {
                       // sp.setTodayWorkouts(Timestamp.fromDate(cp.selectedDay));
