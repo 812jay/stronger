@@ -114,6 +114,55 @@ class WorkoutService {
     }
   }
 
+  Future<void> addWorkoutInfo(
+    String uid,
+    String title,
+    String category,
+    List<String> tools,
+    String description,
+  ) async {
+    try {
+      final snapshot = await firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .add(
+        {
+          'title': title,
+          'category': category,
+          'isBookmarked': false,
+          'tools': tools,
+          'description': description,
+          'workoutRecords': [],
+        },
+      );
+      // final snapshot = await firestore
+      //     .collection('users')
+      //     .doc(uid)
+      //     .collection('workouts')
+      //     .where('title', isEqualTo: title)
+      //     .get();
+
+      // final workoutId = snapshot.docs[0].id;
+
+      // firestore
+      //     .collection('users')
+      //     .doc(uid)
+      //     .collection('workouts')
+      //     .doc(workoutId)
+      //     .update(
+      //   {
+      //     'title': title,
+      //     'category': category,
+      //     'tools': tools,
+      //     'description': description,
+      //   },
+      // );
+    } catch (e) {
+      print('error : $e');
+    }
+  }
+
   Future<void> editWorkoutBookmark(
     String uid,
     String title,

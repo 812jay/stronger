@@ -8,6 +8,7 @@ import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/provider/schedule_provider.dart';
 import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/utils/define.dart';
+import 'package:stronger/views/workouts_library/workout_add_view.dart';
 import 'package:stronger/widgets/common/common_button.dart';
 import 'package:stronger/widgets/common/common_card.dart';
 import 'package:stronger/widgets/common/workout_text.dart';
@@ -20,6 +21,7 @@ class LibraryView extends StatelessWidget {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    final lp = context.read<LibraryProvider>();
     return Scaffold(
       body: SafeArea(
         child: SizedBox(
@@ -103,7 +105,7 @@ class LibraryView extends StatelessWidget {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 15.0),
-                height: height * 0.55,
+                height: height * 0.6,
                 width: width * 0.9,
                 child: CustomScrollView(
                   slivers: [
@@ -156,6 +158,17 @@ class LibraryView extends StatelessWidget {
                   ],
                 ),
               ),
+              CommonButton(
+                onTap: () {
+                  lp.clearAddWorkoutDatas();
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return WorkoutAddView();
+                      });
+                },
+                buttonText: '운동 추가',
+              )
             ],
           ),
         ),

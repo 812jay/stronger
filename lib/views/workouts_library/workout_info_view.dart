@@ -44,6 +44,7 @@ class WorkoutInfoView extends StatelessWidget {
             result.add(Text('${set['time']}초'));
           }
         }
+
         return result;
       }
 
@@ -203,17 +204,22 @@ class WorkoutInfoView extends StatelessWidget {
                           workouts.volume,
                     )
                   ]),
-              const Text(
-                '이전기록',
-                style: TextStyle(color: ColorsStronger.grey, fontSize: 18.0),
-              ),
+              lp.workoutInfoRecords.isNotEmpty &&
+                      lp.currentRecordSets.isNotEmpty
+                  ? const Text(
+                      '이전기록',
+                      style:
+                          TextStyle(color: ColorsStronger.grey, fontSize: 18.0),
+                    )
+                  : Container(),
               const SizedBox(
                 height: 10.0,
               ),
               //TODO: 날짜당 세트 전부 나오게해야함
               //왼쪽이나 오른쪽 화살표 누르면 이전이나 다음일자로 이동
               //(이전이나 다음 데이터 없으면 해당버튼 비활성화)
-              lp.workoutInfoRecords.isNotEmpty
+              lp.workoutInfoRecords.isNotEmpty &&
+                      lp.currentRecordSets.isNotEmpty
                   ? Container(
                       width: double.infinity,
                       // height: 200,

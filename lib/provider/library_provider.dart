@@ -12,6 +12,14 @@ class LibraryProvider extends EasyNotifier {
   List<String> _selectedCategories = [];
   List<String> get selectedCategories => _selectedCategories;
 
+  //운동추가에서 선택한 카테고리
+  String _selectedAddCategory = '';
+  String get selectedAddCategory => _selectedAddCategory;
+
+  //운동추가에서 선택한 도구
+  List<String> _selectedAddTools = [];
+  List<String> get selectedAddTools => _selectedAddTools;
+
   //운동편집에서 선택한 카테고리
   String _selectedEditCategory = '';
   String get selectedEditCategory => _selectedEditCategory;
@@ -64,16 +72,59 @@ class LibraryProvider extends EasyNotifier {
     notify(() {
       if (isSelected) {
         _selectedCategories.remove(categoryString);
-        final List<WorkoutModel> filteredWorkouts =
-            _filteredWorkoutModels.where((workoutModel) => workoutModel.category != categoryString).toList();
+        final List<WorkoutModel> filteredWorkouts = _filteredWorkoutModels
+            .where((workoutModel) => workoutModel.category != categoryString)
+            .toList();
         _filteredWorkoutModels = [...filteredWorkouts];
       } else {
         _selectedCategories = [..._selectedCategories, categoryString];
-        final List<WorkoutModel> selectedWorkoutsByCategory =
-            workoutModels.where((workoutModel) => workoutModel.category == categoryString).toList();
+        final List<WorkoutModel> selectedWorkoutsByCategory = workoutModels
+            .where((workoutModel) => workoutModel.category == categoryString)
+            .toList();
 
-        _filteredWorkoutModels = [..._filteredWorkoutModels, ...selectedWorkoutsByCategory];
+        _filteredWorkoutModels = [
+          ..._filteredWorkoutModels,
+          ...selectedWorkoutsByCategory
+        ];
       }
+    });
+  }
+
+  //운동추가에서 선택한 카테고리 유저 데이터와 같은지
+  bool isSelectedAddCategory(String categoryString) {
+    return _selectedAddCategory == categoryString;
+  }
+
+  //운동추가에서 선택한 카테고리 클릭했을때 동작
+  void onAddCategorySelect(String categoryString) {
+    notify(() {
+      _selectedAddCategory = categoryString;
+    });
+    print(_selectedAddCategory);
+  }
+
+  //운동추가에서 선택한 도구 유저 데이터에 포함되었는지
+  bool isSelectedAddTool(String toolString) {
+    return _selectedAddTools.contains(toolString);
+  }
+
+  //운동추가에서 선택한 도구 클릭했을때 동작
+  void onAddToolSelect(String toolString) {
+    final bool isSelected = isSelectedAddTool(toolString);
+    notify(() {
+      if (isSelected) {
+        _selectedAddTools.remove(toolString);
+      } else {
+        _selectedAddTools = [..._selectedAddTools, toolString];
+      }
+    });
+  }
+
+  //운동추가 이전정보 clear
+  void clearAddWorkoutDatas() {
+    notify(() {
+      _selectedAddCategory = '';
+      _selectedAddTools = [];
     });
   }
 
@@ -110,6 +161,7 @@ class LibraryProvider extends EasyNotifier {
   Future<void> setWorkouts(String uid) async {
     final List<WorkoutModel> workouts = await workoutService.getWorkouts(uid);
     _workoutModels = [...workouts];
+    print(_workoutModels);
   }
 
   //운동목록에서 카테고리별 운동 불러오기
@@ -125,7 +177,8 @@ class LibraryProvider extends EasyNotifier {
   //운동 상세정보에서 운동정보 불러오기
   Future<void> setWorkoutInfo(String uid, String title) async {
     _workoutInfoRecords.clear();
-    final WorkoutModel workoutInfo = await workoutService.getWorkoutInfo(uid, title);
+    final WorkoutModel workoutInfo =
+        await workoutService.getWorkoutInfo(uid, title);
 
     notify(() {
       _workoutInfo = workoutInfo;
@@ -136,7 +189,9 @@ class LibraryProvider extends EasyNotifier {
         _workoutInfoRecords = [..._workoutInfoRecords, workoutRecord];
       }
     });
-    setWorkoutRecord();
+    if (workoutInfo.workoutRecords.isNotEmpty) {
+      setWorkoutRecord();
+    }
   }
 
   // List<WorkoutsData> getWorkoutsChartData() {
@@ -174,6 +229,27 @@ class LibraryProvider extends EasyNotifier {
         currentRecordSets.add(set);
       });
     }
+  }
+
+  //운동추가에서 데이터 제출시 동작
+  void setAddLibrary(
+    String uid,
+    // String prevTitle,
+    String title,
+    String category,
+    List<String> tools,
+    String description,
+  ) async {
+    print(
+        'uid: $uid, title : $title, category : $category, tools : $tools, description: $description');
+    await workoutService.addWorkoutInfo(
+      uid,
+      title,
+      category,
+      tools,
+      description,
+    );
+    setWorkouts(uid);
   }
 
   //운동편집에서 데이터 제출시 동작
