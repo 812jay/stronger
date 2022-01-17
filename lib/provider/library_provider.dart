@@ -286,3 +286,9 @@ class WorkoutsData {
   final String workoutDate;
   final int volume;
 }
+
+class CirclularChartData {
+  CirclularChartData(this.workout, this.frequency);
+  final String workout;
+  final int frequency;
+}

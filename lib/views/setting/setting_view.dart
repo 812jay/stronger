@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stronger/provider/auth_provider.dart';
+import 'package:stronger/provider/library_provider.dart';
 import 'package:stronger/provider/user_provider.dart';
 import 'package:stronger/utils/define.dart';
 import 'package:stronger/views/setting/category_edit_view.dart';
@@ -9,6 +10,7 @@ import 'package:stronger/views/setting/tool_edit_view.dart';
 import 'package:stronger/widgets/common/common_card.dart';
 import 'package:stronger/widgets/common/common_small_button.dart';
 import 'package:stronger/widgets/settings/edit_button.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class SettingView extends StatelessWidget {
   static const routeName = 'setting';
@@ -115,17 +117,37 @@ class SettingView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Container(
-                        width: double.infinity,
-                        height: 180,
-                        margin: EdgeInsets.symmetric(vertical: height * 0.03),
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 1),
-                        ),
-                        child: const Center(
-                          child: Text('그래프'),
-                        ),
-                      ),
+
+                      // Container(
+                      //   width: double.infinity,
+                      //   height: 180,
+                      //   margin: EdgeInsets.symmetric(vertical: height * 0.03),
+                      //   decoration: BoxDecoration(
+                      //     border: Border.all(width: 1),
+                      //   ),
+                      //   child: const Center(
+                      //     child: Text('그래프'),
+                      //   ),
+                      // ),
+                      SfCartesianChart(
+                          primaryXAxis: CategoryAxis(),
+                          series: <LineSeries<WorkoutsData, String>>[
+                            LineSeries<WorkoutsData, String>(
+                              // Bind data source
+                              dataSource: <WorkoutsData>[
+                                WorkoutsData('2021.10.20', 35),
+                                WorkoutsData('2021.10.26', 28),
+                                WorkoutsData('2021.11.10', 35),
+                                // WorkoutsData('2021.11.20', 48),
+                                // WorkoutsData('2021.11.25', 46),
+                              ],
+                              // dataSource: lp.getWorkoutsChartData(),
+                              xValueMapper: (WorkoutsData workouts, _) =>
+                                  workouts.workoutDate,
+                              yValueMapper: (WorkoutsData workouts, _) =>
+                                  workouts.volume,
+                            )
+                          ]),
                       Container(
                         padding: EdgeInsets.only(bottom: height * 0.02),
                         child: const Text(
@@ -147,13 +169,31 @@ class SettingView extends StatelessWidget {
                           Container(
                             width: 150,
                             height: 130,
-                            margin:
-                                EdgeInsets.symmetric(vertical: height * 0.03),
+                            // margin:
+                            //     EdgeInsets.symmetric(vertical: height * 0.03),
                             decoration: BoxDecoration(
-                              border: Border.all(width: 1),
+                              border: Border.all(
+                                width: 1,
+                                color: Colors.transparent,
+                              ),
                             ),
-                            child: const Center(
-                              child: Text('그래프'),
+                            child: SfCircularChart(
+                              series: <CircularSeries>[
+                                RadialBarSeries<CirclularChartData, String>(
+                                  dataSource: [
+                                    CirclularChartData('프론트 스쿼트', 10),
+                                    CirclularChartData('벤치프레스', 8),
+                                    CirclularChartData('프론트 스쿼트', 5),
+                                  ],
+                                  maximumValue: 100,
+                                  xValueMapper:
+                                      (CirclularChartData data, index) =>
+                                          data.workout,
+                                  yValueMapper:
+                                      (CirclularChartData data, index) =>
+                                          data.frequency,
+                                ),
+                              ],
                             ),
                           ),
                         ],
