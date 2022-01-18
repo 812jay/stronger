@@ -42,15 +42,42 @@ class ScheduleEditView extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const Divider(thickness: 1),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                CountDown(),
-                CountUp(),
-              ],
+            // const Divider(thickness: 1),
+            GestureDetector(
+              onTap: () {
+                sp.setViewTimer();
+              },
+              child: Container(
+                width: width,
+                padding: EdgeInsets.symmetric(vertical: height * 0.01),
+                margin: EdgeInsets.only(bottom: height * 0.02),
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: ColorsStronger.grey),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    sp.viewTimer ? Text('타이머 접기') : Text('타이머 열기'),
+                    sp.viewTimer
+                        ? Icon(Icons.arrow_drop_up)
+                        : Icon(Icons.arrow_drop_down),
+                  ],
+                ),
+              ),
             ),
-            const Divider(thickness: 1),
+            sp.viewTimer
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      CountDown(),
+                      CountUp(),
+                    ],
+                  )
+                : Container(),
+            sp.viewTimer ? const Divider(thickness: 1) : Container(),
+            // const SizedBox(
+            //   height: 10,
+            // ),
             CommonButton(
               onTap: () {
                 sp.clearSelectedworkoutsTitle();

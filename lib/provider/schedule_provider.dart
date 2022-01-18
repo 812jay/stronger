@@ -26,6 +26,9 @@ class ScheduleProvider extends EasyNotifier {
   WorkoutViewTypes _selectedViewType = WorkoutViewTypes.vol;
   WorkoutViewTypes get selectedViewType => _selectedViewType;
 
+  bool _viewTimer = false;
+  bool get viewTimer => _viewTimer;
+
   List<WorkoutModel> dayWorkouts = [];
   List<Map<String, dynamic>> dayWorkoutRecords = [];
   List<List<Map<String, dynamic>>> dayWorkoutSets = [];
@@ -33,6 +36,12 @@ class ScheduleProvider extends EasyNotifier {
   //운동선택에서 선택한 운동
   List<String> _selectedworkouts = [];
   List<String> get selectedWorkouts => _selectedworkouts;
+
+  void setViewTimer() {
+    notify(() {
+      _viewTimer = !viewTimer;
+    });
+  }
 
   //클릭한 날짜 schdule 정보 불러오기
   Future<void> setSchedule(String uid, Timestamp selectDay) async {
