@@ -1,16 +1,18 @@
 # stronger
+```
+무분별한 운동은 그만!
+stronger와 함께 기록하고 체계적으로 성장하세요.
+```
 
-A new Flutter project.
+## 프로젝트 시작
+- git init
+- git remote add origin https://github.com/812jay/stronger.git
+- git pull origin master
+  
+## front-end
+- dart
+- flutter
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## server
+- firebase
+## 미리보기

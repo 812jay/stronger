@@ -141,7 +141,7 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.only(top: 15),
                                   child: CommonCard(
-                                    cardColor: sp.selectedWorkouts
+                                    cardColor: sp.selectedWorkoutsTitle
                                             .contains(workouts[index].title)
                                         ? ColorsStronger.primaryBG
                                         : Colors.white,
@@ -150,7 +150,7 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         WorkoutText(
-                                          textColor: sp.selectedWorkouts
+                                          textColor: sp.selectedWorkoutsTitle
                                                   .contains(
                                                       workouts[index].title)
                                               ? Colors.white
@@ -187,7 +187,7 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                               return Row(
                                 children: [
                                   Text(
-                                    sp.selectedWorkouts[index],
+                                    sp.selectedWorkoutsTitle[index],
                                     style: const TextStyle(fontSize: 18),
                                   ),
                                   const SizedBox(
@@ -196,7 +196,7 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                                   GestureDetector(
                                     onTap: () {
                                       sp.setAddWorkouts(
-                                        sp.selectedWorkouts[index],
+                                        sp.selectedWorkoutsTitle[index],
                                       );
                                     },
                                     child: Container(
@@ -217,7 +217,7 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                                 ],
                               );
                             },
-                            childCount: sp.selectedWorkouts.length,
+                            childCount: sp.selectedWorkoutsTitle.length,
                           ),
                         ),
                       ],
@@ -227,7 +227,7 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
               }),
               Consumer3<ScheduleProvider, CalendarProvider, AuthProvider>(
                 builder: (_, sp, cp, ap, __) {
-                  print(sp.selectedWorkouts);
+                  print(sp.selectedWorkoutsTitle);
                   return CommonButton(
                     onTap: () {
                       // sp.setTodayWorkouts(Timestamp.fromDate(cp.selectedDay));

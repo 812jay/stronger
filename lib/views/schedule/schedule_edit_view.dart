@@ -57,10 +57,10 @@ class ScheduleEditView extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    sp.viewTimer ? Text('타이머 접기') : Text('타이머 열기'),
+                    sp.viewTimer ? const Text('타이머 접기') : const Text('타이머 열기'),
                     sp.viewTimer
-                        ? Icon(Icons.arrow_drop_up)
-                        : Icon(Icons.arrow_drop_down),
+                        ? const Icon(Icons.arrow_drop_up)
+                        : const Icon(Icons.arrow_drop_down),
                   ],
                 ),
               ),
@@ -80,11 +80,13 @@ class ScheduleEditView extends StatelessWidget {
             // ),
             CommonButton(
               onTap: () {
-                sp.clearSelectedworkoutsTitle();
+                sp.clearSelectedWorkoutsTitle();
                 Navigator.of(context, rootNavigator: true)
                     .pushNamed('schedule/add/workouts');
               },
               buttonText: '운동 선택',
+              buttonColor: Colors.black,
+              textColor: Colors.white,
             ),
             const Divider(thickness: 1),
             Expanded(
@@ -216,7 +218,8 @@ class ScheduleEditView extends StatelessWidget {
                                               decoration: BoxDecoration(
                                                   border: Border.all(width: 1)),
                                               child: const Center(
-                                                  child: Text('세트 추가')),
+                                                child: Text('세트 추가'),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -240,6 +243,31 @@ class ScheduleEditView extends StatelessWidget {
                 hintText: '오늘의 메모',
                 border: OutlineInputBorder(
                   borderSide: BorderSide(width: 1),
+                ),
+              ),
+            ),
+            // Container(
+            //   height: 50,
+            //   child: Text(
+            //     '확인',
+            //     textAlign: TextAlign.center,
+            //     style: TextStyle(),
+            //   ),
+            // )
+            SizedBox(
+              width: width,
+              height: 55,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.black,
+                ),
+                onPressed: () => Navigator.pop(context),
+                child: const Text(
+                  '확인',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),

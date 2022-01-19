@@ -6,12 +6,14 @@ class CommonButton extends StatelessWidget {
     required this.onTap,
     required this.buttonText,
     this.buttonColor = ColorsStronger.primaryBG,
+    this.textColor = Colors.white,
     Key? key,
   }) : super(key: key);
 
   final VoidCallback onTap;
   final String buttonText;
   final Color buttonColor;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class CommonButton extends StatelessWidget {
       height: 55,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: ColorsStronger.primaryBG,
+          primary: buttonColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -29,8 +31,8 @@ class CommonButton extends StatelessWidget {
         onPressed: onTap,
         child: Text(
           buttonText,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: textColor,
             fontSize: 16,
           ),
         ),
