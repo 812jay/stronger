@@ -227,7 +227,6 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
               }),
               Consumer3<ScheduleProvider, CalendarProvider, AuthProvider>(
                 builder: (_, sp, cp, ap, __) {
-                  print(sp.selectedWorkoutsTitle);
                   return CommonButton(
                     onTap: () {
                       // sp.setTodayWorkouts(Timestamp.fromDate(cp.selectedDay));
@@ -236,7 +235,8 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                         ap.uid!,
                         Timestamp.fromDate(cp.selectedDay),
                       );
-                      Navigator.pop(context);
+
+                      Navigator.pop(context, true);
                     },
                     buttonText: '운동 추가하기',
                   );

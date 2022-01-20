@@ -23,7 +23,6 @@ class ScheduleEditView extends StatelessWidget {
     final calculator = Calculator();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -79,10 +78,13 @@ class ScheduleEditView extends StatelessWidget {
             //   height: 10,
             // ),
             CommonButton(
-              onTap: () {
+              onTap: () async {
                 sp.clearSelectedWorkoutsTitle();
-                Navigator.of(context, rootNavigator: true)
+                final result = await Navigator.of(context, rootNavigator: true)
                     .pushNamed('schedule/add/workouts');
+                // if (result == true) {
+                //   sp.setWorkoutsSchedule(uid!, Timestamp.fromDate(selectedDay));
+                // }
               },
               buttonText: '운동 선택',
               buttonColor: Colors.black,
@@ -154,7 +156,7 @@ class ScheduleEditView extends StatelessWidget {
                                         height: 10,
                                       ),
                                       ...dayWorkoutSets.map((set) {
-                                        // index++;
+                                        index++;
                                         return Column(
                                           children: [
                                             Row(
@@ -204,7 +206,8 @@ class ScheduleEditView extends StatelessWidget {
                                               width: width * 0.4,
                                               height: 40,
                                               decoration: BoxDecoration(
-                                                  border: Border.all(width: 1)),
+                                                border: Border.all(width: 1),
+                                              ),
                                               child: const Center(
                                                 child: Text('세트 삭제'),
                                               ),

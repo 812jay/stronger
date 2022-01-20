@@ -29,9 +29,17 @@ class ScheduleProvider extends EasyNotifier {
   bool _viewTimer = false;
   bool get viewTimer => _viewTimer;
 
-  List<WorkoutModel> dayWorkouts = [];
-  List<Map<String, dynamic>> dayWorkoutRecords = [];
-  List<List<Map<String, dynamic>>> dayWorkoutSets = [];
+  List<WorkoutModel> _dayWorkouts = [];
+  List<WorkoutModel> get dayWorkouts => _dayWorkouts;
+
+  int _dayWorkoutsLength = 0;
+  int get dayWorkoutsLength => _dayWorkoutsLength;
+
+  List<Map<String, dynamic>> _dayWorkoutRecords = [];
+  List<Map<String, dynamic>> get dayWorkoutRecords => _dayWorkoutRecords;
+
+  List<List<Map<String, dynamic>>> _dayWorkoutSets = [];
+  List<List<Map<String, dynamic>>> get dayWorkoutSets => _dayWorkoutSets;
 
   //운동선택에서 선택한 운동
   List<String> _selectedWorkoutsTitle = [];
@@ -61,37 +69,43 @@ class ScheduleProvider extends EasyNotifier {
 
   //불러온 schedule에서 workout 정보 가져오기
   void setDayWorkouts(List<WorkoutModel> workouts) {
-    dayWorkouts.clear();
+    _dayWorkouts.clear();
     notify(() {
       for (String workout in scheduleModel.workouts) {
         final data = workouts.firstWhere((element) => element.title == workout);
-        dayWorkouts = [...dayWorkouts, data];
+        _dayWorkouts = [..._dayWorkouts, data];
       }
     });
   }
 
   //불러온 schedule workout정보에서 workoutRecord가져오기
   void setDayWorkoutRecords(Timestamp selectedDay) {
-    dayWorkoutRecords.clear();
-    dayWorkoutSets.clear();
+    _dayWorkoutRecords.clear();
+    _dayWorkoutSets.clear();
     notify(() {
-      for (WorkoutModel dayWorkout in dayWorkouts) {
+      for (WorkoutModel dayWorkout in _dayWorkouts) {
         final data = dayWorkout.workoutRecords.firstWhere((element) =>
             calculator.compareTimestampToDatetime(
                 selectedDay, element['workoutDate']));
-        dayWorkoutRecords = [...dayWorkoutRecords, data];
+        _dayWorkoutRecords = [..._dayWorkoutRecords, data];
       }
 
-      for (var workoutRecord in dayWorkoutRecords) {
+      for (var workoutRecord in _dayWorkoutRecords) {
         List<Map<String, dynamic>> workoutSets =
             List<Map<String, dynamic>>.from(workoutRecord['sets']);
-        dayWorkoutSets = [...dayWorkoutSets, workoutSets];
+        _dayWorkoutSets = [..._dayWorkoutSets, workoutSets];
       }
     });
   }
 
-  void setWorkoutsSchedule(String uid, Timestamp scheduleDate) {
-    workoutService.getWorkoutsSchedule(uid, scheduleDate);
+  void setWorkoutsSchedule(String uid, Timestamp scheduleDate) async {
+    final result = await workoutService.getWorkoutsSchedule(uid, scheduleDate);
+    print(result);
+    // print('result : $result');
+    notify(() {
+      _dayWorkoutsLength = result.length;
+      _dayWorkouts = result;
+    });
   }
 
   //캘린더에서 스케줄 클릭시 vol, max별로 보여주는 방식
@@ -119,17 +133,18 @@ class ScheduleProvider extends EasyNotifier {
     });
   }
 
-  void setAddScheduleWorkouts(String uid, Timestamp scheduleDate) {
+  void setAddScheduleWorkouts(String uid, Timestamp scheduleDate) async {
     scheduleService.addScheduleWorkouts(
       uid,
       _selectedWorkoutsTitle,
       scheduleDate,
     );
-    workoutService.addWorkoutsSchedule(
+    await workoutService.addWorkoutsSchedule(
       uid,
       _selectedWorkoutsTitle,
       scheduleDate,
     );
+    // setWorkoutsSchedule(uid, scheduleDate);
   }
 
   void deleteScheduleWorkouts(

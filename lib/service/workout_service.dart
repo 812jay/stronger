@@ -43,20 +43,27 @@ class WorkoutService {
   }
 
   // Future<List<WorkoutModel>> getScheduleWorkouts() async {
-  Future<void> getWorkoutsSchedule(String uid, Timestamp scheduleDate) async {
+  Future<List<WorkoutModel>> getWorkoutsSchedule(
+      String uid, Timestamp scheduleDate) async {
     try {
+      List<WorkoutModel> dayWorkoutsDatas = [];
       final snapshot = await firestore
           .collection('users')
           .doc(uid)
           .collection('workouts')
           .get();
-      // print(snapshot);
       for (var doc in snapshot.docs) {
-        if (calculator.compareTimestampToDatetime(
-            doc['workoutDate'], scheduleDate)) {
-          print(doc);
+        for (var workoutRecord in doc['workoutRecords']) {
+          if (calculator.compareTimestampToDatetime(
+              workoutRecord['workoutDate'], scheduleDate)) {
+            dayWorkoutsDatas = [
+              ...dayWorkoutsDatas,
+              WorkoutModel.fromDocument(doc)
+            ];
+          }
         }
       }
+      return dayWorkoutsDatas;
     } catch (e) {
       throw Exception('getScheduleWorkouts: $e');
     }
@@ -247,8 +254,6 @@ class WorkoutService {
           }
         }
         // print(workoutId);
-
-        print(workoutRecords);
 
         // final scheduleWorkouts = await firestore
         //     .collection('users')

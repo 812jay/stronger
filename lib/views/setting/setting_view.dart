@@ -40,8 +40,19 @@ class SettingView extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              const CircleAvatar(
-                                maxRadius: 30,
+                              Container(
+                                padding: const EdgeInsets.all(10.0),
+                                width: 70.0,
+                                height: 70.0,
+                                decoration: BoxDecoration(
+                                  // color: ColorsStronger.lightGrey,
+                                  image: const DecorationImage(
+                                      image:
+                                          AssetImage('assets/auth/pony.jpeg'),
+                                      fit: BoxFit.cover),
+                                  border: Border.all(width: 1.0),
+                                  borderRadius: BorderRadius.circular(60.0),
+                                ),
                               ),
                               const SizedBox(width: 20),
                               Column(
