@@ -56,6 +56,7 @@ class WorkoutService {
         for (var workoutRecord in doc['workoutRecords']) {
           if (calculator.compareTimestampToDatetime(
               workoutRecord['workoutDate'], scheduleDate)) {
+            print('doc : $doc');
             dayWorkoutsDatas = [
               ...dayWorkoutsDatas,
               WorkoutModel.fromDocument(doc)

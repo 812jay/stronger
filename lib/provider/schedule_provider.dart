@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stronger/models/schedule_model.dart';
 import 'package:stronger/models/workout_model.dart';
@@ -98,13 +100,14 @@ class ScheduleProvider extends EasyNotifier {
     });
   }
 
-  void setWorkoutsSchedule(String uid, Timestamp scheduleDate) async {
+  Future<void> setWorkoutsSchedule(String uid, Timestamp scheduleDate) async {
     final result = await workoutService.getWorkoutsSchedule(uid, scheduleDate);
-    print(result);
+    // log('setWorkoutsSchedule : $result');
     // print('result : $result');
     notify(() {
       _dayWorkoutsLength = result.length;
-      _dayWorkouts = result;
+      _dayWorkouts = [...result];
+      log('dayWorkouts : $_dayWorkouts');
     });
   }
 
@@ -133,7 +136,8 @@ class ScheduleProvider extends EasyNotifier {
     });
   }
 
-  void setAddScheduleWorkouts(String uid, Timestamp scheduleDate) async {
+  Future<void> setAddScheduleWorkouts(
+      String uid, Timestamp scheduleDate) async {
     scheduleService.addScheduleWorkouts(
       uid,
       _selectedWorkoutsTitle,

@@ -40,7 +40,6 @@ class ScheduleService {
   Future<void> addScheduleWorkouts(
       String uid, List<String> workouts, Timestamp scheduleDate) async {
     try {
-      // print(workouts);
       List<String> resultWorkouts = [];
       String scheduleId = '';
       final snapshot = await firestore

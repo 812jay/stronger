@@ -161,7 +161,7 @@ class LibraryProvider extends EasyNotifier {
   Future<void> setWorkouts(String uid) async {
     final List<WorkoutModel> workouts = await workoutService.getWorkouts(uid);
     _workoutModels = [...workouts];
-    print(_workoutModels);
+    // print(_workoutModels);
   }
 
   //운동목록에서 카테고리별 운동 불러오기
