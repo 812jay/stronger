@@ -239,7 +239,8 @@ class ScheduleAddWorkoutsView extends StatelessWidget {
                         ap.uid!,
                         Timestamp.fromDate(cp.selectedDay),
                       );
-
+                      sp.setDayWorkoutRecords(
+                          Timestamp.fromDate(cp.selectedDay));
                       Navigator.pop(context, true);
                     },
                     buttonText: '운동 추가하기',

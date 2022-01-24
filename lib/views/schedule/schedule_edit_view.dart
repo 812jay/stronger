@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -104,7 +106,9 @@ class ScheduleEditView extends StatelessWidget {
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
                             final dayWorkouts = sp.dayWorkouts[index];
-                            final dayWorkoutSets = sp.dayWorkoutSets[index];
+                            final dayWorkoutSets = sp.dayWorkoutSets.isNotEmpty
+                                ? sp.dayWorkoutSets[index]
+                                : [];
                             return Card(
                               elevation: 4,
                               child: Column(
@@ -161,47 +165,49 @@ class ScheduleEditView extends StatelessWidget {
                                         const SizedBox(
                                           height: 10,
                                         ),
-                                        ...dayWorkoutSets.map((set) {
-                                          index++;
-                                          return Column(
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text('$index'),
-                                                  Text('${set['weight']}kg'),
-                                                  Text('${set['reps']}회'),
-                                                  Text('${set['time']}초'),
-                                                  set['isChecked']
-                                                      ? GestureDetector(
-                                                          onTap: () {
-                                                            print(
-                                                                'change false');
-                                                          },
-                                                          child: const Icon(
-                                                            Icons.check_box,
-                                                            color:
-                                                                ColorsStronger
-                                                                    .lightGreen,
-                                                          ),
-                                                        )
-                                                      : GestureDetector(
-                                                          onTap: () {
-                                                            print(
-                                                                'change true');
-                                                          },
-                                                          child: const Icon(
-                                                            Icons
-                                                                .check_box_outline_blank,
-                                                          ),
-                                                        )
-                                                ],
-                                              )
-                                            ],
-                                          );
-                                        }),
+                                        if (dayWorkoutSets.isNotEmpty)
+                                          ...dayWorkoutSets.map((set) {
+                                            index++;
+                                            return Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text('$index'),
+                                                    Text('${set['weight']}kg'),
+                                                    Text('${set['reps']}회'),
+                                                    Text('${set['time']}초'),
+                                                    set['isChecked']
+                                                        ? GestureDetector(
+                                                            onTap: () {
+                                                              print(
+                                                                'change false',
+                                                              );
+                                                            },
+                                                            child: const Icon(
+                                                              Icons.check_box,
+                                                              color:
+                                                                  ColorsStronger
+                                                                      .lightGreen,
+                                                            ),
+                                                          )
+                                                        : GestureDetector(
+                                                            onTap: () {
+                                                              print(
+                                                                  'change true');
+                                                            },
+                                                            child: const Icon(
+                                                              Icons
+                                                                  .check_box_outline_blank,
+                                                            ),
+                                                          )
+                                                  ],
+                                                )
+                                              ],
+                                            );
+                                          }),
                                         const SizedBox(
                                           height: 30,
                                         ),

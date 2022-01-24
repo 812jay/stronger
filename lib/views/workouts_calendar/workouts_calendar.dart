@@ -31,6 +31,7 @@ class _WorkoutsCalendarState extends State<WorkoutsCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    String? uid = context.read<AuthProvider>().uid;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -76,7 +77,8 @@ class _WorkoutsCalendarState extends State<WorkoutsCalendar> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Consumer<CalendarProvider>(builder: (_, cp, __) {
+                  Consumer2<ScheduleProvider, CalendarProvider>(
+                      builder: (_, sp, cp, __) {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -85,15 +87,21 @@ class _WorkoutsCalendarState extends State<WorkoutsCalendar> {
                           style: const TextStyle(fontSize: 18),
                         ),
                         CommonSmallButton(
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return ScheduleEditView(
-                                  selectedDay: cp.selectedDay,
-                                );
-                              },
-                            ),
-                          ),
+                          onTap: () {
+                            // sp.setWorkoutsSchedule(
+                            //   uid!,
+                            //   Timestamp.fromDate(cp.selectedDay),
+                            // );
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ScheduleEditView(
+                                    selectedDay: cp.selectedDay,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                           buttonText: '편집하기',
                         ),
                       ],
@@ -104,14 +112,14 @@ class _WorkoutsCalendarState extends State<WorkoutsCalendar> {
                   ),
                   //TODO: VOL/MAX 기능 추가해야 한다.
                   Consumer<ScheduleProvider>(
-                    builder: (_, cp, __) {
-                      WorkoutViewTypes viewType = cp.selectedViewType;
+                    builder: (_, sp, __) {
+                      WorkoutViewTypes viewType = sp.selectedViewType;
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           GestureDetector(
                             onTap: () {
-                              cp.onSelectViewType(WorkoutViewTypes.vol);
+                              sp.onSelectViewType(WorkoutViewTypes.vol);
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
@@ -144,7 +152,7 @@ class _WorkoutsCalendarState extends State<WorkoutsCalendar> {
                           ), //vol
                           GestureDetector(
                             onTap: () {
-                              cp.onSelectViewType(WorkoutViewTypes.max);
+                              sp.onSelectViewType(WorkoutViewTypes.max);
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(

@@ -107,8 +107,8 @@ class ScheduleProvider extends EasyNotifier {
     notify(() {
       _dayWorkoutsLength = result.length;
       _dayWorkouts = [...result];
-      log('dayWorkouts : $_dayWorkouts');
     });
+    // setDayWorkoutRecords(scheduleDate);
   }
 
   //캘린더에서 스케줄 클릭시 vol, max별로 보여주는 방식
