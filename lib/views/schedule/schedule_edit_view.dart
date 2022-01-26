@@ -148,12 +148,19 @@ class ScheduleEditView extends StatelessWidget {
                                               ],
                                             ),
                                             GestureDetector(
-                                              onTap: () {
-                                                sp.deleteScheduleWorkouts(
+                                              onTap: () async {
+                                                await sp.deleteScheduleWorkouts(
                                                   uid!,
                                                   Timestamp.fromDate(
-                                                      selectedDay),
+                                                    selectedDay,
+                                                  ),
                                                   dayWorkouts.title,
+                                                );
+                                                await sp.setWorkoutsSchedule(
+                                                  uid,
+                                                  Timestamp.fromDate(
+                                                    selectedDay,
+                                                  ),
                                                 );
                                               },
                                               child: const Icon(

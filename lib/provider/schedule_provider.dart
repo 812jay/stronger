@@ -34,9 +34,6 @@ class ScheduleProvider extends EasyNotifier {
   List<WorkoutModel> _dayWorkouts = [];
   List<WorkoutModel> get dayWorkouts => _dayWorkouts;
 
-  int _dayWorkoutsLength = 0;
-  int get dayWorkoutsLength => _dayWorkoutsLength;
-
   List<Map<String, dynamic>> _dayWorkoutRecords = [];
   List<Map<String, dynamic>> get dayWorkoutRecords => _dayWorkoutRecords;
 
@@ -105,7 +102,6 @@ class ScheduleProvider extends EasyNotifier {
     // log('setWorkoutsSchedule : $result');
     // print('result : $result');
     notify(() {
-      _dayWorkoutsLength = result.length;
       _dayWorkouts = [...result];
     });
     // setDayWorkoutRecords(scheduleDate);
@@ -151,9 +147,9 @@ class ScheduleProvider extends EasyNotifier {
     // setWorkoutsSchedule(uid, scheduleDate);
   }
 
-  void deleteScheduleWorkouts(
-      String uid, Timestamp scheduleDate, String workout) {
-    scheduleService.removeScheduleWorkout(uid, scheduleDate, workout);
-    workoutService.removeWorkoutsSchedule(uid, scheduleDate, workout);
+  Future<void> deleteScheduleWorkouts(
+      String uid, Timestamp scheduleDate, String workout) async {
+    await scheduleService.removeScheduleWorkout(uid, scheduleDate, workout);
+    await workoutService.removeWorkoutsSchedule(uid, scheduleDate, workout);
   }
 }
