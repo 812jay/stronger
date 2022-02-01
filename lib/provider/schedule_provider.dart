@@ -99,12 +99,9 @@ class ScheduleProvider extends EasyNotifier {
 
   Future<void> setWorkoutsSchedule(String uid, Timestamp scheduleDate) async {
     final result = await workoutService.getWorkoutsSchedule(uid, scheduleDate);
-    // log('setWorkoutsSchedule : $result');
-    // print('result : $result');
     notify(() {
       _dayWorkouts = [...result];
     });
-    // setDayWorkoutRecords(scheduleDate);
   }
 
   //캘린더에서 스케줄 클릭시 vol, max별로 보여주는 방식
@@ -151,5 +148,11 @@ class ScheduleProvider extends EasyNotifier {
       String uid, Timestamp scheduleDate, String workout) async {
     await scheduleService.removeScheduleWorkout(uid, scheduleDate, workout);
     await workoutService.removeWorkoutsSchedule(uid, scheduleDate, workout);
+  }
+
+  //스케줄 운동에서 세트추가했을때 동작
+  Future<void> addDayWorkoutSet(
+      String uid, Timestamp scheduleDate, String workout) async {
+    await workoutService.addDayWorkoutSet(uid, scheduleDate, workout);
   }
 }

@@ -254,15 +254,6 @@ class WorkoutService {
             }
           }
         }
-        // print(workoutId);
-
-        // final scheduleWorkouts = await firestore
-        //     .collection('users')
-        //     .doc(uid)
-        //     .collection('workouts')
-        //     .doc(workoutId)
-        //     .get();
-        // print('service : $scheduleWorkouts');
       }
     } catch (e) {
       throw Exception('addWorkoutsSchedule: $e');
@@ -305,6 +296,55 @@ class WorkoutService {
       );
     } catch (e) {
       throw Exception('removeWorkoutsSchedule: $e');
+    }
+  }
+
+  Future<void> addDayWorkoutSet(
+      String uid, Timestamp workoutDate, String title) async {
+    try {
+      final workoutsCollection = await firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .get();
+
+      Map<String, dynamic> workoutData = {};
+      Map<String, dynamic> addSet = {};
+      String workoutId = '';
+      for (var workouts in workoutsCollection.docs) {
+        if (workouts['title'] == title) {
+          workoutId = workouts.id;
+          workoutData = workouts.data();
+          int index = 0;
+          for (var workoutRecord in workouts['workoutRecords']) {
+            if (calculator.compareTimestampToDatetime(
+                workoutRecord['workoutDate'], workoutDate)) {
+              if (workoutRecord['sets'].isNotEmpty) {
+                addSet = workoutRecord['sets'].last;
+                addSet['isChecked'] = false;
+                workoutData['workoutRecords'][index]['sets'] = [
+                  ...workoutRecord['sets'],
+                  addSet,
+                ];
+              } else {
+                workoutData['workoutRecords'][index]['sets'] = [
+                  {'reps': 0, 'isChecked': false, 'weight': 0, 'time': 0}
+                ];
+              }
+            }
+            index++;
+          }
+        }
+      }
+
+      firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .doc(workoutId)
+          .update({'workoutRecords': workoutData['workoutRecords']});
+    } catch (e) {
+      throw Exception('addDayWorkoutSet: $e');
     }
   }
 }

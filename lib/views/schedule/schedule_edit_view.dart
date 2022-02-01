@@ -109,6 +109,7 @@ class ScheduleEditView extends StatelessWidget {
                             final dayWorkoutSets = sp.dayWorkoutSets.isNotEmpty
                                 ? sp.dayWorkoutSets[index]
                                 : [];
+                            int setIndex = 0;
                             return Card(
                               elevation: 4,
                               child: Column(
@@ -174,7 +175,7 @@ class ScheduleEditView extends StatelessWidget {
                                         ),
                                         if (dayWorkoutSets.isNotEmpty)
                                           ...dayWorkoutSets.map((set) {
-                                            index++;
+                                            setIndex++;
                                             return Column(
                                               children: [
                                                 Row(
@@ -182,7 +183,7 @@ class ScheduleEditView extends StatelessWidget {
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    Text('$index'),
+                                                    Text('$setIndex'),
                                                     Text('${set['weight']}kg'),
                                                     Text('${set['reps']}회'),
                                                     Text('${set['time']}초'),
@@ -236,7 +237,27 @@ class ScheduleEditView extends StatelessWidget {
                                               ),
                                             ),
                                             GestureDetector(
-                                              onTap: () {},
+                                              onTap: () async {
+                                                await sp.addDayWorkoutSet(
+                                                  uid!,
+                                                  Timestamp.fromDate(
+                                                    selectedDay,
+                                                  ),
+                                                  dayWorkouts.title,
+                                                );
+
+                                                await sp.setWorkoutsSchedule(
+                                                  uid,
+                                                  Timestamp.fromDate(
+                                                    selectedDay,
+                                                  ),
+                                                );
+                                                sp.setDayWorkoutRecords(
+                                                  Timestamp.fromDate(
+                                                    selectedDay,
+                                                  ),
+                                                );
+                                              },
                                               child: Container(
                                                 width: width * 0.4,
                                                 height: 40,
