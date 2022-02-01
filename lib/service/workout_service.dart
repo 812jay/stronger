@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stronger/models/workout_model.dart';
 import 'package:stronger/utils/calculator.dart';
@@ -56,7 +58,6 @@ class WorkoutService {
         for (var workoutRecord in doc['workoutRecords']) {
           if (calculator.compareTimestampToDatetime(
               workoutRecord['workoutDate'], scheduleDate)) {
-            print('doc : $doc');
             dayWorkoutsDatas = [
               ...dayWorkoutsDatas,
               WorkoutModel.fromDocument(doc)
@@ -302,7 +303,7 @@ class WorkoutService {
   Future<void> addDayWorkoutSet(
       String uid, Timestamp workoutDate, String title) async {
     try {
-      final workoutsCollection = await firestore
+      final workoutsRef = await firestore
           .collection('users')
           .doc(uid)
           .collection('workouts')
@@ -311,7 +312,7 @@ class WorkoutService {
       Map<String, dynamic> workoutData = {};
       Map<String, dynamic> addSet = {};
       String workoutId = '';
-      for (var workouts in workoutsCollection.docs) {
+      for (var workouts in workoutsRef.docs) {
         if (workouts['title'] == title) {
           workoutId = workouts.id;
           workoutData = workouts.data();
@@ -345,6 +346,48 @@ class WorkoutService {
           .update({'workoutRecords': workoutData['workoutRecords']});
     } catch (e) {
       throw Exception('addDayWorkoutSet: $e');
+    }
+  }
+
+  Future<void> removeDayWorkoutSet(
+    String uid,
+    Timestamp workoutDate,
+    String title,
+  ) async {
+    try {
+      final workoutsRef = await firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .get();
+
+      Map<String, dynamic> workoutData = {};
+      String workoutId = '';
+      for (var workouts in workoutsRef.docs) {
+        if (workouts['title'] == title) {
+          workoutId = workouts.id;
+          workoutData = workouts.data();
+          int index = 0;
+          for (var workoutRecord in workouts['workoutRecords']) {
+            if (calculator.compareTimestampToDatetime(
+                workoutRecord['workoutDate'], workoutDate)) {
+              if (workoutRecord['sets'].isNotEmpty) {
+                workoutData['workoutRecords'][index]['sets'].removeAt(
+                    workoutData['workoutRecords'][index]['sets'].length - 1);
+              }
+            }
+            index++;
+          }
+        }
+      }
+      firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .doc(workoutId)
+          .update({'workoutRecords': workoutData['workoutRecords']});
+    } catch (e) {
+      throw Exception('removeDayWorkoutSet: $e');
     }
   }
 }

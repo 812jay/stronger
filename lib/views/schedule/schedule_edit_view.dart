@@ -224,7 +224,25 @@ class ScheduleEditView extends StatelessWidget {
                                               MainAxisAlignment.spaceAround,
                                           children: [
                                             GestureDetector(
-                                              onTap: () {},
+                                              onTap: () async {
+                                                await sp.deleteDayWorkoutSet(
+                                                  uid!,
+                                                  Timestamp.fromDate(
+                                                      selectedDay),
+                                                  dayWorkouts.title,
+                                                );
+                                                await sp.setWorkoutsSchedule(
+                                                  uid,
+                                                  Timestamp.fromDate(
+                                                    selectedDay,
+                                                  ),
+                                                );
+                                                sp.setDayWorkoutRecords(
+                                                  Timestamp.fromDate(
+                                                    selectedDay,
+                                                  ),
+                                                );
+                                              },
                                               child: Container(
                                                 width: width * 0.4,
                                                 height: 40,

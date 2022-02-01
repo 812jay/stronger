@@ -150,9 +150,15 @@ class ScheduleProvider extends EasyNotifier {
     await workoutService.removeWorkoutsSchedule(uid, scheduleDate, workout);
   }
 
-  //스케줄 운동에서 세트추가했을때 동작
+  //스케줄 운동에서 세트추가 했을때 동작
   Future<void> addDayWorkoutSet(
       String uid, Timestamp scheduleDate, String workout) async {
     await workoutService.addDayWorkoutSet(uid, scheduleDate, workout);
+  }
+
+  //스케줄 운동에서 세트삭제 했을때 동작
+  Future<void> deleteDayWorkoutSet(
+      String uid, Timestamp scheduleDate, String workout) async {
+    await workoutService.removeDayWorkoutSet(uid, scheduleDate, workout);
   }
 }
