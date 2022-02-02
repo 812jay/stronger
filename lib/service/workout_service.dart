@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stronger/models/workout_model.dart';
 import 'package:stronger/utils/calculator.dart';
@@ -321,8 +319,13 @@ class WorkoutService {
             if (calculator.compareTimestampToDatetime(
                 workoutRecord['workoutDate'], workoutDate)) {
               if (workoutRecord['sets'].isNotEmpty) {
-                addSet = workoutRecord['sets'].last;
-                addSet['isChecked'] = false;
+                Map<String, dynamic> lastSet = workoutRecord['sets'].last;
+                addSet = {
+                  'reps': lastSet['reps'],
+                  'isChecked': false,
+                  'weight': lastSet['weight'],
+                  'time': lastSet['time']
+                };
                 workoutData['workoutRecords'][index]['sets'] = [
                   ...workoutRecord['sets'],
                   addSet,
