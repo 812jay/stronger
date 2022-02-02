@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stronger/models/schedule_model.dart';
 import 'package:stronger/models/workout_model.dart';
@@ -160,5 +158,10 @@ class ScheduleProvider extends EasyNotifier {
   Future<void> deleteDayWorkoutSet(
       String uid, Timestamp scheduleDate, String workout) async {
     await workoutService.removeDayWorkoutSet(uid, scheduleDate, workout);
+  }
+
+  Future<void> changeIsChecked(
+      String uid, Timestamp scheduleDate, String workout, int setIndex) async {
+    await workoutService.changeIsChecked(uid, scheduleDate, workout, setIndex);
   }
 }

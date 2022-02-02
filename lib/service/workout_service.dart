@@ -390,4 +390,43 @@ class WorkoutService {
       throw Exception('removeDayWorkoutSet: $e');
     }
   }
+
+  Future<void> changeIsChecked(
+      String uid, Timestamp workoutDate, String title, int setIndex) async {
+    try {
+      final workoutsRef = await firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .get();
+
+      Map<String, dynamic> workoutData = {};
+      String workoutId = '';
+      for (var workouts in workoutsRef.docs) {
+        if (workouts['title'] == title) {
+          workoutId = workouts.id;
+          workoutData = workouts.data();
+          int index = 0;
+          for (var workoutRecord in workouts['workoutRecords']) {
+            if (calculator.compareTimestampToDatetime(
+                workoutRecord['workoutDate'], workoutDate)) {
+              workoutData['workoutRecords'][index]['sets'][setIndex]
+                      ['isChecked'] =
+                  !workoutData['workoutRecords'][index]['sets'][setIndex]
+                      ['isChecked'];
+            }
+            index++;
+          }
+        }
+      }
+      firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .doc(workoutId)
+          .update({'workoutRecords': workoutData['workoutRecords']});
+    } catch (e) {
+      throw Exception('changeIsChecked: $e');
+    }
+  }
 }
