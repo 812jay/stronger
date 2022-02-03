@@ -109,4 +109,35 @@ class ScheduleService {
       },
     );
   }
+
+  Future<void> addScheduleDescription(
+    String uid,
+    Timestamp scheduleDate,
+    String description,
+  ) async {
+    final snapshot = await firestore
+        .collection('users')
+        .doc(uid)
+        .collection('schedules')
+        .get();
+
+    String scheduleId = '';
+    for (var element in snapshot.docs) {
+      if (calculator.compareTimestampToDatetime(
+          element['scheduleDate'], scheduleDate)) {
+        scheduleId = element.id;
+      }
+    }
+
+    firestore
+        .collection('users')
+        .doc(uid)
+        .collection('schedules')
+        .doc(scheduleId)
+        .update(
+      {
+        'description': description,
+      },
+    );
+  }
 }

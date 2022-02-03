@@ -164,4 +164,16 @@ class ScheduleProvider extends EasyNotifier {
       String uid, Timestamp scheduleDate, String workout, int setIndex) async {
     await workoutService.changeIsChecked(uid, scheduleDate, workout, setIndex);
   }
+
+  Future<void> addScheduleDescription(
+    String uid,
+    Timestamp scheduleDate,
+    String description,
+  ) async {
+    await scheduleService.addScheduleDescription(
+      uid,
+      scheduleDate,
+      description,
+    );
+  }
 }

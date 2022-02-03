@@ -12,11 +12,33 @@ import 'package:stronger/widgets/common/common_button.dart';
 import 'package:stronger/widgets/schedule/count_down.dart';
 import 'package:stronger/widgets/schedule/count_up.dart';
 
-class ScheduleEditView extends StatelessWidget {
+class ScheduleEditView extends StatefulWidget {
   static const routeName = 'schedule/edit';
   const ScheduleEditView({required this.selectedDay, Key? key})
       : super(key: key);
   final DateTime selectedDay;
+
+  @override
+  State<ScheduleEditView> createState() => _ScheduleEditViewState();
+}
+
+class _ScheduleEditViewState extends State<ScheduleEditView> {
+  var _descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // _descriptionController = TextEditingController(text: widget.description);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _descriptionController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final uid = context.read<AuthProvider>().uid;
@@ -27,7 +49,7 @@ class ScheduleEditView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          DateFormat('yyyy-MM-dd').format(selectedDay),
+          DateFormat('yyyy-MM-dd').format(widget.selectedDay),
           style: const TextStyle(
             color: Colors.black,
           ),
@@ -152,14 +174,14 @@ class ScheduleEditView extends StatelessWidget {
                                                 await sp.deleteScheduleWorkouts(
                                                   uid!,
                                                   Timestamp.fromDate(
-                                                    selectedDay,
+                                                    widget.selectedDay,
                                                   ),
                                                   dayWorkouts.title,
                                                 );
                                                 await sp.setWorkoutsSchedule(
                                                   uid,
                                                   Timestamp.fromDate(
-                                                    selectedDay,
+                                                    widget.selectedDay,
                                                   ),
                                                 );
                                               },
@@ -196,7 +218,8 @@ class ScheduleEditView extends StatelessWidget {
                                                                 uid!,
                                                                 Timestamp
                                                                     .fromDate(
-                                                                  selectedDay,
+                                                                  widget
+                                                                      .selectedDay,
                                                                 ),
                                                                 dayWorkouts
                                                                     .title,
@@ -207,14 +230,16 @@ class ScheduleEditView extends StatelessWidget {
                                                                 uid,
                                                                 Timestamp
                                                                     .fromDate(
-                                                                  selectedDay,
+                                                                  widget
+                                                                      .selectedDay,
                                                                 ),
                                                               );
 
                                                               sp.setDayWorkoutRecords(
                                                                 Timestamp
                                                                     .fromDate(
-                                                                  selectedDay,
+                                                                  widget
+                                                                      .selectedDay,
                                                                 ),
                                                               );
                                                             },
@@ -232,7 +257,8 @@ class ScheduleEditView extends StatelessWidget {
                                                                 uid!,
                                                                 Timestamp
                                                                     .fromDate(
-                                                                  selectedDay,
+                                                                  widget
+                                                                      .selectedDay,
                                                                 ),
                                                                 dayWorkouts
                                                                     .title,
@@ -243,14 +269,16 @@ class ScheduleEditView extends StatelessWidget {
                                                                 uid,
                                                                 Timestamp
                                                                     .fromDate(
-                                                                  selectedDay,
+                                                                  widget
+                                                                      .selectedDay,
                                                                 ),
                                                               );
 
                                                               sp.setDayWorkoutRecords(
                                                                 Timestamp
                                                                     .fromDate(
-                                                                  selectedDay,
+                                                                  widget
+                                                                      .selectedDay,
                                                                 ),
                                                               );
                                                             },
@@ -276,18 +304,18 @@ class ScheduleEditView extends StatelessWidget {
                                                 await sp.deleteDayWorkoutSet(
                                                   uid!,
                                                   Timestamp.fromDate(
-                                                      selectedDay),
+                                                      widget.selectedDay),
                                                   dayWorkouts.title,
                                                 );
                                                 await sp.setWorkoutsSchedule(
                                                   uid,
                                                   Timestamp.fromDate(
-                                                    selectedDay,
+                                                    widget.selectedDay,
                                                   ),
                                                 );
                                                 sp.setDayWorkoutRecords(
                                                   Timestamp.fromDate(
-                                                    selectedDay,
+                                                    widget.selectedDay,
                                                   ),
                                                 );
                                               },
@@ -307,7 +335,7 @@ class ScheduleEditView extends StatelessWidget {
                                                 await sp.addDayWorkoutSet(
                                                   uid!,
                                                   Timestamp.fromDate(
-                                                    selectedDay,
+                                                    widget.selectedDay,
                                                   ),
                                                   dayWorkouts.title,
                                                 );
@@ -315,12 +343,12 @@ class ScheduleEditView extends StatelessWidget {
                                                 await sp.setWorkoutsSchedule(
                                                   uid,
                                                   Timestamp.fromDate(
-                                                    selectedDay,
+                                                    widget.selectedDay,
                                                   ),
                                                 );
                                                 sp.setDayWorkoutRecords(
                                                   Timestamp.fromDate(
-                                                    selectedDay,
+                                                    widget.selectedDay,
                                                   ),
                                                 );
                                               },
@@ -351,8 +379,9 @@ class ScheduleEditView extends StatelessWidget {
                   ),
                 ),
               ),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: _descriptionController,
+                decoration: const InputDecoration(
                   hintText: '오늘의 메모',
                   border: OutlineInputBorder(
                     borderSide: BorderSide(width: 1),
@@ -374,7 +403,16 @@ class ScheduleEditView extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     primary: Colors.black,
                   ),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () async {
+                    await sp.addScheduleDescription(
+                      uid!,
+                      Timestamp.fromDate(
+                        widget.selectedDay,
+                      ),
+                      _descriptionController.text,
+                    );
+                    Navigator.pop(context);
+                  },
                   child: const Text(
                     '확인',
                     style: TextStyle(
