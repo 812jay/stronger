@@ -30,6 +30,9 @@ class _ScheduleEditViewState extends State<ScheduleEditView> {
     // TODO: implement initState
     super.initState();
     // _descriptionController = TextEditingController(text: widget.description);
+    final String description =
+        context.read<ScheduleProvider>().scheduleModel.description;
+    _descriptionController = TextEditingController(text: description);
   }
 
   @override
@@ -201,93 +204,98 @@ class _ScheduleEditViewState extends State<ScheduleEditView> {
                                                 dayWorkoutSets.indexOf(set);
                                             return Column(
                                               children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text('${setIndex + 1}'),
-                                                    Text('${set['weight']}kg'),
-                                                    Text('${set['reps']}회'),
-                                                    Text('${set['time']}초'),
-                                                    set['isChecked']
-                                                        ? GestureDetector(
-                                                            onTap: () async {
-                                                              await sp
-                                                                  .changeIsChecked(
-                                                                uid!,
-                                                                Timestamp
-                                                                    .fromDate(
-                                                                  widget
-                                                                      .selectedDay,
-                                                                ),
-                                                                dayWorkouts
-                                                                    .title,
-                                                                setIndex,
-                                                              );
-                                                              await sp
-                                                                  .setWorkoutsSchedule(
-                                                                uid,
-                                                                Timestamp
-                                                                    .fromDate(
-                                                                  widget
-                                                                      .selectedDay,
-                                                                ),
-                                                              );
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    print(setIndex);
+                                                  },
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text('${setIndex + 1}'),
+                                                      Text(
+                                                          '${set['weight']}kg'),
+                                                      Text('${set['reps']}회'),
+                                                      Text('${set['time']}초'),
+                                                      set['isChecked']
+                                                          ? GestureDetector(
+                                                              onTap: () async {
+                                                                await sp
+                                                                    .changeIsChecked(
+                                                                  uid!,
+                                                                  Timestamp
+                                                                      .fromDate(
+                                                                    widget
+                                                                        .selectedDay,
+                                                                  ),
+                                                                  dayWorkouts
+                                                                      .title,
+                                                                  setIndex,
+                                                                );
+                                                                await sp
+                                                                    .setWorkoutsSchedule(
+                                                                  uid,
+                                                                  Timestamp
+                                                                      .fromDate(
+                                                                    widget
+                                                                        .selectedDay,
+                                                                  ),
+                                                                );
 
-                                                              sp.setDayWorkoutRecords(
-                                                                Timestamp
-                                                                    .fromDate(
-                                                                  widget
-                                                                      .selectedDay,
-                                                                ),
-                                                              );
-                                                            },
-                                                            child: const Icon(
-                                                              Icons.check_box,
-                                                              color:
-                                                                  ColorsStronger
-                                                                      .lightGreen,
-                                                            ),
-                                                          )
-                                                        : GestureDetector(
-                                                            onTap: () async {
-                                                              await sp
-                                                                  .changeIsChecked(
-                                                                uid!,
-                                                                Timestamp
-                                                                    .fromDate(
-                                                                  widget
-                                                                      .selectedDay,
-                                                                ),
-                                                                dayWorkouts
-                                                                    .title,
-                                                                setIndex,
-                                                              );
-                                                              await sp
-                                                                  .setWorkoutsSchedule(
-                                                                uid,
-                                                                Timestamp
-                                                                    .fromDate(
-                                                                  widget
-                                                                      .selectedDay,
-                                                                ),
-                                                              );
+                                                                sp.setDayWorkoutRecords(
+                                                                  Timestamp
+                                                                      .fromDate(
+                                                                    widget
+                                                                        .selectedDay,
+                                                                  ),
+                                                                );
+                                                              },
+                                                              child: const Icon(
+                                                                Icons.check_box,
+                                                                color: ColorsStronger
+                                                                    .lightGreen,
+                                                              ),
+                                                            )
+                                                          : GestureDetector(
+                                                              onTap: () async {
+                                                                await sp
+                                                                    .changeIsChecked(
+                                                                  uid!,
+                                                                  Timestamp
+                                                                      .fromDate(
+                                                                    widget
+                                                                        .selectedDay,
+                                                                  ),
+                                                                  dayWorkouts
+                                                                      .title,
+                                                                  setIndex,
+                                                                );
+                                                                await sp
+                                                                    .setWorkoutsSchedule(
+                                                                  uid,
+                                                                  Timestamp
+                                                                      .fromDate(
+                                                                    widget
+                                                                        .selectedDay,
+                                                                  ),
+                                                                );
 
-                                                              sp.setDayWorkoutRecords(
-                                                                Timestamp
-                                                                    .fromDate(
-                                                                  widget
-                                                                      .selectedDay,
-                                                                ),
-                                                              );
-                                                            },
-                                                            child: const Icon(
-                                                              Icons
-                                                                  .check_box_outline_blank,
-                                                            ),
-                                                          )
-                                                  ],
+                                                                sp.setDayWorkoutRecords(
+                                                                  Timestamp
+                                                                      .fromDate(
+                                                                    widget
+                                                                        .selectedDay,
+                                                                  ),
+                                                                );
+                                                              },
+                                                              child: const Icon(
+                                                                Icons
+                                                                    .check_box_outline_blank,
+                                                              ),
+                                                            )
+                                                    ],
+                                                  ),
                                                 )
                                               ],
                                             );
