@@ -42,11 +42,56 @@ class ScheduleProvider extends EasyNotifier {
   List<String> _selectedWorkoutsTitle = [];
   List<String> get selectedWorkoutsTitle => _selectedWorkoutsTitle;
 
+  // int _selectedIntWeight = 0;
+  // int get selectedIntWeight => _selectedIntWeight;
+
+  // int _selectedDecimalWeight = 0;
+  // int get selectedDecimalWeight => _selectedDecimalWeight;
+
+  int _selectedWeight = 0;
+  int get selectedWeight => _selectedWeight;
+
+  int _selectedReps = 0;
+  int get selectedReps => _selectedReps;
+
+  int _selectedMinutes = 0;
+  int get selectedMinutes => _selectedMinutes;
+
+  int _selectedSeconds = 0;
+  int get selectedSeconds => _selectedSeconds;
+
   void setViewTimer() {
     notify(() {
       _viewTimer = !viewTimer;
     });
   }
+
+  void setInitSetData(int weight, int reps, int time) {
+    int minutes = 0;
+    int seconds = 0;
+    _selectedWeight = weight;
+    _selectedReps = reps;
+    _selectedMinutes = (time / 60).floor();
+    _selectedSeconds = (time % 60);
+  }
+
+  // void setIntWeight(int value) {
+  //   notify(() => _selectedIntWeight = value);
+  // }
+
+  // void setDecimalWeight(int value) {
+  //   notify(() => _selectedDecimalWeight = value);
+  // }
+
+  void setWeight(int value) {
+    notify(() => _selectedWeight = value);
+  }
+
+  void setReps(int value) => notify(() => _selectedReps = value);
+
+  void setMinutes(int value) => notify(() => _selectedMinutes = value);
+
+  void setSeconds(int value) => notify(() => _selectedSeconds = value);
 
   //클릭한 날짜 schdule 정보 불러오기
   Future<void> setSchedule(String uid, Timestamp selectDay) async {
@@ -174,6 +219,24 @@ class ScheduleProvider extends EasyNotifier {
       uid,
       scheduleDate,
       description,
+    );
+  }
+
+  Future<void> editDayWorkoutSet(
+    String uid,
+    Timestamp scheduleDate,
+    String workout,
+    int setIndex,
+  ) async {
+    int time = (_selectedMinutes * 60) + _selectedSeconds;
+    await workoutService.editDayWorkoutSet(
+      uid,
+      scheduleDate,
+      workout,
+      setIndex,
+      _selectedWeight,
+      _selectedReps,
+      time,
     );
   }
 }

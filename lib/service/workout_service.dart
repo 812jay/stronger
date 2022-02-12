@@ -432,4 +432,56 @@ class WorkoutService {
       throw Exception('changeIsChecked: $e');
     }
   }
+
+  Future<void> editDayWorkoutSet(
+    String uid,
+    Timestamp workoutDate,
+    String title,
+    int setIndex,
+    int weight,
+    int reps,
+    int time,
+  ) async {
+    try {
+      final workoutsRef = await firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .get();
+      Map<String, dynamic> workoutData = {};
+      String workoutId = '';
+      // print(title);
+      for (var workouts in workoutsRef.docs) {
+        if (workouts['title'] == title) {
+          workoutId = workouts.id;
+          workoutData = workouts.data();
+          int index = 0;
+          for (var workoutRecord in workouts['workoutRecords']) {
+            if (calculator.compareTimestampToDatetime(
+                workoutRecord['workoutDate'], workoutDate)) {
+              if (calculator.compareTimestampToDatetime(
+                  workoutRecord['workoutDate'], workoutDate)) {
+                workoutData['workoutRecords'][index]['sets'][setIndex]
+                    ['weight'] = weight;
+                workoutData['workoutRecords'][index]['sets'][setIndex]['reps'] =
+                    reps;
+                workoutData['workoutRecords'][index]['sets'][setIndex]['time'] =
+                    time;
+              }
+              index++;
+            }
+          }
+        }
+      }
+      // print(workoutData['workoutRecords']);
+      firestore
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .doc(workoutId)
+          .update({'workoutRecords': workoutData['workoutRecords']});
+    } catch (e) {
+      throw Exception('editDayWorkoutSet: $e');
+    }
+  }
 }
